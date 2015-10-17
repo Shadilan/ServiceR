@@ -68,7 +68,7 @@ public class SpiritProto {
 		int result=0;
 		PreparedStatement pstmt=null;
 		try {
-		pstmt= con.prepareStatement("SELECT count(1) from GPLAYERS WHERE PlayerName=? and Password=?");
+		pstmt= con.prepareStatement("SELECT count(1) from gplayers WHERE PlayerName=? and Password=?");
 		pstmt.setString(1, Login);
 		
 			pstmt.setString(2, Password);
@@ -85,7 +85,7 @@ public class SpiritProto {
 		if (result==0)
 		{
 			try {
-				pstmt= con.prepareStatement("UPDATE GPLAYERS SET USERTOKEN=? WHERE PlayerName=? and Password=?");
+				pstmt= con.prepareStatement("UPDATE gplayers SET USERTOKEN=? WHERE PlayerName=? and Password=?");
 				pstmt.setString(1, Token);
 				pstmt.setString(2, Login);
 			
@@ -135,7 +135,7 @@ public class SpiritProto {
 		String result="";
 		int cnt=0;
 		try {
-			PreparedStatement stmt=con.prepareStatement("select GUID,ObjectType from AOBJECT where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
+			PreparedStatement stmt=con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			
