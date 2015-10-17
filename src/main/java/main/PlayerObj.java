@@ -28,7 +28,7 @@ public class PlayerObj implements GameObject {
 		PreparedStatement stmt=null;
 		
 		try {
-			stmt=con.prepareStatement("SELECT PlayerName,USERTOKEN,GUID,Lat,Lng,Gold from GPLAYERS WHERE GUID=? LIMIT 0,1");
+			stmt=con.prepareStatement("SELECT PlayerName,USERTOKEN,GUID,Lat,Lng,Gold from gplayers WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
 			rs.first();
