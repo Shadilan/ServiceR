@@ -109,7 +109,7 @@ public class SpiritProto {
 			e.printStackTrace();
 		}
 		
-		if (result==0) return Token; else return lastError;
+		if (result==0) return "{Token:"+'"'+Token+'"'+"}"; else return lastError;
 			
 	}
 	
