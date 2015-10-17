@@ -51,7 +51,7 @@ public class PlayerObj implements GameObject {
 		PreparedStatement stmt=null;
 		
 		try {
-			stmt=con.prepareStatement("SELECT PlayerName,USERTOKEN,GUID,Lat,Lng,Gold from GPLAYERS WHERE USERTOKEN=? LIMIT 0,1");
+			stmt=con.prepareStatement("SELECT PlayerName,USERTOKEN,GUID,Lat,Lng,Gold from gplayers WHERE USERTOKEN=? LIMIT 0,1");
 			stmt.setString(1, UserToken);
 			ResultSet rs=stmt.executeQuery();
 			if (rs.isBeforeFirst()){
@@ -80,7 +80,7 @@ public class PlayerObj implements GameObject {
 		PreparedStatement stmt=null;
 		
 		try {
-			stmt=con.prepareStatement("UPDATE GPLAYERS set "
+			stmt=con.prepareStatement("UPDATE gplayers set "
 					+ "Lat=?,"
 					+ "Lng=?,"
 					+ "Gold=? WHERE GUID=? LIMIT 0,1");
@@ -89,7 +89,7 @@ public class PlayerObj implements GameObject {
 			stmt.setInt(3, Gold);
 			stmt.setString(4, GUID);
 			stmt.execute();
-			stmt=con.prepareStatement("UPDATE AOBJECT set "
+			stmt=con.prepareStatement("UPDATE aobject set "
 					+ "Lat=?,"
 					+ "Lng=?,"
 					+ "WHERE GUID=? LIMIT 0,1");
