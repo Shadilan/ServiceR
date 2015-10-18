@@ -19,8 +19,8 @@ public class PlayerObj implements GameObject {
 		return false;
 	};
 	public void setPos(int lat,int lng){
-		Lat=lat;
-		Lng=lng;
+		this.Lat=lat;
+		this.Lng=lng;
 	}
 	@Override
 	public void GetDBData(Connection con, String GUID) {
@@ -97,6 +97,7 @@ public class PlayerObj implements GameObject {
 			stmt.setInt(2, Lng);
 			stmt.setString(3, GUID);
 			stmt.execute();
+			con.commit();
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

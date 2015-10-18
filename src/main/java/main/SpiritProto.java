@@ -114,10 +114,10 @@ public class SpiritProto {
 	}
 	
 	public String GetData(String token,int Lat,int Lng){
-		//����������� � �����
+
 		Connection con = ConnectDB();
 		if (con == null) return "NoConnection";
-		//��������� ����� � �������� ���������� �� ������.
+
 		PlayerObj player=new PlayerObj();
 		player.GetDBDataByToken(con,token);
 		if (!player.isLogin()) {
@@ -129,7 +129,6 @@ public class SpiritProto {
 			}
 			return player.LastError;
 		}
-		//�������� ������� ������
 		player.setPos(Lat, Lng);
 		player.SetDBData(con);
 		String result="";
