@@ -106,7 +106,7 @@ public class PlayerObj implements GameObject {
 	}
 	@Override
 	public String toString(){
-		String result="Player:{"+
+		String result="{"+
 				"GUID:"+'"'+GUID+'"'+
 				",PlayerName:"+'"'+UserName+'"'+
 				",Lat:"+Lat+

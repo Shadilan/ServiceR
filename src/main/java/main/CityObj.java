@@ -79,7 +79,7 @@ public class CityObj implements GameObject {
 	}
 	@Override
 	public String toString(){
-		String result="Player:{"+
+		String result="{"+
 				"GUID:"+'"'+GUID+'"'+
 				"Owner:"+'"'+Owner+'"'+
 				"Lat:"+Lat+

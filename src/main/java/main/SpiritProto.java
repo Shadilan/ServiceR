@@ -159,7 +159,7 @@ public class SpiritProto {
 				if (ObjType.equalsIgnoreCase("AMBUSH")){
 				};
 			}
-			result="{"+player.toString();
+			result="{Player:"+player.toString();
 			String citiesinfo=null;
 			for (CityObj city:Cities){
 				if (citiesinfo==null) citiesinfo=city.toString(); else citiesinfo+=","+city.toString();
