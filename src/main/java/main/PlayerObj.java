@@ -83,7 +83,7 @@ public class PlayerObj implements GameObject {
 			stmt=con.prepareStatement("UPDATE gplayers set "
 					+ "Lat=?,"
 					+ "Lng=?,"
-					+ "Gold=? WHERE GUID=? LIMIT 0,1");
+					+ "Gold=? WHERE GUID=?");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			stmt.setInt(3, Gold);
@@ -92,7 +92,7 @@ public class PlayerObj implements GameObject {
 			stmt=con.prepareStatement("UPDATE aobject set "
 					+ "Lat=?,"
 					+ "Lng=?,"
-					+ "WHERE GUID=? LIMIT 0,1");
+					+ "WHERE GUID=?");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			stmt.setString(3, GUID);
