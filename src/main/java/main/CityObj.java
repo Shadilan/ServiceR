@@ -31,8 +31,8 @@ public class CityObj implements GameObject {
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
 			rs.first();
+			this.GUID=rs.getString("GUID");
 			Owner=rs.getString("Owner");
-			GUID=rs.getString("GUID");
 			Lat=rs.getInt("Lat");
 			Lng=rs.getInt("Lng");
 			stmt.close();
