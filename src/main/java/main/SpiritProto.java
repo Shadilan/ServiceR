@@ -166,11 +166,7 @@ public class SpiritProto {
 			}
 			if (citiesinfo!=null) result+=","+"Cities:["+citiesinfo+"]";
 			result+="}";
-				//������������ ����� ������
-				//������������ ����� �������
-					//������������ ����� ������
-				//������������ ����� �����
-					//������������ ������
+
 			con.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

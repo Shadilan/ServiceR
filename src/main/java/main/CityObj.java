@@ -80,9 +80,9 @@ public class CityObj implements GameObject {
 	@Override
 	public String toString(){
 		String result="{"+
-				"GUID:"+'"'+GUID+'"'+
-				"Owner:"+'"'+Owner+'"'+
-				"Lat:"+Lat+
+				"GUID:"+'"'+GUID+'",'+
+				"Owner:"+'"'+Owner+'",'+
+				"Lat:"+Lat+","+
 				"Lng:"+Lng+
 				"}";
 		return result;

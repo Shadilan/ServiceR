@@ -91,7 +91,7 @@ public class PlayerObj implements GameObject {
 			stmt.execute();
 			stmt=con.prepareStatement("UPDATE aobject set "
 					+ "Lat=?,"
-					+ "Lng=?,"
+					+ "Lng=?"
 					+ "WHERE GUID=?");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
