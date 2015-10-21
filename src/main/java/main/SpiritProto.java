@@ -187,14 +187,11 @@ public class SpiritProto {
 		
 	}
 	
-	public boolean MakeAction(String token,int Lat,int Lng,String action,String target){
+	public String SimpleCommand(String token,int Lat,int Lng,String action,String target){
 	
-		//����������� � �����
-		//��������� ����� � �������� ���������� �� ������.
-		//�������� ������� ������
-		//����� ����
-		//������� ��������
-		return true;
+		return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000000"+'"'+",Message:"+'"'+"Command uknown."+'"'+"}";
+
+
 	}
 	
 }
