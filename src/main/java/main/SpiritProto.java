@@ -186,10 +186,24 @@ public class SpiritProto {
 		//������������ �����
 		
 	}
-	
+
 	public String SimpleCommand(String token,int Lat,int Lng,String action,String target){
-	
+	    Connection con ConnectDB();
+        PlayerObj player=new PlayerObj();
+        player.GetDBDataByToken(con,token);
+        if (player.isLogin()!=false){
+            return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000001"+'"'+",Message:"+'"'+"User not login in."+'"'+"}";
+        }
+        player.setPos(Lat,Lng);
+        if (action.equals("addCity")){
+            player.CreateCity(con);
+        } else
+        if (action.equals("removeCity")){
+            player.RemoveCity(con, target);
+        } else
 		return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000000"+'"'+",Message:"+'"'+"Command uknown."+'"'+"}";
+
+        return "{Result:"+'"'+"Success"+'"'+",Code:"+'"'+"S"+'"'+",Message:"+'"'+"Done"+'"'+"}";
 
 
 	}

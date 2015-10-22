@@ -77,6 +77,9 @@ public class CityObj implements GameObject {
 		}
 
 	}
+	public String GetGUID(){
+		return GUID;
+	}
 	@Override
 	public String toString(){
 		String result="{"+
