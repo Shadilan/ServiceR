@@ -136,6 +136,12 @@ public class PlayerObj implements GameObject {
         if (City!=null) return;
         CityObj newCity=new CityObj(GUID,Lat,Lng);
         newCity.SetDBData(con);
+        try {
+			con.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         City=newCity.GetGUID();
     }
     public void RemoveCity(Connection con,String Target){
