@@ -192,7 +192,7 @@ public class SpiritProto {
 	    Connection con = ConnectDB();
         PlayerObj player=new PlayerObj();
         player.GetDBDataByToken(con,token);
-        if (player.isLogin()!=false){
+        if (player.isLogin()==false){
             return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000001"+'"'+",Message:"+'"'+"User not login in."+'"'+"}";
         }
         player.setPos(Lat,Lng);
