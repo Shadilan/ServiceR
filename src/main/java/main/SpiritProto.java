@@ -77,7 +77,7 @@ public class SpiritProto {
 			rs.first();
 			if (rs.getInt(1)==0) {
 				result=2;
-				lastError="User not Found";
+				lastError="User not Found: "+Login+" "+Password;
 			}
 			
 		} catch (SQLException e) {
