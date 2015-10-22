@@ -34,7 +34,7 @@ public class PlayerObj implements GameObject {
 		
 		try {
 			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city" +
-					"FROM gplayers a" +
+					"FROM gplayers a " +
 					"LEFT JOIN cities b ON b.owner = a.guid WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
@@ -61,7 +61,7 @@ public class PlayerObj implements GameObject {
 		
 		try {
 			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city" +
-					"FROM gplayers a" +
+					"FROM gplayers a " +
 					"LEFT JOIN cities b ON b.owner = a.guid WHERE USERTOKEN=? LIMIT 0,1");
 			stmt.setString(1, UserToken);
 			ResultSet rs=stmt.executeQuery();
