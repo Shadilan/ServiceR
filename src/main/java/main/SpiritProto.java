@@ -75,7 +75,10 @@ public class SpiritProto {
 		
 			ResultSet rs=pstmt.executeQuery();
 			rs.first();
-			if (rs.getInt(1)==0) result=2;
+			if (rs.getInt(1)==0) {
+				result=2;
+				lastError="User not Found";
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -106,7 +109,7 @@ public class SpiritProto {
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			lastError=e.toString();
 		}
 		
 		if (result==0) return "{Token:"+'"'+Token+'"'+"}"; else return lastError;
@@ -138,9 +141,7 @@ public class SpiritProto {
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			
-			//������� ��� ������� ����������� �����
-			//���� ������ ����� ��������� �����
-			//���� ������ ������ ��������� ������
+
 
 			ResultSet rs=stmt.executeQuery();
 			rs.beforeFirst();
