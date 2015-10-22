@@ -136,20 +136,20 @@ public class PlayerObj implements GameObject {
 				"}";
 		return result;
 	}
-    public CreateCity(Connection con){
+    public void CreateCity(Connection con){
         if (City!=null) return;
         CityObj newCity=new CityObj(GUID,Lat,Lng);
         newCity.SetDBData(con);
         City=newCity.GetGUID();
     }
-    public RemoveCity(Connection con,String Target){
+    public void RemoveCity(Connection con,String Target){
         if (!City.equals(Target)) return;
-        //Ужадить рассчеты
-        //Обновить Влияние
-        //Удалить маршруты
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-        //Удалить Из Таблицы Объектов
-        //Удалить город
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         PreparedStatement pstmt=null;
         try {
             pstmt= con.prepareStatement("DELETE FROM cities WHERE GUID=?");
@@ -161,10 +161,10 @@ public class PlayerObj implements GameObject {
             con.commit();
             pstmt.close();
         } catch (SQLException e) {
-            lastError=e.toString();
+            LastError=e.toString();
         }
         SetDBData(con);
-        //Удалить из Таблицы Объектов
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     }
 }

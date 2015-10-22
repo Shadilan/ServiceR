@@ -188,7 +188,7 @@ public class SpiritProto {
 	}
 
 	public String SimpleCommand(String token,int Lat,int Lng,String action,String target){
-	    Connection con ConnectDB();
+	    Connection con = ConnectDB();
         PlayerObj player=new PlayerObj();
         player.GetDBDataByToken(con,token);
         if (player.isLogin()!=false){
