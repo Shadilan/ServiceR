@@ -177,6 +177,7 @@ public class SpiritProto {
 		
 		try {
 			if (!con.isClosed()){
+				con.rollback();
 				con.close();
 			}
 		} catch (SQLException e) {
@@ -212,6 +213,14 @@ public class SpiritProto {
 			}
         	return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000003"+'"'+",Message:"+'"'+player.GetLastError()+'"'+"}";
         }
+        
+        try {
+        	con.commit();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return "{Result:"+'"'+"Success"+'"'+",Code:"+'"'+"S"+'"'+",Message:"+'"'+"Done"+'"'+"}";
 
 
