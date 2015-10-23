@@ -65,7 +65,7 @@ public class CityObj implements GameObject {
 					+ "?,"
 					+ "?,"
 					+ "?,"
-					+ "?,"
+					+ "?"
 					+ ")");
 			stmt.setString(1, GUID);
 			stmt.setString(2, "CITY");
