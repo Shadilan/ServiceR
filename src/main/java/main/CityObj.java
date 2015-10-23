@@ -61,7 +61,7 @@ public class CityObj implements GameObject {
 			stmt.setInt(3, Lat);
 			stmt.setInt(4, Lng);
 			stmt.execute();
-			stmt=con.prepareStatement("INSERT IGNORE INTO aobject(GUID,TYPE,Lat,Lng) VALUES("
+			stmt=con.prepareStatement("INSERT IGNORE INTO aobject(GUID,ObjectType,Lat,Lng) VALUES("
 					+ "?,"
 					+ "?,"
 					+ "?,"
