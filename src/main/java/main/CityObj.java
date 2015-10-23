@@ -11,6 +11,7 @@ public class CityObj implements GameObject {
 	private String Owner;
 	private int Lat;
 	private int Lng;
+	private String LastError=null;
 	
 	public CityObj(String owner,int lat,int lng){
 		GUID=UUID.randomUUID().toString();
@@ -39,6 +40,7 @@ public class CityObj implements GameObject {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LastError=e.toString();
 		}
 	}
 
@@ -74,6 +76,7 @@ public class CityObj implements GameObject {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			LastError=e.toString();
 		}
 
 	}
@@ -90,5 +93,6 @@ public class CityObj implements GameObject {
 				"}";
 		return result;
 	}
+	public String GetLastError(){return LastError;}
 
 }

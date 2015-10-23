@@ -203,7 +203,15 @@ public class SpiritProto {
             player.RemoveCity(con, target);
         } else
 		return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000000"+'"'+",Message:"+'"'+"Command uknown."+'"'+"}";
-
+        if (player.GetLastError()!=null)
+        {
+        	try {
+				con.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+        	return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000003"+'"'+",Message:"+'"'+player.GetLastError()+'"'+"}";
+        }
         return "{Result:"+'"'+"Success"+'"'+",Code:"+'"'+"S"+'"'+",Message:"+'"'+"Done"+'"'+"}";
 
 

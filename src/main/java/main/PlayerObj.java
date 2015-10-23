@@ -133,13 +133,23 @@ public class PlayerObj implements GameObject {
 		return result;
 	}
     public void CreateCity(Connection con){
-        if (City!=null) return;
+        if (City!=null) 
+        	{
+        	LastError="You already have city";
+        	return;
+        	}
         CityObj newCity=new CityObj(GUID,Lat,Lng);
+        
         newCity.SetDBData(con);
+        if (newCity.GetLastError()!=null){
+        	LastError=newCity.GetLastError();
+        	return;
+        }
         try {
 			con.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			LastError="Error on commit";
 			e.printStackTrace();
 		}
         City=newCity.GetGUID();
@@ -169,4 +179,5 @@ public class PlayerObj implements GameObject {
         //������� �� ������� ��������
 
     }
+    public String GetLastError(){return LastError;}
 }
