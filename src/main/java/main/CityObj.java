@@ -50,7 +50,7 @@ public class CityObj implements GameObject {
 		PreparedStatement stmt=null;
 		
 		try {
-			stmt=con.prepareStatement("INSERT IGNORE INTO Cities(GUID,Owner,Lat,Lng) VALUES ("
+			stmt=con.prepareStatement("INSERT IGNORE INTO cities(GUID,Owner,Lat,Lng) VALUES ("
 					+ "?,"
 					+ "?,"
 					+ "?,"
