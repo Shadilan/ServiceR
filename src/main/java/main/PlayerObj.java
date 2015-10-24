@@ -170,6 +170,13 @@ public class PlayerObj implements GameObject {
             pstmt= con.prepareStatement("DELETE FROM aobject WHERE GUID=?");
             pstmt.setString(1, Target);
             pstmt.execute();
+            //Remove Route
+            pstmt= con.prepareStatement("DELETE FROM route WHERE RSTART=? or REND=?");
+            pstmt.setString(1, Target);
+            pstmt.setString(2, Target);
+            pstmt.execute();
+            //RemoveCaravan
+            
             con.commit();
             pstmt.close();
         } catch (SQLException e) {

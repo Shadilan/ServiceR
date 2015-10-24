@@ -9,6 +9,7 @@ import java.util.UUID;
 public class CityObj implements GameObject {
 	private String GUID;
 	private String Owner;
+	private String CityName;
 	private int Lat;
 	private int Lng;
 	private String LastError=null;
@@ -28,12 +29,13 @@ public class CityObj implements GameObject {
 		PreparedStatement stmt=null;
 		
 		try {
-			stmt=con.prepareStatement("SELECT GUID,Owner,Lat,Lng from cities WHERE GUID=? LIMIT 0,1");
+			stmt=con.prepareStatement("SELECT GUID,Owner,CITYNAME,Lat,Lng from cities WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
 			rs.first();
 			this.GUID=rs.getString("GUID");
 			Owner=rs.getString("Owner");
+			CityName=rs.getString("CITYNAME");
 			Lat=rs.getInt("Lat");
 			Lng=rs.getInt("Lng");
 			stmt.close();
@@ -50,16 +52,18 @@ public class CityObj implements GameObject {
 		PreparedStatement stmt=null;
 		
 		try {
-			stmt=con.prepareStatement("INSERT IGNORE INTO cities(GUID,Owner,Lat,Lng) VALUES ("
+			stmt=con.prepareStatement("INSERT IGNORE INTO cities(GUID,CITYNAME,Owner,Lat,Lng) VALUES ("
+					+ "?,"
 					+ "?,"
 					+ "?,"
 					+ "?,"
 					+ "?"
 					+ ")");
 			stmt.setString(1, GUID);
-			stmt.setString(2, Owner);
-			stmt.setInt(3, Lat);
-			stmt.setInt(4, Lng);
+			stmt.setString(2, CityName);
+			stmt.setString(3, Owner);
+			stmt.setInt(4, Lat);
+			stmt.setInt(5, Lng);
 			stmt.execute();
 			stmt=con.prepareStatement("INSERT IGNORE INTO aobject(GUID,ObjectType,Lat,Lng) VALUES("
 					+ "?,"
@@ -93,6 +97,7 @@ public class CityObj implements GameObject {
 				"}";
 		return result;
 	}
+	
 	public String GetLastError(){return LastError;}
 
 }
