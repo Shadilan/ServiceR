@@ -12,33 +12,37 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+/**
+ * Main object for Server
+ */
 public class SpiritProto {
 	String lastError="";
-	
+
+	/**
+	 * Default Constructor
+	 */
 	public SpiritProto(){
 		
 	}
 	public Connection ConnectDB(){
-		Context ctx=null;
-		DataSource ds=null;
+		Context ctx;
+		DataSource ds;
 		Connection con =null;
 		try {
 			ctx = new InitialContext();
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			lastError=e.toString();
 			return null;
 		}
 		try {
 			ds = (DataSource)ctx.lookup("java:jboss/datasources/MySQLDS");
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			lastError=e.toString(true);
 			try{
 				ctx.close();
 			} catch(NamingException e2){
-				
+				lastError=e2.toString();
 			}
 			return null;
 		}
@@ -46,14 +50,13 @@ public class SpiritProto {
 			con = ds.getConnection("adminUuszpdJ","5FKl3fnWFT55");
 			con.setAutoCommit(false);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			lastError=e.toString();
 			try{
 				ctx.close();
 				
 			} catch(NamingException e2){
-				
+				lastError=e2.toString();
 			}
 		}
 		
@@ -61,6 +64,13 @@ public class SpiritProto {
 		
 		return con;
 	}
+
+	/**
+	 * Get Token
+	 * @param Login Login of user
+	 * @param Password Password of user
+	 * @return Generated Token
+	 */
 	public String GetToken(String Login,String Password){
 		
 		Connection con=ConnectDB();
@@ -81,7 +91,6 @@ public class SpiritProto {
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			result=1;
 			lastError=e.toString();
 		}
@@ -115,7 +124,14 @@ public class SpiritProto {
 		if (result==0) return "{Token:"+'"'+Token+'"'+"}"; else return lastError;
 			
 	}
-	
+
+	/**
+	 * Get info of objects around coord
+	 * @param token Secure Token
+	 * @param Lat Latitude of point
+	 * @param Lng Longtitude of point
+	 * @return JSON String
+	 */
 	public String GetData(String token,int Lat,int Lng){
 
 		Connection con = ConnectDB();
@@ -134,7 +150,7 @@ public class SpiritProto {
 		}
 		player.setPos(Lat, Lng);
 		player.SetDBData(con);
-		String result="";
+		String result;
 		int cnt=0;
 		try {
 			PreparedStatement stmt=con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
@@ -157,7 +173,7 @@ public class SpiritProto {
 					Cities.add(City);
 				} else
 				if (ObjType.equalsIgnoreCase("AMBUSH")){
-				};
+				}
 			}
 			result="{Player:"+player.toString();
 			String citiesinfo=null;
@@ -185,15 +201,22 @@ public class SpiritProto {
 			e.printStackTrace();
 		}
 		return result;
-		//������������ �����
-		
 	}
 
+	/**
+	 * SimpleActions
+	 * @param token  Secure Token
+	 * @param Lat Latitude of command
+	 * @param Lng Longtitude of command
+	 * @param action Action to do
+	 * @param target Target of Action
+	 * @return JSON String of result
+	 */
 	public String SimpleCommand(String token,int Lat,int Lng,String action,String target){
 	    Connection con = ConnectDB();
         PlayerObj player=new PlayerObj();
         player.GetDBDataByToken(con,token);
-        if (player.isLogin()==false){
+        if (!player.isLogin()){
             return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000001"+'"'+",Message:"+'"'+"User not login in."+'"'+"}";
         }
         player.setPos(Lat,Lng);

@@ -1,6 +1,18 @@
 package main;
 //This code was freely adapted from http://www.movable-type.co.uk/scripts/latlong-vincenty.html
+
+/**
+ * Utility Functions
+ */
 public class MyUtils {
+	/**
+	 * Count distance in meters
+	 * @param lat1 Latitude of start point
+	 * @param lon1 Longtitude of start point
+	 * @param lat2 Latitude of end point
+	 * @param lon2 Longtitude of end point
+	 * @return Distance in meters
+	 */
 	public static double distVincenty(double lat1, double lon1, double lat2, double lon2) {
 	    double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
 	    double L = Math.toRadians(lon2 - lon1);
@@ -43,8 +55,8 @@ public class MyUtils {
 	                    / 4
 	                    * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) - B / 6 * cos2SigmaM
 	                            * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
-	    double dist = b * A * (sigma - deltaSigma);
+		return b * A * (sigma - deltaSigma);
 
-	    return dist;
+
 	}
 }

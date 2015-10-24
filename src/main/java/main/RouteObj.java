@@ -8,9 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class RouteObj implements GameObject {
+/**
+ * @author Shadilan
+ */
 
+public class RouteObj implements GameObject {
 	private String GUID;
+
 	private String Owner;
 	private String RStart;
 	private String REnd;
@@ -18,24 +22,56 @@ public class RouteObj implements GameObject {
 	private int HP;
 	private int Cooldown;
 	private Date Next;
-	private String LastError;
 	private int SLat;
 	private int SLng;
 	private int ELat;
 	private int ELng;
-	public String GetLastError(){
-		return LastError;
-	}
-	public String GetGuid(){
-		return GUID;
-	}
 
+    //TODO: Change to Exception;
+    private String LastError;
+
+    /**
+     * Geter
+     * @return GUID value
+     */
+    public String GetGuid(){return GUID;}
+
+    /**
+     * Geter
+     * @return LastError
+     */
+	public String GetLastError(){return LastError;}
+
+    /**
+     * Geter
+     * @return Latitude of Start;
+     */
     public int GetSLat(){return SLat;}
+
+    /**
+     * Geter
+     * @return Longtitue of Start
+     */
     public int GetSLng(){return SLng;}
+
+    /**
+     * Geter
+     * @return Latitude of End
+     */
     public int GetELat(){return ELat;}
+
+    /**
+     * Geter
+     * @return Longtitude of End
+     */
     public int GetELng(){return ELng;}
 
-
+    /**
+     * Creator of object
+     * @param Owner Owner of route
+     * @param RStart StartPoint of route
+     * @param REnd  EndPoint of route
+     */
     public RouteObj(String Owner,String RStart,String REnd){
 		GUID=UUID.randomUUID().toString();
 		this.Owner=Owner;
@@ -45,13 +81,23 @@ public class RouteObj implements GameObject {
 		HP=10;
 	}
 
+    /**
+     * Creator of object
+     * @param con Connection to DB
+     * @param GUID GUID of route
+     */
 	public RouteObj(Connection con,String GUID){
 		GetDBData(con,GUID);
 	}
+
+    /**
+     * Fill object from DB
+     * @param con Connection to DB
+     * @param GUID GUID of route
+     */
 	@Override
 	public void GetDBData(Connection con, String GUID) {
-		PreparedStatement stmt=null;
-
+        PreparedStatement stmt;
 		try {
 			ResultSet rs;
 			stmt=con.prepareStatement("SELECT r.GUID, r.Owner, r.RStart, r.REnd, r.Gold, r.HP, r.Cooldown, r.Next, c1.Lat AS Lat1, c1.Lng AS Lng1, c2.Lat Lat2, c2.Lng AS Lng2\n" +
@@ -77,17 +123,19 @@ public class RouteObj implements GameObject {
 			Next=rs.getDate("Next");
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			LastError=e.toString();
 		}
 		
 	}
 
+    /**
+     * Write data to DB
+     * @param con Connection to DB
+     */
 	@Override
 	public void SetDBData(Connection con) {
-		PreparedStatement stmt=null;
-		
+        PreparedStatement stmt;
 		try {
 			ResultSet rs;
 			if (Gold==0) {
@@ -126,16 +174,19 @@ public class RouteObj implements GameObject {
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			LastError=e.toString();
 		}
 
 	}
-	
+
+    /**
+     * Generate JSON
+     * @return JSON of Object
+     */
 	@Override
 	public String toString(){
-		String result="{"+
+        return "{"+
 				"GUID:"+'"'+GUID+'"'+
 				",Owner:"+'"'+Owner+'"'+
 				",Start:"+'"'+RStart+'"'+
@@ -145,7 +196,7 @@ public class RouteObj implements GameObject {
 				",Cooldown:"+Cooldown+
 				",Next:"+Next.getTime()+
 				"}";
-		return result;
+
 		
 	}
 

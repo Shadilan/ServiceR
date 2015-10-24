@@ -6,27 +6,53 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+/**
+ * @author Shadilan
+ */
 public class CityObj implements GameObject {
 	private String GUID;
 	private String Owner;
 	private String CityName;
 	private int Lat;
 	private int Lng;
+
 	private String LastError=null;
-	
+
+	/**
+	 * Creator of object
+	 * @param owner Owner of City (Player GUID)
+	 * @param lat Latitude of City
+	 * @param lng Longtitude of City
+	 */
 	public CityObj(String owner,int lat,int lng){
 		GUID=UUID.randomUUID().toString();
 		Owner=owner;
 		Lat=lat;
 		Lng=lng;
 	}
+
+	//Default constructor
 	public CityObj() {
-		// TODO Auto-generated constructor stub
+
 	}
+
+	/**
+	 * Constructor with loading from DB
+	 * @param con Connection to DB
+	 * @param GUID GUID of City
+	 */
+	public CityObj(Connection con,String GUID) {
+		GetDBData(con,GUID);
+	}
+
+	/**
+	 * Load data from DB
+	 * @param con Connection to DB
+	 * @param GUID GUID of City
+	 */
 	@Override
 	public void GetDBData(Connection con, String GUID) {
-		// TODO Auto-generated method stub
-		PreparedStatement stmt=null;
+		PreparedStatement stmt;
 		
 		try {
 			stmt=con.prepareStatement("SELECT GUID,Owner,CITYNAME,Lat,Lng from cities WHERE GUID=? LIMIT 0,1");
@@ -40,17 +66,18 @@ public class CityObj implements GameObject {
 			Lng=rs.getInt("Lng");
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			LastError=e.toString();
 		}
 	}
 
+	/**
+	 * Write data to DB
+	 * @param con Connection to DB
+	 */
 	@Override
 	public void SetDBData(Connection con) {
-		// TODO Auto-generated method stub
-		PreparedStatement stmt=null;
-		
+		PreparedStatement stmt;
 		try {
 			stmt=con.prepareStatement("INSERT IGNORE INTO cities(GUID,CITYNAME,Owner,Lat,Lng) VALUES ("
 					+ "?,"
@@ -78,27 +105,40 @@ public class CityObj implements GameObject {
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			LastError=e.toString();
 		}
 
 	}
+
+	/**
+	 * Geter
+	 * @return GUID of object
+	 */
 	public String GetGUID(){
 		return GUID;
 	}
+
+	/**
+	 * Generate JSON
+	 * @return JSON string of Object
+	 */
 	@Override
 	public String toString(){
-		String result="{"+
+		return"{"+
 				"GUID:"+'"'+GUID+'"'+
 				",Owner:"+'"'+Owner+'"'+
 				",CityName:"+'"'+CityName+'"'+
 				",Lat:"+Lat+
 				",Lng:"+Lng+
 				"}";
-		return result;
+
 	}
-	
+
+	/**
+	 * Getter
+	 * @return return LastError
+	 */
 	public String GetLastError(){return LastError;}
 
 }

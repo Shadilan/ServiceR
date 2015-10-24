@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
+/**
+ * Player info
+ * @author Shadilan
+ */
 public class PlayerObj implements GameObject {
 	private String UserName;
 	private String Token;
@@ -16,21 +19,38 @@ public class PlayerObj implements GameObject {
 	private int Gold;
 	private String City;
 	private int Influence;
+	//TODO:Change to exception
 	public String LastError;
 
+	/**
+	 *
+	 * @return True when player Loaded
+	 */
 	public boolean isLogin()
 	{
 		if (GUID !=null) return true;
 		return false;
-	};
+	}
+
+	/**
+	 * Set Position of Player
+	 * @param lat Latitude
+	 * @param lng Longtitude
+	 */
 	public void setPos(int lat,int lng){
 		this.Lat=lat;
 		this.Lng=lng;
 	}
+
+	/**
+	 * Load data from DB by GUID
+	 * @param con Connetion to DB
+	 * @param GUID GUID of Player
+	 */
 	@Override
 	public void GetDBData(Connection con, String GUID) {
 		// TODO Auto-generated method stub
-		PreparedStatement stmt=null;
+		PreparedStatement stmt;
 		
 		try {
 			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a LEFT JOIN cities b ON (b.owner = a.guid) WHERE GUID=? LIMIT 0,1");
@@ -47,15 +67,19 @@ public class PlayerObj implements GameObject {
 			City=rs.getString("city");
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			LastError=e.toString();
 		}
 		
 	}
+
+	/**
+	 * Load data from DB by Secure Token
+	 * @param con Connection to DB
+	 * @param UserToken Secure Token
+	 */
 	public void GetDBDataByToken(Connection con, String UserToken) {
-		// TODO Auto-generated method stub
-		PreparedStatement stmt=null;
+		PreparedStatement stmt;
 		
 		try {
 			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a  LEFT JOIN cities b ON (b.owner = a.guid) WHERE USERTOKEN=? LIMIT 0,1");
@@ -77,16 +101,19 @@ public class PlayerObj implements GameObject {
 			}
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			LastError=e.toString();
 		}
 	}
 
+	/**
+	 * Write data to DB
+	 * @param con Connection to db
+	 */
 	@Override
 	public void SetDBData(Connection con) {
-		// TODO Auto-generated method stub
-		PreparedStatement stmt=null;
+
+		PreparedStatement stmt;
 		
 		try {
 			stmt=con.prepareStatement("UPDATE gplayers set "
@@ -115,13 +142,18 @@ public class PlayerObj implements GameObject {
 		}
 
 	}
+
+	/**
+	 * Generate JSON String
+	 * @return JSON String
+	 */
 	@Override
 	public String toString(){
 		String CityB="N";
 		if (City!=null && City.length()>0){
 			CityB="Y";
 		}
-		String result="{"+
+		return"{"+
 				"GUID:"+'"'+GUID+'"'+
 				",PlayerName:"+'"'+UserName+'"'+
 				",Lat:"+Lat+
@@ -130,8 +162,13 @@ public class PlayerObj implements GameObject {
 				",Influence:"+Influence+
 				",City:"+'"'+CityB+'"'+
 				"}";
-		return result;
+
 	}
+
+	/**
+	 * Create City with player as owner
+	 * @param con Connection to DB
+	 */
     public void CreateCity(Connection con){
         if (City!=null) 
         	{
@@ -148,21 +185,20 @@ public class PlayerObj implements GameObject {
         try {
 			con.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			LastError="Error on commit";
 			e.printStackTrace();
 		}
         City=newCity.GetGUID();
     }
+
+	/**
+	 * Remove city (with check if Player is Owner)
+	 * @param con Connection to DB
+	 * @param Target City to remove
+	 */
     public void RemoveCity(Connection con,String Target){
         if (!City.equals(Target)) return;
-        //������� ��������
-        //�������� �������
-        //������� ��������
-
-        //������� �� ������� ��������
-        //������� �����
-        PreparedStatement pstmt=null;
+        PreparedStatement pstmt;
         try {
             pstmt= con.prepareStatement("DELETE FROM cities WHERE GUID=?");
             pstmt.setString(1, Target);
@@ -170,12 +206,11 @@ public class PlayerObj implements GameObject {
             pstmt= con.prepareStatement("DELETE FROM aobject WHERE GUID=?");
             pstmt.setString(1, Target);
             pstmt.execute();
-            //Remove Route
             pstmt= con.prepareStatement("DELETE FROM route WHERE RSTART=? or REND=?");
             pstmt.setString(1, Target);
             pstmt.setString(2, Target);
             pstmt.execute();
-            //RemoveCaravan
+            //TODO:Remove all caravans
             
             con.commit();
             pstmt.close();
@@ -183,8 +218,11 @@ public class PlayerObj implements GameObject {
             LastError=e.toString();
         }
         SetDBData(con);
-        //������� �� ������� ��������
-
     }
+
+	/**
+	 * Return Last error in object
+	 * @return Last error text
+	 */
     public String GetLastError(){return LastError;}
 }
