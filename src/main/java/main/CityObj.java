@@ -92,6 +92,7 @@ public class CityObj implements GameObject {
 		String result="{"+
 				"GUID:"+'"'+GUID+'"'+
 				",Owner:"+'"'+Owner+'"'+
+				",CityName:"+'"'+CityName+'"'+
 				",Lat:"+Lat+
 				",Lng:"+Lng+
 				"}";
