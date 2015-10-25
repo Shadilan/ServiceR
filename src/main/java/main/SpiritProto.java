@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.UUID;
 
 import javax.naming.Context;
@@ -355,7 +356,13 @@ public class SpiritProto {
 		}*/
 
 		try {
-			InitialContext iniCtx = new InitialContext();
+			/*jndi.java.naming.provider.url=jnp://localhost:1099/
+			jndi.java.naming.factory.url=org.jboss.naming:org.jnp.interfaces
+			jndi.java.naming.factory.initial=org.jnp.interfaces.NamingContextFactory*/
+			Properties props = new Properties();
+			props.setProperty(Context.INITIAL_CONTEXT_FACTORY,"rg.jnp.interfaces.NamingContextFactory");
+			props.setProperty(Context.PROVIDER_URL,"jnp://localhost:1099");
+			InitialContext iniCtx = new InitialContext(props);
 			DataSource ds;
 			ds = (DataSource)iniCtx.lookup("java:jboss/datasources/MySQLDS");
 			System.out.println("test");
