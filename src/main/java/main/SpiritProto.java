@@ -360,7 +360,7 @@ public class SpiritProto {
 				e.printStackTrace();
 
 			}
-			Connection con= DriverManager.getConnection("jdbc:mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/","adminUuszpdJ","5FKl3fnWFT55")
+			Connection con= DriverManager.getConnection("jdbc:mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/","adminUuszpdJ","5FKl3fnWFT55");
 		} catch (SQLException e) {
 			e.printStackTrace();
 
