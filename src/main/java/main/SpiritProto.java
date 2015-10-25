@@ -342,7 +342,7 @@ public class SpiritProto {
 	 * @param arg NotUse
 	 */
 	public static void main(String[] arg){
-		SpiritProto sp=new SpiritProto();
+		/*SpiritProto sp=new SpiritProto();
 		Connection con=sp.ConnectDB();
 		sp.CreateCaravans(con);
 		sp.MoveCaravans(con);
@@ -352,7 +352,8 @@ public class SpiritProto {
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}*/
+		System.out.print("Test");
 	}
 
 	
