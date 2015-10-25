@@ -360,7 +360,7 @@ public class SpiritProto {
 			jndi.java.naming.factory.url=org.jboss.naming:org.jnp.interfaces
 			jndi.java.naming.factory.initial=org.jnp.interfaces.NamingContextFactory*/
 			Properties props = new Properties();
-			props.setProperty(Context.INITIAL_CONTEXT_FACTORY,"rg.jnp.interfaces.NamingContextFactory");
+			props.setProperty(Context.INITIAL_CONTEXT_FACTORY,"org.jnp.interfaces.NamingContextFactory");
 			props.setProperty(Context.PROVIDER_URL,"jnp://localhost:1099");
 			InitialContext iniCtx = new InitialContext(props);
 			DataSource ds;
