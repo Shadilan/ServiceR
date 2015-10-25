@@ -1,9 +1,6 @@
 package main;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
@@ -355,21 +352,21 @@ public class SpiritProto {
 			e.printStackTrace();
 		}*/
 
+
 		try {
-			/*jndi.java.naming.provider.url=jnp://localhost:1099/
-			jndi.java.naming.factory.url=org.jboss.naming:org.jnp.interfaces
-			jndi.java.naming.factory.initial=org.jnp.interfaces.NamingContextFactory*/
-			Properties props = new Properties();
-			props.setProperty(Context.INITIAL_CONTEXT_FACTORY,"org.jnp.interfaces.NamingContextFactory");
-			props.setProperty(Context.PROVIDER_URL,"jnp://localhost:1099");
-			InitialContext iniCtx = new InitialContext(props);
-			DataSource ds;
-			ds = (DataSource)iniCtx.lookup("java:jboss/datasources/MySQLDS");
-			System.out.println("test");
-		} catch (NamingException e) {
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+
+			}
+			Connection con= DriverManager.getConnection("jdbc:mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/","adminUuszpdJ","5FKl3fnWFT55")
+		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(e.toString());
+
 		}
+		System.out.println("test");
+
 
 
 	}
