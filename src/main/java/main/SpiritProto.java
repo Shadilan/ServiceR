@@ -355,6 +355,7 @@ public class SpiritProto {
 
 		try {
 			try {
+
 				Class.forName("com.mysql.jdbc.Driver");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
