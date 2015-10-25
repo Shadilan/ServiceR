@@ -12,7 +12,7 @@ import java.util.UUID;
 public class CaravanObj implements GameObject {
 
 	private String GUID; public String GetGUID(){return GUID;}
-	private String Owner;
+	private String Owner;public String GetOwner(){return this.Owner;}
     private String StartPoint;
     private String EndPoint;
 	private int Lat;

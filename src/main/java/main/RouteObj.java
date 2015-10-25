@@ -112,6 +112,9 @@ public class RouteObj implements GameObject {
 		
 	}
 
+	public void SetNext(){
+		Next.setTime(Next.getTime()+Cooldown);
+	}
     /**
      * Write data to DB
      * @param con Connection to DB

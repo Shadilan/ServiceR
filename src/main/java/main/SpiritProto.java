@@ -274,20 +274,86 @@ public class SpiritProto {
 		}
         return "{Result:"+'"'+"Success"+'"'+",Code:"+'"'+"S"+'"'+",Message:"+'"'+"Done"+'"'+"}";
 	}
-    public void MoveCaravans(){
+
+	/**
+	 * Move caravans to new positions
+	 * @param con DB Connection
+	 */
+    public void MoveCaravans(Connection con){
         //Update all Caravans
+		PreparedStatement stmt;
+		try {
+			stmt=con.prepareStatement("UPDATE caravan a, aobject b SET b.Lat = a.Lat + a.SpdLat, b.Lng = a.Lng + a.SpdLng, a.Lat = a.Lat + a.SpdLat, a.Lng = a.Lng + a.SpdLng");
+			stmt.execute();
+			//Maybe do it in
+			stmt=con.prepareStatement("SELECT a.GUID " +
+					"FROM caravan a, cities b " +
+					"WHERE a.endpoint = b.guid " +
+					"AND FLOOR( a.lat / ABS( a.SpdLat ) ) = FLOOR( b.lat / ABS( a.SpdLat ) )  " +
+					"AND FLOOR( a.lng / ABS( a.SpdLng ) ) = FLOOR( b.lng / ABS( a.SpdLng ) ) ");
+			ResultSet rs=stmt.executeQuery();
+			if (rs.isBeforeFirst()){
+				while (rs.next()){
+					CaravanObj caravan = new CaravanObj(con,rs.getString("GUID"));
+					PlayerObj player = new PlayerObj(con,caravan.GetOwner());
+					player.SetGold(player.GetGold()+caravan.GetGold(con));
+					player.SetDBData(con);
+				}
+			}
+			stmt.close();
+			//Check Cross with Ambush
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//Check Cross with Cities
 
-        //Check Cross with Cities
 
-        //Check Cross with Ambush
     }
-    public void CreateCaravans(){
+
+	/**
+	 * Create new Caravans
+	 * @param con Connection DB
+	 */
+    public void CreateCaravans(Connection con){
         //Check All Routes with timeout
-        //For each cooldown
-            //CreateCaravan
-            //UpdateCooldown
-
+		PreparedStatement stmt;
+		try {
+			stmt=con.prepareStatement("SELECT guid, owner\n" +
+					"FROM route " +
+					"WHERE NEXT < NOW( ) ");
+			ResultSet rs=stmt.executeQuery();
+			if (rs.isBeforeFirst()){
+				while (rs.next()){
+					RouteObj route = new RouteObj(con,rs.getString("GUID"));
+					CaravanObj caravan=new CaravanObj(route);
+					caravan.SetDBData(con);
+					route.SetNext();
+					route.SetDBData(con);
+				}
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
     }
+
+	/**
+	 * Cron tast
+	 * @param arg NotUse
+	 */
+	public static void main(String[] arg){
+		SpiritProto sp=new SpiritProto();
+		Connection con=sp.ConnectDB();
+		sp.CreateCaravans(con);
+		sp.MoveCaravans(con);
+
+		try {
+			con.commit();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	
 }

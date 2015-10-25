@@ -1,0 +1,4 @@
+#!/bin/bash
+clear
+cd $OPENSHIFT_REPO_DIR
+java -cp . src.main.java.main.SpiritProto

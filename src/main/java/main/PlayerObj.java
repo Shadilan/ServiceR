@@ -13,14 +13,26 @@ import java.sql.SQLException;
 public class PlayerObj implements GameObject {
 	private String UserName;
 	private String Token;
-	private String GUID;
+	private String GUID;public String GetGUID(){return GUID;}
 	private int Lat;
 	private int Lng;
-	private int Gold;
-	private String City;
+	private int Gold;public int GetGold(){return Gold;} public void SetGold(int Gold){this.Gold=Gold;}
+	private String City;public String GetCity(){return City;}
 	private int Influence;
 	//TODO:Change to exception
-	public String LastError;
+	public String LastError;public String GetLastError(){return LastError;}
+
+	public PlayerObj(){
+
+	}
+	/**
+	 * Load data from DB by GUID
+	 * @param con DB Connection
+	 * @param GUID GUID
+	 */
+	public PlayerObj(Connection con,String GUID){
+		GetDBData(con,GUID);
+	}
 
 	/**
 	 *
@@ -48,9 +60,9 @@ public class PlayerObj implements GameObject {
 	 */
 	@Override
 	public void GetDBData(Connection con, String GUID) {
-		// TODO Auto-generated method stub
+
 		PreparedStatement stmt;
-		
+
 		try {
 			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a LEFT JOIN cities b ON (b.owner = a.guid) WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
@@ -219,21 +231,4 @@ public class PlayerObj implements GameObject {
         SetDBData(con);
     }
 
-	/**
-	 * Return Last error in object
-	 * @return Last error text
-	 */
-    public String GetLastError(){return LastError;}
-
-	/**
-	 *
-	 * @return City that players own
-	 */
-	public String GetCity(){return City;}
-
-	/**
-	 * Get GUID of object
-	 * @return GUID
-	 */
-	public String GetGUID(){return GUID;}
 }
