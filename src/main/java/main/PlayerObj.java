@@ -28,8 +28,7 @@ public class PlayerObj implements GameObject {
 	 */
 	public boolean isLogin()
 	{
-		if (GUID !=null) return true;
-		return false;
+		return GUID != null;
 	}
 
 	/**
@@ -59,7 +58,7 @@ public class PlayerObj implements GameObject {
 			rs.first();
 			UserName=rs.getString("PlayerName");
 			Token=rs.getString("USERTOKEN");
-			GUID=rs.getString("GUID");
+			this.GUID=rs.getString("GUID");
 			Lat=rs.getInt("Lat");
 			Lng=rs.getInt("Lng");
 			Gold=rs.getInt("Gold");
@@ -225,4 +224,16 @@ public class PlayerObj implements GameObject {
 	 * @return Last error text
 	 */
     public String GetLastError(){return LastError;}
+
+	/**
+	 *
+	 * @return City that players own
+	 */
+	public String GetCity(){return City;}
+
+	/**
+	 * Get GUID of object
+	 * @return GUID
+	 */
+	public String GetGUID(){return GUID;}
 }

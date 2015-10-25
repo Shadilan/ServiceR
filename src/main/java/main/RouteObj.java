@@ -82,6 +82,25 @@ public class RouteObj implements GameObject {
 	}
 
     /**
+     * Constructor Create route from player and cities info
+     * @param player Owner of route
+     * @param StartCity Start city
+     * @param TargetCity End city
+     */
+    public RouteObj(PlayerObj player,CityObj StartCity,CityObj TargetCity){
+        GUID=UUID.randomUUID().toString();
+        this.Owner=player.GetGUID();
+        this.RStart=StartCity.GetGUID();
+        this.REnd=TargetCity.GetGUID();
+        if (Owner.equals("")) LastError="Player not found";
+        else if (RStart.equals("")) LastError="Player City not found";
+        else if (REnd.equals("")) LastError="Target City not found";
+        else if (RStart.equals(REnd)) LastError="Target and Home city is one city";
+
+        Gold=0;
+        HP=10;
+    }
+    /**
      * Creator of object
      * @param con Connection to DB
      * @param GUID GUID of route

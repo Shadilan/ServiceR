@@ -114,7 +114,9 @@ public class SpiritProto {
 			}
 		}
 		try {
-			pstmt.close();
+            if (pstmt!=null) {
+                pstmt.close();
+            }
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -173,7 +175,12 @@ public class SpiritProto {
 					Cities.add(City);
 				} else
 				if (ObjType.equalsIgnoreCase("AMBUSH")){
-				}
+                    //For future
+				}else
+                if (ObjType.equalsIgnoreCase("CARAVAN")){
+                    //For future
+                }
+
 			}
 			result="{Player:"+player.toString();
 			String citiesinfo=null;
@@ -216,25 +223,46 @@ public class SpiritProto {
 	    Connection con = ConnectDB();
         PlayerObj player=new PlayerObj();
         player.GetDBDataByToken(con,token);
+		//Check if player have correct Token
         if (!player.isLogin()){
             return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000001"+'"'+",Message:"+'"'+"User not login in."+'"'+"}";
         }
+		//Set new player position
         player.setPos(Lat,Lng);
+
+		//Check Actions (add new action here
         if (action.equals("addCity")){
             player.CreateCity(con);
+			lastError=player.GetLastError();
         } else
         if (action.equals("removeCity")){
             player.RemoveCity(con, target);
+			lastError=player.GetLastError();
         } else
-		return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000000"+'"'+",Message:"+'"'+"Command uknown."+'"'+"}";
-        if (player.GetLastError()!=null)
+		//Create route
+		if (action.equals("addroute")){
+			CityObj targetCity=new CityObj(con,target);
+			CityObj homeCity=new CityObj(con,player.GetCity());
+			//Check if all city founded;
+			RouteObj route=new RouteObj(player,homeCity,targetCity);
+			if (route.GetLastError().equals("")) route.SetDBData(con);
+			else lastError=route.GetLastError();
+		}
+		else
+		//Return defaul error for unknown command
+		lastError="Command unknown.";
+
+		//TODO change to exception
+		//Check LastError
+        if (lastError!=null)
         {
         	try {
 				con.rollback();
+				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-        	return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000003"+'"'+",Message:"+'"'+player.GetLastError()+'"'+"}";
+        	return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000003"+'"'+",Message:"+'"'+lastError+'"'+"}";
         }
         
         try {
