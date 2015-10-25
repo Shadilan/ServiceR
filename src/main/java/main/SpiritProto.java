@@ -356,6 +356,8 @@ public class SpiritProto {
 
 		try {
 			InitialContext iniCtx = new InitialContext();
+			DataSource ds;
+			ds = (DataSource)iniCtx.lookup("java:jboss/datasources/MySQLDS");
 			System.out.println("test");
 		} catch (NamingException e) {
 			e.printStackTrace();
