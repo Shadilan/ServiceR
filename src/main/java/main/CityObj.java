@@ -10,13 +10,13 @@ import java.util.UUID;
  * @author Shadilan
  */
 public class CityObj implements GameObject {
-	private String GUID;
-	private String Owner;
+	private String GUID;public String GetGUID(){return GUID;}
+	private String Owner;public String GetOwner(){return this.Owner;}
 	private String CityName;
-	private int Lat;
-	private int Lng;
+	private int Lat;public int GetLat(){return Lat;}
+	private int Lng;public int GetLng(){return Lng;}
 
-	private String LastError=null;
+	private String LastError=null;public String GetLastError(){return LastError;}
 
 	/**
 	 * Creator of object
@@ -111,13 +111,6 @@ public class CityObj implements GameObject {
 
 	}
 
-	/**
-	 * Geter
-	 * @return GUID of object
-	 */
-	public String GetGUID(){
-		return GUID;
-	}
 
 	/**
 	 * Generate JSON
@@ -135,10 +128,6 @@ public class CityObj implements GameObject {
 
 	}
 
-	/**
-	 * Getter
-	 * @return return LastError
-	 */
-	public String GetLastError(){return LastError;}
+
 
 }

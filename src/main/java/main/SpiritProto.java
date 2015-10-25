@@ -273,8 +273,21 @@ public class SpiritProto {
 			e.printStackTrace();
 		}
         return "{Result:"+'"'+"Success"+'"'+",Code:"+'"'+"S"+'"'+",Message:"+'"'+"Done"+'"'+"}";
-
-
 	}
+    public void MoveCaravans(){
+        //Update all Caravans
+
+        //Check Cross with Cities
+
+        //Check Cross with Ambush
+    }
+    public void CreateCaravans(){
+        //Check All Routes with timeout
+        //For each cooldown
+            //CreateCaravan
+            //UpdateCooldown
+
+    }
+
 	
 }

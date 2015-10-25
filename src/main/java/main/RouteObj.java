@@ -13,58 +13,22 @@ import java.util.UUID;
  */
 
 public class RouteObj implements GameObject {
-	private String GUID;
 
-	private String Owner;
-	private String RStart;
-	private String REnd;
+    private String GUID; public String GetGuid(){return GUID;}
+	private String Owner; public String GetOwner(){return this.Owner;}
+	private String RStart; public String GetRStart(){return RStart;}
+	private String REnd;public String GetREnd(){return REnd;}
 	private int Gold;
 	private int HP;
 	private int Cooldown;
 	private Date Next;
-	private int SLat;
-	private int SLng;
-	private int ELat;
-	private int ELng;
+	private int SLat; public int GetSLat(){return SLat;}
+	private int SLng;public int GetSLng(){return SLng;}
+	private int ELat;public int GetELat(){return ELat;}
+	private int ELng;public int GetELng(){return ELng;}
 
     //TODO: Change to Exception;
-    private String LastError;
-
-    /**
-     * Geter
-     * @return GUID value
-     */
-    public String GetGuid(){return GUID;}
-
-    /**
-     * Geter
-     * @return LastError
-     */
-	public String GetLastError(){return LastError;}
-
-    /**
-     * Geter
-     * @return Latitude of Start;
-     */
-    public int GetSLat(){return SLat;}
-
-    /**
-     * Geter
-     * @return Longtitue of Start
-     */
-    public int GetSLng(){return SLng;}
-
-    /**
-     * Geter
-     * @return Latitude of End
-     */
-    public int GetELat(){return ELat;}
-
-    /**
-     * Geter
-     * @return Longtitude of End
-     */
-    public int GetELng(){return ELng;}
+    private String LastError; public String GetLastError(){return LastError;}
 
     /**
      * Creator of object
