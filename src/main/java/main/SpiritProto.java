@@ -353,7 +353,16 @@ public class SpiritProto {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}*/
-		System.out.print("Test");
+
+		try {
+			InitialContext iniCtx = new InitialContext();
+			System.out.println("test");
+		} catch (NamingException e) {
+			e.printStackTrace();
+			System.out.println(e.toString());
+		}
+
+
 	}
 
 	
