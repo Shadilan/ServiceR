@@ -482,6 +482,7 @@ public class SpiritProto {
 				stmt.setInt(2,a.x);
 				stmt.setInt(3,a.y);
 				stmt.execute();
+				con.commit();
 			}
 			con.commit();
 			con.close();
