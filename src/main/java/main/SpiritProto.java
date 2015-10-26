@@ -1,26 +1,56 @@
 package main;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.UUID;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Main object for Server
  */
 public class SpiritProto {
 	String lastError="";
+    final Runnable task = new Runnable() {
+        public void run() {
+            Connection con = ConnectDB();
+            try {
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                PreparedStatement stmt;
+                stmt = con.prepareStatement("select count(1) as cnt from service.PROCESS_CONTROL where PROCESS_NAME='MAIN' and STOP_FLAG='Y'");
+                ResultSet rs = stmt.executeQuery();
+                rs.first();
+                if (rs.getInt("cnt") == 0) new Thread(task).start();
+                stmt.close();
+                CreateCaravans(con);
+                MoveCaravans(con);
+                stmt = con.prepareStatement("update service.PROCESS_CONTROL set LAST_RUN=NOW() where PROCESS_NAME='MAIN'");
+                stmt.execute();
+                con.commit();
+                stmt.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
-	/**
-	 * Default Constructor
+    /**
+     * Default Constructor
 	 */
 	public SpiritProto(){
-		
+
 	}
+
 	public Connection ConnectDB(){
 		Context ctx;
 		DataSource ds;
@@ -51,16 +81,15 @@ public class SpiritProto {
 			lastError=e.toString();
 			try{
 				ctx.close();
-				
+
 			} catch(NamingException e2){
 				lastError=e2.toString();
 			}
 		}
-		
-		
-		
-		return con;
-	}
+
+
+        return con;
+    }
 
 	/**
 	 * Get Token
@@ -69,7 +98,7 @@ public class SpiritProto {
 	 * @return Generated Token
 	 */
 	public String GetToken(String Login,String Password){
-		
+
 		Connection con=ConnectDB();
 		String Token = UUID.randomUUID().toString();
 		int result=0;
@@ -77,18 +106,18 @@ public class SpiritProto {
 		try {
 		pstmt= con.prepareStatement("SELECT count(1) from gplayers WHERE PlayerName=? and Password=?");
 		pstmt.setString(1, Login);
-		
-			pstmt.setString(2, Password);
-		
-			ResultSet rs=pstmt.executeQuery();
-			rs.first();
+
+            pstmt.setString(2, Password);
+
+            ResultSet rs = pstmt.executeQuery();
+            rs.first();
 			if (rs.getInt(1)==0) {
 				result=2;
 				lastError="User not Found: "+Login+" "+Password;
 			}
-			
-		} catch (SQLException e) {
-			result=1;
+
+        } catch (SQLException e) {
+            result=1;
 			lastError=e.toString();
 		}
 		if (result==0)
@@ -97,15 +126,15 @@ public class SpiritProto {
 				pstmt= con.prepareStatement("UPDATE gplayers SET USERTOKEN=? WHERE PlayerName=? and Password=?");
 				pstmt.setString(1, Token);
 				pstmt.setString(2, Login);
-			
-				pstmt.setString(3, Password);
-			
-				pstmt.execute();
-				con.commit();
+
+                pstmt.setString(3, Password);
+
+                pstmt.execute();
+                con.commit();
 				result=0;
-				
-			} catch (SQLException e) {
-				result=1;
+
+            } catch (SQLException e) {
+                result=1;
 				lastError=e.toString();
 			}
 		}
@@ -118,10 +147,11 @@ public class SpiritProto {
 			// TODO Auto-generated catch block
 			lastError=e.toString();
 		}
-		
-		if (result==0) return "{Token:"+'"'+Token+'"'+"}"; else return lastError;
-			
-	}
+
+        if (result == 0) return "{Token:" + '"' + Token + '"' + "}";
+        else return lastError;
+
+    }
 
 	/**
 	 * Get info of objects around coord
@@ -153,17 +183,16 @@ public class SpiritProto {
 			PreparedStatement stmt=con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
-			
 
 
-			ResultSet rs=stmt.executeQuery();
-			rs.beforeFirst();
+            ResultSet rs = stmt.executeQuery();
+            rs.beforeFirst();
 			ArrayList<CityObj> Cities= new ArrayList<>();
 			while (rs.next())
 			{
-				
-				String GUID=rs.getString(1);
-				String ObjType=rs.getString(2);
+
+                String GUID = rs.getString(1);
+                String ObjType=rs.getString(2);
 				if (ObjType.equalsIgnoreCase("CITY")){
 					CityObj City=new CityObj();
 					City.GetDBData(con, GUID);
@@ -181,9 +210,9 @@ public class SpiritProto {
 			String citiesinfo=null;
 			for (CityObj city:Cities){
 				if (citiesinfo==null) citiesinfo=city.toString(); else citiesinfo+=","+city.toString();
-				
-			}
-			if (citiesinfo!=null) result+=","+"Cities:["+citiesinfo+"]";
+
+            }
+            if (citiesinfo!=null) result+=","+"Cities:["+citiesinfo+"]";
 			result+="}";
 
 			con.commit();
@@ -191,9 +220,9 @@ public class SpiritProto {
 			e.printStackTrace();
 			result=e.toString();
 		}
-		
-		try {
-			if (!con.isClosed()){
+
+        try {
+            if (!con.isClosed()){
 				con.rollback();
 				con.close();
 			}
@@ -257,7 +286,7 @@ public class SpiritProto {
 			}
         	return "{Result:"+'"'+"Error"+'"'+",Code:"+'"'+"E000003"+'"'+",Message:"+'"'+lastError+'"'+"}";
         }
-        
+
         try {
         	con.commit();
 			con.close();
@@ -363,48 +392,23 @@ public class SpiritProto {
 		}
 		return "Stoped";
 	}
-	final Runnable task = new Runnable() {
-		public void run() {
-			Connection con =ConnectDB();
-			try {
-				try {
-					Thread.sleep(60000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				PreparedStatement stmt;
-				stmt =con.prepareStatement("select count(1) as cnt from service.PROCESS_CONTROL where PROCESS_NAME='MAIN' and STOP_FLAG='Y'");
-				ResultSet rs=stmt.executeQuery();
-				rs.first();
-				if (rs.getInt("cnt")==0) new Thread(task).start();
-				stmt.close();
-				CreateCaravans(con);
-				MoveCaravans(con);
-				stmt =con.prepareStatement("update service.PROCESS_CONTROL set LAST_RUN=NOW() where PROCESS_NAME='MAIN'");
-				stmt.execute();
-				con.commit();
-				stmt.close();
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-	/**
-	 * Create New Player
-	 * @param Login
-	 * @param Password
-	 * @param email
-	 */
-	public String NewPlayer(String Login,String Password,String email,String InviteCode){
+
+    /**
+     * Create New Player
+     *
+     * @param Login
+     * @param Password
+     * @param email
+     */
+    public String NewPlayer(String Login,String Password,String email,String InviteCode){
 		Connection con=ConnectDB();
 		PreparedStatement stmt;
 		try {
 			ResultSet rs;
 			//Check inviteCode
-			stmt=con.prepareStatement("select count(1) cnt from invites where inviteCode=?");
-			stmt.setString(1,InviteCode);
-			rs=stmt.executeQuery();
+            stmt = con.prepareStatement("select count(1) cnt from invites where inviteCode=? and Invited=''");
+            stmt.setString(1, InviteCode);
+            rs=stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt")==0){
 				stmt.close();
@@ -412,9 +416,9 @@ public class SpiritProto {
 				return "No Invite Code";
 			}
 			//Check Name Available
-			stmt=con.prepareStatement("select count(1) cnt from gplayers where UserName=? or email=?");
-			stmt.setString(1,Login);
-			stmt.setString(2,email);
+            stmt = con.prepareStatement("select count(1) cnt from gplayers where PlayerName=? or email=?");
+            stmt.setString(1,Login);
+            stmt.setString(2,email);
 			rs=stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt")>0){
@@ -430,17 +434,17 @@ public class SpiritProto {
 			//Write InviteCode
 			String GUID=UUID.randomUUID().toString();
 			stmt=con.prepareStatement("update invites set Invited=? where inviteCode=?");
-			stmt.setString(1,GUID);
-			stmt.setString(2,InviteCode);
-			stmt.execute();
-			//Write Player Info
+            stmt.setString(1, GUID);
+            stmt.setString(2, InviteCode);
+            stmt.execute();
+            //Write Player Info
 			stmt=con.prepareStatement("insert into gplayers(GUID,PlayerName,Password,email) VALUES(?,?,?,?)");
 			stmt.setString(1,GUID);
 			stmt.setString(2,Login);
 			stmt.setString(3,Password);
-			stmt.setString(4,email);
-			stmt.execute();
-			stmt=con.prepareStatement("insert into aobject(GUID) VALUES(?)");
+            stmt.setString(4, email);
+            stmt.execute();
+            stmt=con.prepareStatement("insert into aobject(GUID) VALUES(?)");
 			stmt.setString(1, GUID);
 			stmt.execute();
 			stmt.close();
