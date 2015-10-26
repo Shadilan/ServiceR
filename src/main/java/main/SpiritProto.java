@@ -470,16 +470,17 @@ public class SpiritProto {
 			stmt = con.prepareStatement("delete from aobject where ObjectType='CITY'");
 			stmt.execute();
 			ArrayList<Point>  cities=MyUtils.createCitiesOnMap(x,y,count);
+			con.commit();
 			for (Point a:cities){
 				String GUID=UUID.randomUUID().toString();
 				stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng,CITYNAME)VALUES(?,?,?,'TEST')");
 				stmt.setString(1,GUID);
-				stmt.setInt(2,a.x);
+				stmt.setInt(2, a.x);
 				stmt.setInt(3,a.y);
 				stmt.execute();
 				stmt = con.prepareStatement("INSERT INTO aobject(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
 				stmt.setString(1,GUID);
-				stmt.setInt(2,a.x);
+				stmt.setInt(2, a.x);
 				stmt.setInt(3,a.y);
 				stmt.execute();
 				con.commit();
@@ -488,7 +489,12 @@ public class SpiritProto {
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return e.toString();
+			try {
+				if (!con.isClosed()) con.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			return "!!"+e.toString();
 		}
 		return "Success";
 		//Generate positions
