@@ -462,16 +462,17 @@ public class SpiritProto {
 	public String GenCity(int x,int y,int count){
 		Connection con = ConnectDB();
 		//Remove all current city
-
+        int step=0;
 		try {
 			PreparedStatement stmt;
 			stmt = con.prepareStatement("delete from cities");
 			stmt.execute();
+            step++;
             stmt.close();
             stmt = con.prepareStatement("delete from aobject where ObjectType='CITY'");
 			stmt.execute();
+            step++;
             stmt.close();
-            con.commit();
 			ArrayList<Point>  cities=MyUtils.createCitiesOnMap(x,y,count);
 			for (Point a:cities){
 				String GUID=UUID.randomUUID().toString();
@@ -480,14 +481,17 @@ public class SpiritProto {
 				stmt.setInt(2, a.x);
                 stmt.setInt(3,a.y);
 				stmt.execute();
+                step++;
                 stmt.close();
 				stmt = con.prepareStatement("INSERT INTO aobject(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
 				stmt.setString(1,GUID);
 				stmt.setInt(2, a.x);
                 stmt.setInt(3,a.y);
                 stmt.execute();
+                step++;
                 stmt.close();
 			}
+            step++;
 			con.commit();
 			con.close();
 		} catch (SQLException e) {
@@ -497,7 +501,7 @@ public class SpiritProto {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			return "!!"+e.toString();
+			return "Step:"+step+" Error:"+e.toString();
 		}
 		return "Success";
 		//Generate positions
