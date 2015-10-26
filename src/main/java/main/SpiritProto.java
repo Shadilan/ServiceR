@@ -467,7 +467,7 @@ public class SpiritProto {
 			PreparedStatement stmt;
 			stmt = con.prepareStatement("delete from cities");
 			stmt.execute();
-			stmt = con.prepareStatement("delete from aobjects where ObjectType='CITY'");
+			stmt = con.prepareStatement("delete from aobject where ObjectType='CITY'");
 			stmt.execute();
 			ArrayList<Point>  cities=MyUtils.createCitiesOnMap(x,y,count);
 			for (Point a:cities){
@@ -477,7 +477,7 @@ public class SpiritProto {
 				stmt.setInt(2,a.x);
 				stmt.setInt(3,a.y);
 				stmt.execute();
-				stmt = con.prepareStatement("INSERT INTO aobjects(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
+				stmt = con.prepareStatement("INSERT INTO aobject(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
 				stmt.setString(1,GUID);
 				stmt.setInt(2,a.x);
 				stmt.setInt(3,a.y);
