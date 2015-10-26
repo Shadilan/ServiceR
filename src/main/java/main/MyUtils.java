@@ -1,6 +1,10 @@
 package main;
 //This code was freely adapted from http://www.movable-type.co.uk/scripts/latlong-vincenty.html
 
+import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Utility Functions
  */
@@ -59,9 +63,10 @@ public class MyUtils {
 
 
 	}
-	public static int[][] createCitiesOnMap(int width, int height, int citycount)
+	public static ArrayList<Point> createCitiesOnMap(int width, int height, int citycount)
 	{
-		int [][] cityarr;
+		ArrayList<Point> cityarr = new ArrayList<>();
+
 		int city=0;
 		double i;
 		double j;
@@ -69,9 +74,8 @@ public class MyUtils {
 		for (i=0;i<width;i+=size_square)
 			for (j=0;j<height;j+=size_square)
 			{
-				cityarr[city,0]=Math.random()*size_square+i;
-				cityarr[city,1]=Math.random()*size_square+j;
-				city=city+1;
+				cityarr.add(new Point ((int) (Math.random()*size_square+i), (int) (Math.random()*size_square+j)));
+
 			}
 		return cityarr;
 	}

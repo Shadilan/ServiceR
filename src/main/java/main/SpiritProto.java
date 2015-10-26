@@ -4,6 +4,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -458,7 +459,41 @@ public class SpiritProto {
 
 		return "User Created";
 	}
+	public String GenCity(int x,int y,int count){
+		Connection con = ConnectDB();
+		//Remove all current city
 
+		try {
+			PreparedStatement stmt;
+			stmt = con.prepareStatement("delete from cities");
+			stmt.execute();
+			stmt = con.prepareStatement("delete from aobjects where ObjectType='CITY'");
+			stmt.execute();
+			ArrayList<Point>  cities=MyUtils.createCitiesOnMap(x,y,count);
+			for (Point a:cities){
+				String GUID=UUID.randomUUID().toString();
+				stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng)VALUES(?,?,?)");
+				stmt.setString(1,GUID);
+				stmt.setInt(2,a.x);
+				stmt.setInt(3,a.y);
+				stmt.execute();
+				stmt = con.prepareStatement("INSERT INTO aobjects(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
+				stmt.setString(1,GUID);
+				stmt.setInt(2,a.x);
+				stmt.setInt(3,a.y);
+				stmt.execute();
+			}
+			con.commit();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "Success";
+		//Generate positions
+		//write to db
+
+	}
 
 	
 }
