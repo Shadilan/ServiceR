@@ -22,6 +22,7 @@ public class PlayerObj implements GameObject {
 	//TODO:Change to exception
 	public String LastError;public String GetLastError(){return LastError;}
 
+
 	public PlayerObj(){
 
 	}

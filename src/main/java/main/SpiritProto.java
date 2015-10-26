@@ -2,7 +2,6 @@ package main;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.UUID;
 
 import javax.naming.Context;
@@ -106,7 +105,6 @@ public class SpiritProto {
 				result=0;
 				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				result=1;
 				lastError=e.toString();
 			}
@@ -151,7 +149,6 @@ public class SpiritProto {
 		player.setPos(Lat, Lng);
 		player.SetDBData(con);
 		String result;
-		int cnt=0;
 		try {
 			PreparedStatement stmt=con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
 			stmt.setInt(1, Lat);
@@ -161,7 +158,7 @@ public class SpiritProto {
 
 			ResultSet rs=stmt.executeQuery();
 			rs.beforeFirst();
-			ArrayList<CityObj> Cities=new ArrayList<CityObj>();
+			ArrayList<CityObj> Cities= new ArrayList<>();
 			while (rs.next())
 			{
 				
@@ -191,7 +188,6 @@ public class SpiritProto {
 
 			con.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result=e.toString();
 		}
@@ -202,7 +198,6 @@ public class SpiritProto {
 				con.close();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;
@@ -267,7 +262,6 @@ public class SpiritProto {
         	con.commit();
 			con.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return "{Result:"+'"'+"Success"+'"'+",Code:"+'"'+"S"+'"'+",Message:"+'"'+"Done"+'"'+"}";
@@ -294,7 +288,7 @@ public class SpiritProto {
 				while (rs.next()){
 					CaravanObj caravan = new CaravanObj(con,rs.getString("GUID"));
 					PlayerObj player = new PlayerObj(con,caravan.GetOwner());
-					player.SetGold(player.GetGold()+caravan.GetGold(con));
+					player.SetGold(player.GetGold() + caravan.GetGold(con));
 					player.SetDBData(con);
 				}
 			}
@@ -336,39 +330,9 @@ public class SpiritProto {
     }
 
 	/**
-	 * Cron tast
-	 * @param arg NotUse
+	 * Start server task
+	 * @return result
 	 */
-
-	public static void main(String[] arg){
-		/*SpiritProto sp=new SpiritProto();
-		Connection con=sp.ConnectDB();
-		sp.CreateCaravans(con);
-		sp.MoveCaravans(con);
-
-		try {
-			con.commit();
-			con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}*/
-
-
-		try {
-			try {
-
-				Class.forName("com.mysql.jdbc.Driver");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-
-			}
-			Connection con= DriverManager.getConnection("jdbc:mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/","adminUuszpdJ","5FKl3fnWFT55");
-		} catch (SQLException e) {
-			e.printStackTrace();
-
-		}
-		System.out.println("test");
-	}
 	public String StartTask(){
 		Connection con=ConnectDB();
 		try {
@@ -382,6 +346,11 @@ public class SpiritProto {
 		new Thread(task).start();
 		return "Started";
 	}
+
+	/**
+	 * Stop current server task
+	 * @return result
+	 */
 	public String StopTask(){
 		Connection con=ConnectDB();
 		try {
@@ -421,6 +390,71 @@ public class SpiritProto {
 			}
 		}
 	};
+	/**
+	 * Create New Player
+	 * @param Login
+	 * @param Password
+	 * @param email
+	 */
+	public String NewPlayer(String Login,String Password,String email,String InviteCode){
+		Connection con=ConnectDB();
+		PreparedStatement stmt;
+		try {
+			ResultSet rs;
+			//Check inviteCode
+			stmt=con.prepareStatement("select count(1) cnt from invites where inviteCode=?");
+			stmt.setString(1,InviteCode);
+			rs=stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt")==0){
+				stmt.close();
+				con.close();
+				return "No Invite Code";
+			}
+			//Check Name Available
+			stmt=con.prepareStatement("select count(1) cnt from gplayers where UserName=? or email=?");
+			stmt.setString(1,Login);
+			stmt.setString(2,email);
+			rs=stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt")>0){
+				stmt.close();
+				con.close();
+				return "Name or Mail already Exists";
+			}
+			if (Password.length()<6){
+				stmt.close();
+				con.close();
+				return "Name or Mail already Exists";
+			}
+			//Write InviteCode
+			String GUID=UUID.randomUUID().toString();
+			stmt=con.prepareStatement("update invites set Invited=? where inviteCode=?");
+			stmt.setString(1,GUID);
+			stmt.setString(2,InviteCode);
+			stmt.execute();
+			//Write Player Info
+			stmt=con.prepareStatement("insert into gplayers(GUID,PlayerName,Password,email) VALUES(?,?,?,?)");
+			stmt.setString(1,GUID);
+			stmt.setString(2,Login);
+			stmt.setString(3,Password);
+			stmt.setString(4,email);
+			stmt.execute();
+			stmt=con.prepareStatement("insert into aobject(GUID) VALUES(?)");
+			stmt.setString(1, GUID);
+			stmt.execute();
+			stmt.close();
+			con.commit();
+			con.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+
+		return "User Created";
+	}
+
 
 	
 }
