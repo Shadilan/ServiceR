@@ -59,7 +59,7 @@ public class MyUtils {
 
 
 	}
-	public static int createCitiesOnMap(int width, int height, int citycount)
+	public static int[][] createCitiesOnMap(int width, int height, int citycount)
 	{
 		int [][] cityarr;
 		int city=0;
