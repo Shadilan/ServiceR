@@ -497,7 +497,10 @@ public class SpiritProto {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
-				if (!con.isClosed()) con.close();
+				if (!con.isClosed()) {
+                    con.rollback();
+                    con.close();
+                }
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
