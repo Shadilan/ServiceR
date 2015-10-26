@@ -339,6 +339,7 @@ public class SpiritProto {
 	 * Cron tast
 	 * @param arg NotUse
 	 */
+
 	public static void main(String[] arg){
 		/*SpiritProto sp=new SpiritProto();
 		Connection con=sp.ConnectDB();
@@ -367,10 +368,38 @@ public class SpiritProto {
 
 		}
 		System.out.println("test");
-
-
-
 	}
+	public String StartTask(){
+		new Thread(task).start();
+		return "Started";
+	}
+	final Runnable task = new Runnable() {
+		public void run() {
+			Connection con =ConnectDB();
+			try {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				PreparedStatement stmt;
+				stmt =con.prepareStatement("insert into service.TEST(DATEWRITE) VALUES(NOW())");
+				stmt.execute();
+				con.commit();
+				stmt.close();
+				stmt =con.prepareStatement("select count(1) as cnt from SERVICE.TEST");
+				ResultSet rs=stmt.executeQuery();
+				rs.first();
+				if (rs.getInt("cnt")<20) new Thread(task).start();
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+
+		}
+	};
 
 	
 }
