@@ -370,34 +370,52 @@ public class SpiritProto {
 		System.out.println("test");
 	}
 	public String StartTask(){
+		Connection con=ConnectDB();
+		try {
+			PreparedStatement stmt=con.prepareStatement("update service.PROCESS_CONTROL set STOP_FLAG='N' where PROCESS_NAME='MAIN'");
+			stmt.execute();
+			con.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
 		new Thread(task).start();
 		return "Started";
+	}
+	public String StopTask(){
+		Connection con=ConnectDB();
+		try {
+			PreparedStatement stmt=con.prepareStatement("update service.PROCESS_CONTROL set STOP_FLAG='Y' where PROCESS_NAME='MAIN'");
+			stmt.execute();
+			con.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "Stoped";
 	}
 	final Runnable task = new Runnable() {
 		public void run() {
 			Connection con =ConnectDB();
 			try {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(60000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				PreparedStatement stmt;
-				stmt =con.prepareStatement("select count(1) as cnt from service.TEST");
+				stmt =con.prepareStatement("select count(1) as cnt from service.PROCESS_CONTROL where PROCESS_NAME='MAIN' and STOP_FLAG='Y'");
 				ResultSet rs=stmt.executeQuery();
 				rs.first();
-				if (rs.getInt("cnt")<20) new Thread(task).start();
-				stmt =con.prepareStatement("insert into service.TEST(DATEWRITE) VALUES(NOW())");
-				stmt.execute();
-				con.commit();
+				if (rs.getInt("cnt")==0) new Thread(task).start();
 				stmt.close();
-				stmt.close();
+				CreateCaravans(con);
+				MoveCaravans(con);
+
 				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
-
 		}
 	};
 
