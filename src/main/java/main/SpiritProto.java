@@ -411,7 +411,10 @@ public class SpiritProto {
 				stmt.close();
 				CreateCaravans(con);
 				MoveCaravans(con);
-
+				stmt =con.prepareStatement("update service.PROCESS_CONTROL set LAST_RUN=NOW() where PROCESS_NAME='MAIN'");
+				stmt.execute();
+				con.commit();
+				stmt.close();
 				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
