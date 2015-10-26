@@ -69,7 +69,7 @@ public class MyUtils {
 
 		double i;
 		double j;
-		double size_square=citycount/(width*height);
+		double size_square=Math.sqrt((width*height)/citycount);
 		for (i=0;i<width;i+=size_square)
 			for (j=0;j<height;j+=size_square)
 			{
