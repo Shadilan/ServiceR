@@ -472,7 +472,7 @@ public class SpiritProto {
 			ArrayList<Point>  cities=MyUtils.createCitiesOnMap(x,y,count);
 			for (Point a:cities){
 				String GUID=UUID.randomUUID().toString();
-				stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng)VALUES(?,?,?)");
+				stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng,CITYNAME)VALUES(?,?,?,'TEST')");
 				stmt.setString(1,GUID);
 				stmt.setInt(2,a.x);
 				stmt.setInt(3,a.y);
