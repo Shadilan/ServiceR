@@ -383,14 +383,14 @@ public class SpiritProto {
 					e.printStackTrace();
 				}
 				PreparedStatement stmt;
+				stmt =con.prepareStatement("select count(1) as cnt from service.TEST");
+				ResultSet rs=stmt.executeQuery();
+				rs.first();
+				if (rs.getInt("cnt")<20) new Thread(task).start();
 				stmt =con.prepareStatement("insert into service.TEST(DATEWRITE) VALUES(NOW())");
 				stmt.execute();
 				con.commit();
 				stmt.close();
-				stmt =con.prepareStatement("select count(1) as cnt from SERVICE.TEST");
-				ResultSet rs=stmt.executeQuery();
-				rs.first();
-				if (rs.getInt("cnt")<20) new Thread(task).start();
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
