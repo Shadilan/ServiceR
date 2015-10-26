@@ -67,7 +67,6 @@ public class MyUtils {
 	{
 		ArrayList<Point> cityarr = new ArrayList<>();
 
-		int city=0;
 		double i;
 		double j;
 		double size_square=citycount/(width*height);
