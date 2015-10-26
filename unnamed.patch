@@ -1,0 +1,28 @@
+Index: src/main/java/main/MyUtils.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/main/MyUtils.java	(revision f5e54db4d8a4a5e4891a00588ac8f5260f89f7c7)
++++ src/main/java/main/MyUtils.java	(revision )
+@@ -59,4 +59,20 @@
+ 
+ 
+ 	}
++	public static int createCitiesOnMap(int width, int height, int citycount)
++	{
++		int [][] cityarr;
++		int city=0;
++		double i;
++		double j;
++		double size_square=citycount/(width*height);
++		for (i=0;i<width;i+=size_square)
++			for (j=0;j<height;j+=size_square)
++			{
++				cityarr[city,0]=Math.random()*size_square+i;
++				cityarr[city,1]=Math.random()*size_square+j;
++				city=city+1;
++			}
++		return cityarr;
++	}
+ }

@@ -59,4 +59,20 @@ public class MyUtils {
 
 
 	}
+	public static int createCitiesOnMap(int width, int height, int citycount)
+	{
+		int [][] cityarr;
+		int city=0;
+		double i;
+		double j;
+		double size_square=citycount/(width*height);
+		for (i=0;i<width;i+=size_square)
+			for (j=0;j<height;j+=size_square)
+			{
+				cityarr[city,0]=Math.random()*size_square+i;
+				cityarr[city,1]=Math.random()*size_square+j;
+				city=city+1;
+			}
+		return cityarr;
+	}
 }
