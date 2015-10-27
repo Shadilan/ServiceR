@@ -83,7 +83,7 @@ public class PlayerObj implements GameObject {
 
 		PreparedStatement stmt;
 
-			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a LEFT JOIN cities b ON (b.owner = a.guid) WHERE GUID=? LIMIT 0,1");
+		stmt = con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence FROM gplayers a WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
 			rs.first();
@@ -94,7 +94,6 @@ public class PlayerObj implements GameObject {
 			Lng=rs.getInt("Lng");
 			Gold=rs.getInt("Gold");
 			Influence=rs.getInt("Influence");
-			City=rs.getString("city");
 			stmt.close();
 
 		
@@ -109,7 +108,7 @@ public class PlayerObj implements GameObject {
 		PreparedStatement stmt;
 
 
-		stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a  LEFT JOIN cities b ON (b.owner = a.guid) WHERE USERTOKEN=? LIMIT 0,1");
+		stmt = con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence FROM gplayers a  WHERE USERTOKEN=? LIMIT 0,1");
 			stmt.setString(1, UserToken);
 			ResultSet rs=stmt.executeQuery();
 			if (rs.isBeforeFirst()){
@@ -121,7 +120,6 @@ public class PlayerObj implements GameObject {
 				Lng=rs.getInt("Lng");
 				Gold=rs.getInt("Gold");
 				Influence=rs.getInt("Influence");
-				City=rs.getString("city");
 			} else
 			{
 				LastError="NOUSERFOUND "+UserToken;
@@ -142,18 +140,17 @@ public class PlayerObj implements GameObject {
 
 			stmt=con.prepareStatement("UPDATE gplayers set "
 					+ "Lat=?,"
-					+ "Lng=?,"
-					+ "Gold=?,Influence=? WHERE GUID=?");
+					+ " Lng=?,"
+					+ " Gold=? WHERE GUID=?");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			stmt.setInt(3, Gold);
-			stmt.setInt(4, Influence);
-			stmt.setString(5, GUID);
+		stmt.setString(4, GUID);
 			stmt.execute();
 			stmt=con.prepareStatement("UPDATE aobject set "
 					+ "Lat=?,"
-					+ "Lng=?"
-					+ "WHERE GUID=?");
+					+ " Lng=?"
+					+ " WHERE GUID=?");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			stmt.setString(3, GUID);
