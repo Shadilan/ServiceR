@@ -148,6 +148,83 @@ public class AdminTools {
     }
 
     /**
+     * @param Lat1     Latitude of start of rect
+     * @param Lng1     Longtitude of start of rect
+     * @param Lat2     Latitude of end of rect
+     * @param Lng2     Longtitude of end of rect
+     * @param count Count of cities
+     * @return Result of operation
+     */
+    public String GenCity(int Lat1, int Lng1, int Lat2, int Lng2, int count) {
+        //Count valid coord;
+        int Lat1N;
+        int Lat2N;
+        int Lng1N;
+        int Lng2N;
+
+        if (Lat1 < Lat2) {
+            Lat1N = Lat1;
+            Lat2N = Lat2;
+        } else {
+            Lat1N = Lat2;
+            Lat2N = Lat1;
+        }
+        if (Lng1 < Lng2) {
+            Lng1N = Lng1;
+            Lng2N = Lng2;
+        } else {
+            Lng1N = Lng2;
+            Lng2N = Lng1;
+        }
+        int width = Lat2N - Lat1N;
+        int height = Lng2N - Lng1N;
+        //Remove all current city
+        try {
+            Connection con = DBUtils.ConnectDB();
+            PreparedStatement stmt;
+            stmt = con.prepareStatement("delete from cities where Lat between ? and ? and Lng between ? and ?");
+            stmt.setInt(1, Lat1N);
+            stmt.setInt(2, Lat2N);
+            stmt.setInt(3, Lng1N);
+            stmt.setInt(4, Lng2N);
+            stmt.execute();
+            stmt = con.prepareStatement("delete from aobject where ObjectType='CITY' and Lat between ? and ? and Lng between ? and ?");
+            stmt.setInt(1, Lat1N);
+            stmt.setInt(2, Lat2N);
+            stmt.setInt(3, Lng1N);
+            stmt.setInt(4, Lng2N);
+            stmt.execute();
+            ArrayList<Point> cities = MyUtils.createCitiesOnMap(width, height, count);
+            for (Point a : cities) {
+                String GUID = UUID.randomUUID().toString();
+                stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng,CITYNAME)VALUES(?,?,?,'TEST')");
+                stmt.setString(1, GUID);
+                stmt.setInt(2, (int) a.getX() + Lat1N);
+                stmt.setInt(3, (int) a.getY() + Lng1N);
+                stmt.execute();
+                stmt = con.prepareStatement("INSERT INTO aobject(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
+                stmt.setString(1, GUID);
+                stmt.setInt(2, (int) a.getX() + Lat1N);
+                stmt.setInt(3, (int) a.getY() + Lng1N);
+                stmt.execute();
+                con.commit();
+            }
+            con.commit();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.toString();
+        } catch (NamingException e) {
+            e.printStackTrace();
+            return e.toString();
+        }
+        return "Success";
+        //Generate positions
+        //write to db
+
+    }
+
+    /**
      * @param x     Width
      * @param y     Height
      * @param count Count of cities
@@ -167,13 +244,13 @@ public class AdminTools {
                 String GUID = UUID.randomUUID().toString();
                 stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng,CITYNAME)VALUES(?,?,?,'TEST')");
                 stmt.setString(1, GUID);
-                stmt.setInt(2, a.x);
-                stmt.setInt(3, a.y);
+                stmt.setInt(2, (int) a.getX());
+                stmt.setInt(3, (int) a.getY());
                 stmt.execute();
                 stmt = con.prepareStatement("INSERT INTO aobject(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
                 stmt.setString(1, GUID);
-                stmt.setInt(2, a.x);
-                stmt.setInt(3, a.y);
+                stmt.setInt(2, (int) a.getX());
+                stmt.setInt(3, (int) a.getY());
                 stmt.execute();
                 con.commit();
             }
