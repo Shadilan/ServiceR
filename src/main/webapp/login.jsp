@@ -6,7 +6,6 @@ String Login=request.getParameter("Login");
 String Password=request.getParameter("Password");
 
 SpiritProto obj=new SpiritProto();
-obj.ConnectDB();
 String token=obj.GetToken(Login, Password);
 %>    
 <%=token%>
