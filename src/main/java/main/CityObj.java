@@ -10,13 +10,12 @@ import java.util.UUID;
  * @author Shadilan
  */
 public class CityObj implements GameObject {
-	private String GUID;public String GetGUID(){return GUID;}
-	private String Owner;public String GetOwner(){return this.Owner;}
+	private String GUID;
+	private String Owner;
 	private String CityName;
-	private int Lat;public int GetLat(){return Lat;}
-	private int Lng;public int GetLng(){return Lng;}
-
-	private String LastError=null;public String GetLastError(){return LastError;}
+	private int Lat;
+	private int Lng;
+	private String LastError = null;
 
 	/**
 	 * Creator of object
@@ -41,8 +40,28 @@ public class CityObj implements GameObject {
 	 * @param con Connection to DB
 	 * @param GUID GUID of City
 	 */
-	public CityObj(Connection con,String GUID) {
+	public CityObj(Connection con, String GUID) throws SQLException {
 		GetDBData(con,GUID);
+	}
+
+	public String GetGUID() {
+		return GUID;
+	}
+
+	public String GetOwner() {
+		return this.Owner;
+	}
+
+	public int GetLat() {
+		return Lat;
+	}
+
+	public int GetLng() {
+		return Lng;
+	}
+
+	public String GetLastError() {
+		return LastError;
 	}
 
 	/**
@@ -51,10 +70,9 @@ public class CityObj implements GameObject {
 	 * @param GUID GUID of City
 	 */
 	@Override
-	public void GetDBData(Connection con, String GUID) {
+	public void GetDBData(Connection con, String GUID) throws SQLException {
 		PreparedStatement stmt;
-		
-		try {
+
 			stmt=con.prepareStatement("SELECT GUID,Owner,CITYNAME,Lat,Lng from cities WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
@@ -65,10 +83,7 @@ public class CityObj implements GameObject {
 			Lat=rs.getInt("Lat");
 			Lng=rs.getInt("Lng");
 			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LastError=e.toString();
-		}
+
 	}
 
 	/**
@@ -76,10 +91,10 @@ public class CityObj implements GameObject {
 	 * @param con Connection to DB
 	 */
 	@Override
-	public void SetDBData(Connection con) {
+	public void SetDBData(Connection con) throws SQLException {
 		PreparedStatement stmt;
-		try {
-			stmt=con.prepareStatement("INSERT IGNORE INTO cities(GUID,CITYNAME,Owner,Lat,Lng) VALUES ("
+
+		stmt=con.prepareStatement("INSERT IGNORE INTO cities(GUID,CITYNAME,Owner,Lat,Lng) VALUES ("
 					+ "?,"
 					+ "?,"
 					+ "?,"
@@ -104,10 +119,7 @@ public class CityObj implements GameObject {
 			stmt.setInt(4, Lng);
 			stmt.execute();
 			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LastError=e.toString();
-		}
+
 
 	}
 

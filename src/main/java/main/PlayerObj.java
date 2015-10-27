@@ -1,6 +1,5 @@
 package main;
 
-import java.lang.String;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,28 +10,48 @@ import java.sql.SQLException;
  * @author Shadilan
  */
 public class PlayerObj implements GameObject {
+	//TODO:Change to exception
+	public String LastError;
 	private String UserName;
 	private String Token;
-	private String GUID;public String GetGUID(){return GUID;}
+	private String GUID;
 	private int Lat;
 	private int Lng;
-	private int Gold;public int GetGold(){return Gold;} public void SetGold(int Gold){this.Gold=Gold;}
-	private String City;public String GetCity(){return City;}
+	private int Gold;
+	private String City;
 	private int Influence;
-	//TODO:Change to exception
-	public String LastError;public String GetLastError(){return LastError;}
 
-
-	public PlayerObj(){
+	public PlayerObj() {
 
 	}
+
 	/**
 	 * Load data from DB by GUID
 	 * @param con DB Connection
 	 * @param GUID GUID
 	 */
-	public PlayerObj(Connection con,String GUID){
+	public PlayerObj(Connection con, String GUID) throws SQLException {
 		GetDBData(con,GUID);
+	}
+
+	public String GetGUID() {
+		return GUID;
+	}
+
+	public int GetGold() {
+		return Gold;
+	}
+
+	public void SetGold(int Gold) {
+		this.Gold = Gold;
+	}
+
+	public String GetCity() {
+		return City;
+	}
+
+	public String GetLastError() {
+		return LastError;
 	}
 
 	/**
@@ -60,11 +79,10 @@ public class PlayerObj implements GameObject {
 	 * @param GUID GUID of Player
 	 */
 	@Override
-	public void GetDBData(Connection con, String GUID) {
+	public void GetDBData(Connection con, String GUID) throws SQLException {
 
 		PreparedStatement stmt;
 
-		try {
 			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a LEFT JOIN cities b ON (b.owner = a.guid) WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
@@ -78,10 +96,7 @@ public class PlayerObj implements GameObject {
 			Influence=rs.getInt("Influence");
 			City=rs.getString("city");
 			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LastError=e.toString();
-		}
+
 		
 	}
 
@@ -90,11 +105,11 @@ public class PlayerObj implements GameObject {
 	 * @param con Connection to DB
 	 * @param UserToken Secure Token
 	 */
-	public void GetDBDataByToken(Connection con, String UserToken) {
+	public void GetDBDataByToken(Connection con, String UserToken) throws SQLException {
 		PreparedStatement stmt;
-		
-		try {
-			stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a  LEFT JOIN cities b ON (b.owner = a.guid) WHERE USERTOKEN=? LIMIT 0,1");
+
+
+		stmt=con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence, b.guid city FROM gplayers a  LEFT JOIN cities b ON (b.owner = a.guid) WHERE USERTOKEN=? LIMIT 0,1");
 			stmt.setString(1, UserToken);
 			ResultSet rs=stmt.executeQuery();
 			if (rs.isBeforeFirst()){
@@ -112,10 +127,8 @@ public class PlayerObj implements GameObject {
 				LastError="NOUSERFOUND "+UserToken;
 			}
 			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LastError=e.toString();
-		}
+
+
 	}
 
 	/**
@@ -123,11 +136,10 @@ public class PlayerObj implements GameObject {
 	 * @param con Connection to db
 	 */
 	@Override
-	public void SetDBData(Connection con) {
+	public void SetDBData(Connection con) throws SQLException {
 
 		PreparedStatement stmt;
-		
-		try {
+
 			stmt=con.prepareStatement("UPDATE gplayers set "
 					+ "Lat=?,"
 					+ "Lng=?,"
@@ -148,10 +160,7 @@ public class PlayerObj implements GameObject {
 			stmt.execute();
 			con.commit();
 			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 	}
 
@@ -181,8 +190,8 @@ public class PlayerObj implements GameObject {
 	 * Create City with player as owner
 	 * @param con Connection to DB
 	 */
-    public void CreateCity(Connection con){
-        if (City!=null) 
+	public void CreateCity(Connection con) throws SQLException {
+		if (City!=null)
         	{
         	LastError="You already have city";
         	return;
@@ -208,11 +217,11 @@ public class PlayerObj implements GameObject {
 	 * @param con Connection to DB
 	 * @param Target City to remove
 	 */
-    public void RemoveCity(Connection con,String Target){
-        if (!City.equals(Target)) return;
+	public void RemoveCity(Connection con, String Target) throws SQLException {
+		if (!City.equals(Target)) return;
         PreparedStatement pstmt;
-        try {
-            pstmt= con.prepareStatement("DELETE FROM cities WHERE GUID=?");
+
+		pstmt= con.prepareStatement("DELETE FROM cities WHERE GUID=?");
             pstmt.setString(1, Target);
             pstmt.execute();
             pstmt= con.prepareStatement("DELETE FROM aobject WHERE GUID=?");
@@ -226,10 +235,8 @@ public class PlayerObj implements GameObject {
             
             con.commit();
             pstmt.close();
-        } catch (SQLException e) {
-            LastError=e.toString();
-        }
-        SetDBData(con);
+
+		SetDBData(con);
     }
 
 }

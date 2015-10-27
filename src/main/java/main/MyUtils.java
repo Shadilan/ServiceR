@@ -2,7 +2,6 @@ package main;
 //This code was freely adapted from http://www.movable-type.co.uk/scripts/latlong-vincenty.html
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

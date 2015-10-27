@@ -1,11 +1,6 @@
 package main;
 
-import javax.swing.plaf.SliderUI;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 
 /**
@@ -14,24 +9,23 @@ import java.util.UUID;
 
 public class RouteObj implements GameObject {
 
-    private String GUID; public String GetGuid(){return GUID;}
-	private String Owner; public String GetOwner(){return this.Owner;}
-	private String RStart; public String GetRStart(){return RStart;}
-	private String REnd;public String GetREnd(){return REnd;}
+	private String GUID;
+	private String Owner;
+	private String RStart;
+	private String REnd;
 	private int Gold;
 	private int HP;
 	private int Cooldown;
 	private Date Next;
-	private int SLat; public int GetSLat(){return SLat;}
-	private int SLng;public int GetSLng(){return SLng;}
-	private int ELat;public int GetELat(){return ELat;}
-	private int ELng;public int GetELng(){return ELng;}
+	private int SLat;
+	private int SLng;
+	private int ELat;
+	private int ELng;
+	//TODO: Change to Exception;
+	private String LastError;
 
-    //TODO: Change to Exception;
-    private String LastError; public String GetLastError(){return LastError;}
-
-    /**
-     * Creator of object
+	/**
+	 * Creator of object
      * @param Owner Owner of route
      * @param RStart StartPoint of route
      * @param REnd  EndPoint of route
@@ -45,8 +39,8 @@ public class RouteObj implements GameObject {
 		HP=10;
 	}
 
-    /**
-     * Constructor Create route from player and cities info
+	/**
+	 * Constructor Create route from player and cities info
      * @param player Owner of route
      * @param StartCity Start city
      * @param TargetCity End city
@@ -63,14 +57,51 @@ public class RouteObj implements GameObject {
 
         Gold=0;
         HP=10;
-    }
-    /**
-     * Creator of object
+	}
+
+	/**
+	 * Creator of object
      * @param con Connection to DB
      * @param GUID GUID of route
      */
-	public RouteObj(Connection con,String GUID){
+	public RouteObj(Connection con, String GUID) throws SQLException {
 		GetDBData(con,GUID);
+	}
+
+	public String GetGuid() {
+		return GUID;
+	}
+
+	public String GetOwner() {
+		return this.Owner;
+	}
+
+	public String GetRStart() {
+		return RStart;
+	}
+
+	public String GetREnd() {
+		return REnd;
+	}
+
+	public int GetSLat() {
+		return SLat;
+	}
+
+	public int GetSLng() {
+		return SLng;
+	}
+
+	public int GetELat() {
+		return ELat;
+	}
+
+	public int GetELng() {
+		return ELng;
+	}
+
+	public String GetLastError() {
+		return LastError;
 	}
 
     /**
@@ -79,9 +110,9 @@ public class RouteObj implements GameObject {
      * @param GUID GUID of route
      */
 	@Override
-	public void GetDBData(Connection con, String GUID) {
-        PreparedStatement stmt;
-		try {
+	public void GetDBData(Connection con, String GUID) throws SQLException {
+		PreparedStatement stmt;
+
 			ResultSet rs;
 			stmt=con.prepareStatement("SELECT r.GUID, r.Owner, r.RStart, r.REnd, r.Gold, r.HP, r.Cooldown, r.Next, c1.Lat AS Lat1, c1.Lng AS Lng1, c2.Lat Lat2, c2.Lng AS Lng2\n" +
                     "FROM route r, cities c1, cities c2 " +
@@ -105,11 +136,8 @@ public class RouteObj implements GameObject {
 			Cooldown=rs.getInt("Cooldown");
 			Next=rs.getDate("Next");
 			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LastError=e.toString();
-		}
-		
+
+
 	}
 
 	public void SetNext(){
@@ -120,9 +148,8 @@ public class RouteObj implements GameObject {
      * @param con Connection to DB
      */
 	@Override
-	public void SetDBData(Connection con) {
-        PreparedStatement stmt;
-		try {
+	public void SetDBData(Connection con) throws SQLException {
+		PreparedStatement stmt;
 			ResultSet rs;
 			if (Gold==0) {
 				stmt=con.prepareStatement("SELECT Lat,Lng from route where GUID=? or GUID=?");
@@ -159,10 +186,7 @@ public class RouteObj implements GameObject {
 			stmt.setDate(9, Next);
 			stmt.execute();
 			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LastError=e.toString();
-		}
+
 
 	}
 

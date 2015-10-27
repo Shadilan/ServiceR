@@ -11,95 +11,102 @@ import java.util.UUID;
  */
 public class CaravanObj implements GameObject {
 
-	private String GUID; public String GetGUID(){return GUID;}
-	private String Owner;public String GetOwner(){return this.Owner;}
+    private String GUID;
+    private String Owner;
     private String StartPoint;
     private String EndPoint;
-	private int Lat;
+    private int Lat;
 	private int Lng;
     private int ELat;
     private int ELng;
     private String Stealed;
     private int SpdLat;
     private int SpdLng;
-	private String LastError; public String GetLastError(){return LastError;}
+    private String LastError;
+    /**
+     * Constructor
+     * @param route Route for which caravan spawned
+     */
+    public CaravanObj(RouteObj route) {
+        GUID = UUID.randomUUID().toString();
+        this.Owner = route.GetOwner();
+        this.Lat = route.GetSLat();
+        this.Lng = route.GetSLng();
+        this.EndPoint = route.GetREnd();
+        this.ELat = route.GetELat();
+        this.ELng = route.GetELng();
+        this.Stealed = "N";
+        SpeedCount();
+
+    }
+
+    /**
+     * Create data from DB
+     * @param con Connection to DB
+     * @param GUID GUID of object
+     */
+    public CaravanObj(Connection con, String GUID) throws SQLException {
+        GetDBData(con, GUID);
+    }
+
+    public String GetGUID() {
+        return GUID;
+    }
+
+    public String GetOwner() {
+        return this.Owner;
+    }
+
+    public String GetLastError() {
+        return LastError;
+    }
 
     /**
      * Load data from DB
      * @param con Connection to DB
      * @param GUID GUID of object
      */
-	@Override
-	public void GetDBData(Connection con, String GUID) {
+    @Override
+    public void GetDBData(Connection con, String GUID) throws SQLException {
 
         PreparedStatement stmt;
-        try {
-            stmt=con.prepareStatement("SELECT a.GUID, a.OWNER,a.STARTPOINT, a.ENDPOINT, a.LAT, a.LNG, a.STEALED, b.lat ELat, b.lng ELng,a.SpdLat,a.SpdLng\n" +
-                    "FROM  `caravan` a, cities b WHERE a.GUID=? LIMIT 0,1");
-            stmt.setString(1, GUID);
-            ResultSet rs=stmt.executeQuery();
-            rs.first();
-            this.GUID=rs.getString("GUID");
-            this.Owner=rs.getString("OWNER");
-            this.StartPoint=rs.getString("STARTPOINT");
-            this.EndPoint=rs.getString("ENDPOINT");
-            this.Stealed=rs.getString("STEALED");
-            this.Lat=rs.getInt("Lat");
-            this.Lng=rs.getInt("Lng");
-            this.ELat=rs.getInt("ELat");
-            this.ELng=rs.getInt("ELng");
-            this.SpdLat=rs.getInt("SpdLat");
-            this.SpdLng=rs.getInt("SpdLng");
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            LastError=e.toString();
-        }
-	}
-
-    /**
-     * Constructor
-     * @param route Route for which caravan spawned
-     */
-    public CaravanObj(RouteObj route){
-        GUID= UUID.randomUUID().toString();
-        this.Owner=route.GetOwner();
-        this.Lat=route.GetSLat();
-        this.Lng=route.GetSLng();
-        this.EndPoint=route.GetREnd();
-        this.ELat=route.GetELat();
-        this.ELng=route.GetELng();
-        this.Stealed="N";
-        SpeedCount();
+        stmt = con.prepareStatement("SELECT a.GUID, a.OWNER,a.STARTPOINT, a.ENDPOINT, a.LAT, a.LNG, a.STEALED, b.lat ELat, b.lng ELng,a.SpdLat,a.SpdLng\n" +
+                "FROM  `caravan` a, cities b WHERE a.GUID=? LIMIT 0,1");
+        stmt.setString(1, GUID);
+        ResultSet rs = stmt.executeQuery();
+        rs.first();
+        this.GUID = rs.getString("GUID");
+        this.Owner = rs.getString("OWNER");
+        this.StartPoint = rs.getString("STARTPOINT");
+        this.EndPoint = rs.getString("ENDPOINT");
+        this.Stealed = rs.getString("STEALED");
+        this.Lat = rs.getInt("Lat");
+        this.Lng = rs.getInt("Lng");
+        this.ELat = rs.getInt("ELat");
+        this.ELng = rs.getInt("ELng");
+        this.SpdLat = rs.getInt("SpdLat");
+        this.SpdLng = rs.getInt("SpdLng");
+        stmt.close();
 
     }
 
     /**
      * Count speed of caravan in Lat and Lng
      */
-    public void SpeedCount()
-    {
-        double TimeToGo=MyUtils.distVincenty(Lat/1e6,Lng/1e6,ELat/1e6,ELng/1e6)/100;
-        SpdLat=(int)((ELat-Lat)/TimeToGo);
-        SpdLng=(int)((ELng-Lng)/TimeToGo);
+    public void SpeedCount() {
+        double TimeToGo = MyUtils.distVincenty(Lat / 1e6, Lng / 1e6, ELat / 1e6, ELng / 1e6) / 100;
+        SpdLat = (int) ((ELat - Lat) / TimeToGo);
+        SpdLng = (int) ((ELng - Lng) / TimeToGo);
     }
 
     /**
      *
      * @return Gold of count
      */
-    public int GetGold(Connection con){
-        CityObj startPoint=new CityObj(con,this.StartPoint);
-        CityObj endPoint=new CityObj(con,this.EndPoint);
-        return (int)(MyUtils.distVincenty(startPoint.GetLat()/1e6,startPoint.GetLng()/1e6,endPoint.GetLat()/1e6,endPoint.GetLng()/1e6)/1000);
-    }
-    /**
-     * Create data from DB
-     * @param con Connection to DB
-     * @param GUID GUID of object
-     */
-    public CaravanObj(Connection con,String GUID){
-        GetDBData(con,GUID);
+    public int GetGold(Connection con) throws SQLException {
+        CityObj startPoint = new CityObj(con, this.StartPoint);
+        CityObj endPoint = new CityObj(con, this.EndPoint);
+        return (int) (MyUtils.distVincenty(startPoint.GetLat() / 1e6, startPoint.GetLng() / 1e6, endPoint.GetLat() / 1e6, endPoint.GetLng() / 1e6) / 1000);
     }
 
     /**
@@ -107,10 +114,9 @@ public class CaravanObj implements GameObject {
      * @param con Connection to DB
      */
 	@Override
-	public void SetDBData(Connection con) {
+    public void SetDBData(Connection con) throws SQLException {
         PreparedStatement stmt;
 
-        try {
             stmt = con.prepareStatement("INSERT INTO caravan(GUID,Owner,StartPoint,EndPoint,Lat,Lng,Stealed,SpdLat,SpdLng) VALUES ("
                     + "?,"
                     + "?,"
@@ -152,11 +158,7 @@ public class CaravanObj implements GameObject {
             stmt.setInt(6, Lng);
             stmt.execute();
             stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            LastError = e.toString();
 
-        }
     }
 
 }

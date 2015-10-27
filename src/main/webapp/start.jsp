@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/plain; charset=UTF8"
     pageEncoding="UTF8"%>
-    <%@page import="main.SpiritProto"%>
+    <%@page import="main.AdminTools"%>
 <%
-SpiritProto obj=new SpiritProto();
+AdminTools obj=new AdminTools();
 String result=obj.StartTask();
 
 %>    
