@@ -1,5 +1,6 @@
 package main;
 
+import javax.naming.NamingException;
 import java.sql.*;
 import java.util.UUID;
 
@@ -210,4 +211,98 @@ public class RouteObj implements GameObject {
 		
 	}
 
+	//проверяем возможность создания маршрута. если есть незавершенный маршрут, то нельзя
+	public String checkCreateRoute(String Owner) {
+		PreparedStatement stmt;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			ResultSet rs;
+			stmt = con.prepareStatement("select count(1) cnt from routes where Owner=? and is_finished=false");
+			stmt.setString(1, Owner);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt") > 0) {
+				return "Сначала завершите текущий маршрут";
+			} else {
+				return "OK";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
+
+	//проверяем возможность завершения маршрута в этом городе. если уже есть маршрут между двумя этими городами, то отказываем
+//НЕ ГОТОВО!
+//надо проверять еще и обратный маршрут
+	public String checkFinishRoute(String Owner, String Route, String City) {
+		String startcity;
+		PreparedStatement stmt;
+		ResultSet rs;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("select z2.guid from waypoints z1, cities z2 where z1.route=? and z1.number=1 and z1.is_finished=true and z1.lat=z2.lat and z1.lng=z2.lng");
+			stmt.setString(1, Route);
+			stmt.execute();
+		/*	rs = stmt.executeQuery();
+			rs.first();
+			startcity = rs.getString("guid");
+			stmt = con.prepareStatement("select count(1) cnt from waypoints z1 where z1.route=? and z1.number=1 and z1.is_finished=true and z1.lat=z2.lat and z1.lng=z2.lng");
+			stmt.setString(1, Route);
+			stmt.execute();*/
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "Пока не работает";
+	}
+
+	//создаем незавершенный (из одного города) маршрут, проверок внутри нет - все проверки отдельно (ну или надо обсуждать)
+	public String createRoute(String Owner, String City) {
+		PreparedStatement stmt;
+		ResultSet rs;
+		int c_lat;
+		int c_lng;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			String GUID_ROUTE = UUID.randomUUID().toString();
+			stmt = con.prepareStatement("insert into routes values(?,?,'false')");
+			stmt.setString(1, GUID_ROUTE);
+			stmt.setString(2, Owner);
+			stmt.execute();
+
+			stmt = con.prepareStatement("select lat, lng from cities where GUID=?");
+			stmt.setString(1, City);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			c_lat = rs.getInt("lat");
+			c_lng = rs.getInt("lng");
+
+			String GUID = UUID.randomUUID().toString();
+			stmt = con.prepareStatement("insert into waypoints values(?,?,'1',?,?)");
+			stmt.setString(1, GUID);
+			stmt.setString(2, GUID_ROUTE);
+			stmt.setInt(3, c_lat);
+			stmt.setInt(4, c_lng);
+
+			stmt.execute();
+
+			return "OK";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
 }
