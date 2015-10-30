@@ -217,7 +217,7 @@ public class RouteObj implements GameObject {
 		try {
 			Connection con = DBUtils.ConnectDB();
 			ResultSet rs;
-			stmt = con.prepareStatement("select count(1) cnt from routes where Owner=? and is_finished=false");
+			stmt = con.prepareStatement("select count(1) cnt from routes where Owner=? and finish is null");
 			stmt.setString(1, Owner);
 			stmt.execute();
 			rs = stmt.executeQuery();
@@ -225,7 +225,7 @@ public class RouteObj implements GameObject {
 			if (rs.getInt("cnt") > 0) {
 				return "Сначала завершите текущий маршрут";
 			} else {
-				return "OK";
+				return "ОК";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -237,24 +237,24 @@ public class RouteObj implements GameObject {
 	}
 
 	//проверяем возможность завершения маршрута в этом городе. если уже есть маршрут между двумя этими городами, то отказываем
-//НЕ ГОТОВО!
-//надо проверять еще и обратный маршрут
 	public String checkFinishRoute(String Owner, String Route, String City) {
-		String startcity;
 		PreparedStatement stmt;
 		ResultSet rs;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			stmt = con.prepareStatement("select z2.guid from waypoints z1, cities z2 where z1.route=? and z1.number=1 and z1.is_finished=true and z1.lat=z2.lat and z1.lng=z2.lng");
-			stmt.setString(1, Route);
+			stmt = con.prepareStatement("select count(1) cnt from routes where (start,finish) in (select start,? from routes where guid=?) or (finish,start) in (select start,? from routes where guid=?)");
+			stmt.setString(1, City);
+			stmt.setString(2, Route);
+			stmt.setString(3, City);
+			stmt.setString(4, Route);
 			stmt.execute();
-		/*	rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 			rs.first();
-			startcity = rs.getString("guid");
-			stmt = con.prepareStatement("select count(1) cnt from waypoints z1 where z1.route=? and z1.number=1 and z1.is_finished=true and z1.lat=z2.lat and z1.lng=z2.lng");
-			stmt.setString(1, Route);
-			stmt.execute();*/
-
+			if (rs.getInt("cnt") > 0) {
+				return "Такой маршрут уже существует";
+			} else {
+				return "ОК";
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return e.toString();
@@ -262,7 +262,45 @@ public class RouteObj implements GameObject {
 			e.printStackTrace();
 			return e.toString();
 		}
-		return "Пока не работает";
+	}
+
+	//завершаем маршрут в указанном городе
+	public String finishRoute(String Owner, String Route, String City) {
+		PreparedStatement stmt;
+		ResultSet rs;
+		int c_lat;
+		int c_lng;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			//добавим конечный город в вэйпойнты
+			stmt = con.prepareStatement("select lat, lng from cities where GUID=?");
+			stmt.setString(1, City);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			c_lat = rs.getInt("lat");
+			c_lng = rs.getInt("lng");
+			String GUID = UUID.randomUUID().toString();
+			stmt = con.prepareStatement("insert into waypoints values(?,?,'1',?,?)");
+			stmt.setString(1, GUID);
+			stmt.setString(2, Route);
+			stmt.setInt(3, c_lat);
+			stmt.setInt(4, c_lng);
+			stmt.execute();
+
+			//незавершенный маршрут сделаем завершенным
+			stmt = con.prepareStatement("update routes set finish=? where guid=?");
+			stmt.setString(1, City);
+			stmt.setString(2, Route);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "ОК";
 	}
 
 	//создаем незавершенный (из одного города) маршрут, проверок внутри нет - все проверки отдельно (ну или надо обсуждать)
@@ -274,9 +312,10 @@ public class RouteObj implements GameObject {
 		try {
 			Connection con = DBUtils.ConnectDB();
 			String GUID_ROUTE = UUID.randomUUID().toString();
-			stmt = con.prepareStatement("insert into routes values(?,?,'false')");
+			stmt = con.prepareStatement("insert into routes (guid,owner,start) values(?,?,?)");
 			stmt.setString(1, GUID_ROUTE);
 			stmt.setString(2, Owner);
+			stmt.setString(3, City);
 			stmt.execute();
 
 			stmt = con.prepareStatement("select lat, lng from cities where GUID=?");
@@ -296,7 +335,7 @@ public class RouteObj implements GameObject {
 
 			stmt.execute();
 
-			return "OK";
+			return "ОК";
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return e.toString();
