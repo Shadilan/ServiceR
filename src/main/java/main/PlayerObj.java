@@ -289,4 +289,21 @@ public class PlayerObj implements GameObject {
 		return "ОК";
 	}
 
+	public String cancelUnfinishedRoute(String Owner) {
+		PreparedStatement stmt;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("delete from routes where FINISH is null and OWNER=?");
+			stmt.setString(1, Owner);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "ОК";
+	}
+
 }
