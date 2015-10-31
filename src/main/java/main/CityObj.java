@@ -1,5 +1,6 @@
 package main;
 
+import javax.naming.NamingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -140,6 +141,137 @@ public class CityObj implements GameObject {
 
 	}
 
+	//проверяем возможность создания маршрута. если есть незавершенный маршрут, то нельзя
+	public String checkCreateRoute(String Owner) {
+		PreparedStatement stmt;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			ResultSet rs;
+			stmt = con.prepareStatement("select count(1) cnt from routes where Owner=? and finish is null");
+			stmt.setString(1, Owner);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt") > 0) {
+				return "Сначала завершите текущий маршрут";
+			} else {
+				return "ОК";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
 
+	//создаем незавершенный (из одного города) маршрут, проверок внутри нет - все проверки отдельно (ну или надо обсуждать)
+	public String createRoute(String Owner, String City) {
+		PreparedStatement stmt;
+		ResultSet rs;
+		int c_lat;
+		int c_lng;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			String GUID_ROUTE = UUID.randomUUID().toString();
+			stmt = con.prepareStatement("insert into routes (guid,owner,start) values(?,?,?)");
+			stmt.setString(1, GUID_ROUTE);
+			stmt.setString(2, Owner);
+			stmt.setString(3, City);
+			stmt.execute();
 
+			stmt = con.prepareStatement("select lat, lng from cities where GUID=?");
+			stmt.setString(1, City);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			c_lat = rs.getInt("lat");
+			c_lng = rs.getInt("lng");
+
+			String GUID = UUID.randomUUID().toString();
+			stmt = con.prepareStatement("insert into waypoints values(?,?,'1',?,?)");
+			stmt.setString(1, GUID);
+			stmt.setString(2, GUID_ROUTE);
+			stmt.setInt(3, c_lat);
+			stmt.setInt(4, c_lng);
+
+			stmt.execute();
+
+			return "ОК";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
+
+	//проверяем возможность завершения маршрута в этом городе. если уже есть маршрут между двумя этими городами, то отказываем
+	public String checkFinishRoute(String Owner, String Route, String City) {
+		PreparedStatement stmt;
+		ResultSet rs;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("select count(1) cnt from routes where (start,finish) in (select start,? from routes where guid=?) or (finish,start) in (select start,? from routes where guid=?)");
+			stmt.setString(1, City);
+			stmt.setString(2, Route);
+			stmt.setString(3, City);
+			stmt.setString(4, Route);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt") > 0) {
+				return "Такой маршрут уже существует";
+			} else {
+				return "ОК";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
+
+	//завершаем маршрут в указанном городе
+	public String finishRoute(String Owner, String Route, String City) {
+		PreparedStatement stmt;
+		ResultSet rs;
+		int c_lat;
+		int c_lng;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			//добавим конечный город в вэйпойнты
+			stmt = con.prepareStatement("select lat, lng from cities where GUID=?");
+			stmt.setString(1, City);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			c_lat = rs.getInt("lat");
+			c_lng = rs.getInt("lng");
+			String GUID = UUID.randomUUID().toString();
+			stmt = con.prepareStatement("insert into waypoints values(?,?,'1',?,?)");
+			stmt.setString(1, GUID);
+			stmt.setString(2, Route);
+			stmt.setInt(3, c_lat);
+			stmt.setInt(4, c_lng);
+			stmt.execute();
+
+			//незавершенный маршрут сделаем завершенным
+			stmt = con.prepareStatement("update routes set finish=? where guid=?");
+			stmt.setString(1, City);
+			stmt.setString(2, Route);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "ОК";
+	}
 }
