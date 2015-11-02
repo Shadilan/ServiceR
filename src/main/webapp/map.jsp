@@ -12,32 +12,24 @@ String result=obj.GenMap();
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
     <meta charset="utf-8"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&subset=latin,cyrillic' rel='stylesheet' type='text/css'/>
-<link rel="stylesheet" type="text/css" href="medalnew.css"/>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 	<script>
 	function create_marker(name,lat,lng,map)
 	{
-	var Lat=lat/1E6;
-var Lng=lng/1E6;
-var latlng=new google.maps.LatLng(Portals[i].Lat/1E6,Portals[i].Lng/1E6);
-var vimg='images/city.png';
-					Marker=new google.maps.Marker({
-						Position:  latlng,
-						map:map, icon:vimg,
-						title:name
-						});
+	    var Lat=lat/1E6;
+        var Lng=lng/1E6;
+        var latlng=new google.maps.LatLng(Portals[i].Lat/1E6,Portals[i].Lng/1E6);
+        var vimg='images/city.png';
+		var Marker=new google.maps.Marker({	Position:  latlng,map:map, icon:vimg, title:name});
 	}
 	function initialize() {
+       lat=47.2584933;
+       lng=39.7722394;
+        var mapOptions = {zoom: 9, center: new google.maps.LatLng(lat, lng)}
+        map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+    };
+google.maps.event.addDomListener(window, 'load', initialize);
 
-   lat=47.2584933;
-   lng=39.7722394;
- var mapOptions = {
-    zoom: 9,
-    center: new google.maps.LatLng(lat, lng)
-  };
-
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
 <%=result%>
 
 }
