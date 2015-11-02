@@ -238,7 +238,7 @@ public class AdminTools {
             e.printStackTrace();
             return e.toString();
         }
-        return "Success";
+        return result;
         //Generate positions
         //write to db
 
