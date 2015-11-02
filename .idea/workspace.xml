@@ -28,8 +28,8 @@
       <file leaf-file-name="map.jsp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.27302632">
-              <caret line="18" column="136" selection-start-line="18" selection-start-column="136" selection-end-line="18" selection-end-column="136" />
+            <state vertical-scroll-proportion="0.8322368">
+              <caret line="41" column="61" selection-start-line="41" selection-start-column="61" selection-end-line="41" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -604,7 +604,13 @@
       <option name="project" value="LOCAL" />
       <updated>1446479110028</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="City_map&#10;">
+      <created>1446479264242</created>
+      <option name="number" value="00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1446479264242</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1034,8 +1040,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27302632">
-          <caret line="18" column="136" selection-start-line="18" selection-start-column="136" selection-end-line="18" selection-end-column="136" />
+        <state vertical-scroll-proportion="0.8322368">
+          <caret line="41" column="61" selection-start-line="41" selection-start-column="61" selection-end-line="41" selection-end-column="61" />
           <folding />
         </state>
       </provider>

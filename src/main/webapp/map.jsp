@@ -32,12 +32,13 @@ AdminTools obj=new AdminTools();
         center: {lat: -34.397, lng: 150.644},
         zoom: 8
       });
+      alert("STRANGE");
     }
 	</SCRIPT>
 	<script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx1sHtgx3dBVdiU0zaaxq3AaEe7MaHVz8&callback=initMap">
     </script>
 	<body>
-	<div id="map-canvas" style='z-index:1'></div>
+	<div id="map-canvas" style='z-index:1'>MAP NOT LOAD</div>
 	</body>
 </HTML>
