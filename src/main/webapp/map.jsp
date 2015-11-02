@@ -18,7 +18,7 @@ function create_marker(lat,lng,name,mapa)
 	{
 	    var Lat=lat/1E6;
         var Lng=lng/1E6;
-        var latlng=new google.maps.LatLng(Lat/1E6,Lng/1E6);
+        var latlng=new google.maps.LatLng(Lat,Lng);
         var vimg='images/city.png';
 		var Marker=new google.maps.Marker({	Position:  latlng,map:mapa, icon:vimg, title:name});
 	}
