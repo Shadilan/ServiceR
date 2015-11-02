@@ -282,4 +282,26 @@ public class AdminTools {
         //write to db
 
     }
+
+    public String GenMap() {
+        String result = null;
+        try {
+            Connection con;
+            con = DBUtils.ConnectDB();
+            PreparedStatement stmt;
+            stmt = con.prepareStatement("select Lat,Lng,CITYNAME from service.cities");
+            ResultSet rs = stmt.executeQuery();
+            rs.beforeFirst();
+            while (rs.next()) {
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",'" + rs.getString("CITYNAME") + ");\n";
+            }
+
+            stmt.close();
+            con.commit();
+            con.close();
+        } catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
