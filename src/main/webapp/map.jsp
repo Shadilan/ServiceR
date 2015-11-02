@@ -28,7 +28,7 @@ function initMap() {
     center: {lat: 47.2584933, lng: 39.7722394},
     zoom: 8
   });
-
+    <%=result%>
 }
 
     </script>
