@@ -58,8 +58,8 @@
       <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.21710527">
-              <caret line="285" column="28" selection-start-line="285" selection-start-column="28" selection-end-line="285" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.49671054">
+              <caret line="295" column="125" selection-start-line="295" selection-start-column="125" selection-end-line="295" selection-end-column="125" />
               <folding />
             </state>
           </provider>
@@ -582,7 +582,13 @@
       <option name="project" value="LOCAL" />
       <updated>1446476845254</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="City_map&#10;">
+      <created>1446477006324</created>
+      <option name="number" value="00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1446477006324</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1012,8 +1018,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21710527">
-          <caret line="285" column="28" selection-start-line="285" selection-start-column="28" selection-end-line="285" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.49671054">
+          <caret line="295" column="125" selection-start-line="295" selection-start-column="125" selection-end-line="295" selection-end-column="125" />
           <folding />
         </state>
       </provider>

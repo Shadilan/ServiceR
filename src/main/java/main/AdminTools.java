@@ -293,7 +293,7 @@ public class AdminTools {
             ResultSet rs = stmt.executeQuery();
             rs.beforeFirst();
             while (rs.next()) {
-                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",'" + rs.getString("CITYNAME") + ");\n";
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",'" + rs.getString("CITYNAME") + "');\n";
             }
 
             stmt.close();
