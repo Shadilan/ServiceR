@@ -14,7 +14,7 @@ String result=obj.GenMap();
     <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&subset=latin,cyrillic' rel='stylesheet' type='text/css'/>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 	<script>
-	function create_marker(name,lat,lng,map)
+	function create_marker(lat,lng,name,map)
 	{
 	    var Lat=lat/1E6;
         var Lng=lng/1E6;
