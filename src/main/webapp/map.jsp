@@ -27,10 +27,11 @@ String result=obj.GenMap();
        lng=39.7722394;
         var mapOptions = {zoom: 9, center: new google.maps.LatLng(lat, lng)}
         map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+        <%=result%>;
     };
 google.maps.event.addDomListener(window, 'load', initialize);
 
-<%=result%>
+
 
 }
 	</SCRIPT>
