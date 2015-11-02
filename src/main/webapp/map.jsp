@@ -18,7 +18,7 @@ String result=obj.GenMap();
 	{
 	    var Lat=lat/1E6;
         var Lng=lng/1E6;
-        var latlng=new google.maps.LatLng(Portals[i].Lat/1E6,Portals[i].Lng/1E6);
+        var latlng=new google.maps.LatLng(Lat/1E6,Lng/1E6);
         var vimg='images/city.png';
 		var Marker=new google.maps.Marker({	Position:  latlng,map:map, icon:vimg, title:name});
 	}
