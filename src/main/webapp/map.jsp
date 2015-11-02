@@ -28,12 +28,13 @@ function initMap() {
     center: {lat: 47.2584933, lng: 39.7722394},
     zoom: 8
   });
-    <%=result%>
+
 }
 
     </script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx1sHtgx3dBVdiU0zaaxq3AaEe7MaHVz8&callback=initMap">
     </script>
+    <%=result%>
   </body>
 </html>
