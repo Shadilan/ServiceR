@@ -32,7 +32,7 @@ AdminTools obj=new AdminTools();
         center: {lat: -34.397, lng: 150.644},
         zoom: 8
       });
-      alert("STRANGE");
+
     }
 	</SCRIPT>
 	<script async defer
@@ -40,5 +40,6 @@ AdminTools obj=new AdminTools();
     </script>
 	<body>
 	<div id="map-canvas" style='z-index:1'>MAP NOT LOAD</div>
+	MAPPPP
 	</body>
 </HTML>
