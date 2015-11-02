@@ -12,17 +12,8 @@ String Lat1S=request.getParameter("Lat1");
 String Lat2S=request.getParameter("Lat2");
 String Lng1S=request.getParameter("Lng1");
 String Lng2S=request.getParameter("Lng2");
-int count=Integer.parseInt(countS);
-result=countS+" \n "+
-       Lat1S+" \n "+
-        Lat2S+" \n "+
-        Lng1S+" \n "+
-        Lng2S+" \n ";
-}catch (NumberFormatException ne)
-{
-result=e.toString();
-}
- catch (Exception e)
+result=obj.GenCity(Lat1S,Lng1S,Lat2S,Lng2S,countS);
+} catch (Exception e)
 {
 result=e.toString();
 }
