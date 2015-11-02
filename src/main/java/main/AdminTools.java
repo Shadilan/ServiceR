@@ -285,7 +285,8 @@ public class AdminTools {
 
     public String GenMap() {
         String result = null;
-        try {
+        return result;
+        /*try {
             Connection con;
             con = DBUtils.ConnectDB();
             PreparedStatement stmt;
@@ -302,6 +303,6 @@ public class AdminTools {
         } catch (SQLException | NamingException e) {
             e.printStackTrace();
         }
-        return result;
+        return result;*/
     }
 }
