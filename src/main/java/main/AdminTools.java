@@ -147,6 +147,20 @@ public class AdminTools {
         }
     }
 
+    public String GenCity(String Lat1, String Lng1, String Lat2, String Lng2, String count) {
+        String result;
+        try {
+            int Lat1N = Integer.parseInt(Lat1);
+            int Lat2N = Integer.parseInt(Lng1);
+            int Lng1N = Integer.parseInt(Lat2);
+            int Lng2N = Integer.parseInt(Lng2);
+            int countN = Integer.parseInt(count);
+            result = GenCity(Lat1N, Lng1N, Lat2N, Lng2N, countN);
+        } catch (NumberFormatException e) {
+            result = e.toString();
+        }
+        return result;
+    }
     /**
      * @param Lat1     Latitude of start of rect
      * @param Lng1     Longtitude of start of rect
@@ -267,5 +281,27 @@ public class AdminTools {
         //Generate positions
         //write to db
 
+    }
+
+    public String GenMap() {
+        String result = null;
+        try {
+            Connection con;
+            con = DBUtils.ConnectDB();
+            PreparedStatement stmt;
+            stmt = con.prepareStatement("select Lat,Lng,CITYNAME from service.cities");
+            ResultSet rs = stmt.executeQuery();
+            rs.beforeFirst();
+            while (rs.next()) {
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",'" + rs.getString("CITYNAME") + ");\n";
+            }
+
+            stmt.close();
+            con.commit();
+            con.close();
+        } catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
