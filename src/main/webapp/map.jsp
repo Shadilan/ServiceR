@@ -17,7 +17,6 @@ AdminTools obj=new AdminTools();
           #map { height: 100%; }
     </style>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&subset=latin,cyrillic' rel='stylesheet' type='text/css'/>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 	<script type="text/javascript">
 	function create_marker(lat,lng,name,map)
 	{
