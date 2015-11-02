@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="City_map&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" afterPath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/map.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/map.jsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="serviceR.iws" />
@@ -26,10 +25,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="map.jsp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="map.jsp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5805921">
+            <state vertical-scroll-proportion="0.0">
               <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
               <folding />
             </state>
@@ -56,11 +55,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="305" column="22" selection-start-line="305" selection-start-column="22" selection-end-line="305" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.2450658">
+              <caret line="286" column="29" selection-start-line="286" selection-start-column="29" selection-end-line="286" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -571,7 +570,13 @@
       <option name="project" value="LOCAL" />
       <updated>1446475532724</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="City_map&#10;">
+      <created>1446476031792</created>
+      <option name="number" value="00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1446476031792</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -991,18 +996,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="305" column="22" selection-start-line="305" selection-start-column="22" selection-end-line="305" selection-end-column="22" />
+          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5805921">
-          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.2450658">
+          <caret line="286" column="29" selection-start-line="286" selection-start-column="29" selection-end-line="286" selection-end-column="29" />
           <folding />
         </state>
       </provider>

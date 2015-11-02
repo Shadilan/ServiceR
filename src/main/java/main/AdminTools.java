@@ -285,7 +285,6 @@ public class AdminTools {
 
     public String GenMap() {
         String result = null;
-        return result;
         try {
             Connection con;
             con = DBUtils.ConnectDB();
