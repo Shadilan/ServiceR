@@ -13,16 +13,16 @@ String Lat2S=request.getParameter("Lat2");
 String Lng1S=request.getParameter("Lng1");
 String Lng2S=request.getParameter("Lng2");
 
-result="Test";
+result=countS+" \n "+
+       Lat1S+" \n "+
+        Lat2S+" \n "+
+        Lng1S+" \n "+
+        Lng2S+" \n ";
 } catch (Exception e)
 {
 result=e.toString();
 }
 
 %>
-<%=countS%><br/>
-<%=Lat1S%><br/>
-<%=Lat2S%><br/>
-<%=Lng1S%><br/>
-<%=Lng2S%><br/>
+
 <%=result%>
