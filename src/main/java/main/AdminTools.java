@@ -151,8 +151,8 @@ public class AdminTools {
         String result;
         try {
             int Lat1N = Integer.parseInt(Lat1);
-            int Lat2N = Integer.parseInt(Lng1);
-            int Lng1N = Integer.parseInt(Lat2);
+            int Lat2N = Integer.parseInt(Lat2);
+            int Lng1N = Integer.parseInt(Lng1);
             int Lng2N = Integer.parseInt(Lng2);
             int countN = Integer.parseInt(count);
             result = GenCity(Lat1N, Lng1N, Lat2N, Lng2N, countN);
