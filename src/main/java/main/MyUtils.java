@@ -68,11 +68,13 @@ public class MyUtils {
 
 		double i;
 		double j;
-		double size_square=Math.sqrt((width*height)/citycount);
-		for (i=0;i<width;i+=size_square)
-			for (j=0;j<height;j+=size_square)
+		//double size_square=Math.sqrt((width*height)/citycount);
+		double size_i = width / Math.sqrt(citycount);
+		double size_j = height / Math.sqrt(citycount);
+		for (i = 0; i < width; i += size_i)
+			for (j = 0; j < height; j += size_j)
 			{
-				cityarr.add(new Point ((int) (Math.random()*size_square+i), (int) (Math.random()*size_square+j)));
+				cityarr.add(new Point((int) (Math.random() * size_i + i), (int) (Math.random() * size_j + j)));
 
 			}
 		return cityarr;
