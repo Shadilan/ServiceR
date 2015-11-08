@@ -151,8 +151,8 @@ public class AdminTools {
         String result;
         try {
             int Lat1N = Integer.parseInt(Lat1);
-            int Lat2N = Integer.parseInt(Lng1);
-            int Lng1N = Integer.parseInt(Lat2);
+            int Lat2N = Integer.parseInt(Lat2);
+            int Lng1N = Integer.parseInt(Lng1);
             int Lng2N = Integer.parseInt(Lng2);
             int countN = Integer.parseInt(count);
             result = GenCity(Lat1N, Lng1N, Lat2N, Lng2N, countN);
@@ -171,6 +171,7 @@ public class AdminTools {
      */
     public String GenCity(int Lat1, int Lng1, int Lat2, int Lng2, int count) {
         //Count valid coord;
+        String result;
         int Lat1N;
         int Lat2N;
         int Lng1N;
@@ -190,8 +191,12 @@ public class AdminTools {
             Lng1N = Lng2;
             Lng2N = Lng1;
         }
+        result = "L" + Lat1N + "X" + Lng1N + "\n";
+        result += "L" + Lat2N + "X" + Lng2N + "\n";
         int width = Lat2N - Lat1N;
         int height = Lng2N - Lng1N;
+        result += "W" + width + " H" + height + "\n";
+        result += "Count:" + count;
         //Remove all current city
         try {
             Connection con = DBUtils.ConnectDB();
@@ -222,6 +227,7 @@ public class AdminTools {
                 stmt.setInt(3, (int) a.getY() + Lng1N);
                 stmt.execute();
                 con.commit();
+                result += "GUID:" + GUID + " Lat:" + (a.getX() + Lat1N) + " Lng:" + (a.getY() + Lng1N) + "\n";
             }
             con.commit();
             con.close();
@@ -232,7 +238,7 @@ public class AdminTools {
             e.printStackTrace();
             return e.toString();
         }
-        return "Success";
+        return result;
         //Generate positions
         //write to db
 
@@ -284,7 +290,7 @@ public class AdminTools {
     }
 
     public String GenMap() {
-        String result = null;
+        String result = "";
         try {
             Connection con;
             con = DBUtils.ConnectDB();
@@ -293,7 +299,7 @@ public class AdminTools {
             ResultSet rs = stmt.executeQuery();
             rs.beforeFirst();
             while (rs.next()) {
-                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",'" + rs.getString("CITYNAME") + ");\n";
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",'" + rs.getString("CITYNAME") + "',map);\n";
             }
 
             stmt.close();

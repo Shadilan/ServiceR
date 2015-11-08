@@ -163,8 +163,12 @@
                         <background-validation-millis>60000</background-validation-millis>
                         <!--<validate-on-match>true</validate-on-match>-->
                     </validation>
+                    <timeout>
+                        <idle-timeout-minutes>5</idle-timeout-minutes>
+                    </timeout>
                     <pool>
                         <flush-strategy>IdleConnections</flush-strategy>
+                        <allow-multiple-users>true</allow-multiple-users>
                     </pool>
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/PostgreSQLDS" enabled="${postgresql.enabled}" use-java-context="true" pool-name="PostgreSQLDS" use-ccm="true">
