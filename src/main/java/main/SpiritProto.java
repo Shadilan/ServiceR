@@ -275,6 +275,39 @@ public class SpiritProto {
 		return "User Created";
 	}
 
+    public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
+        Connection con = null;
+        try {
+            con = DBUtils.ConnectDB();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        PlayerObj player = null;
+        try {
+            player = new PlayerObj(con, Token);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        switch (Action) {
+            case "createRoute":
+                RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
+                if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
+                    return route.createRoute(player.GetGUID(), TargetGUID);
+                }
+                break;
+            case "createAmbush":
+                PlayerObj ambush = new PlayerObj();
+                if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
+                    return ambush.createAmbush(player.GetGUID(), PLat, PLng);
+                }
+                break;
+            default:
+                return "Действие не определено";
+        }
+        return "ОК";
 
-	
+    }
+
 }
