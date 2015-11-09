@@ -48,8 +48,8 @@
       <file leaf-file-name="SpiritProto.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-167.58621">
-              <caret line="298" column="32" selection-start-line="298" selection-start-column="32" selection-end-line="298" selection-end-column="32" />
+            <state vertical-scroll-proportion="-17.51724">
+              <caret line="303" column="22" selection-start-line="303" selection-start-column="22" selection-end-line="303" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -787,7 +787,13 @@
       <option name="project" value="LOCAL" />
       <updated>1447098176482</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="City_map&#10;">
+      <created>1447098200245</created>
+      <option name="number" value="00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1447098200245</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1184,14 +1190,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-167.58621">
-          <caret line="298" column="32" selection-start-line="298" selection-start-column="32" selection-end-line="298" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/MyUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1214,6 +1212,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="25" column="5" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.51724">
+          <caret line="303" column="22" selection-start-line="303" selection-start-column="22" selection-end-line="303" selection-end-column="22" />
           <folding />
         </state>
       </provider>
