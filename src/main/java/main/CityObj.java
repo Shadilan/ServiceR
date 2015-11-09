@@ -22,7 +22,7 @@ public class CityObj implements GameObject {
 	 * @param lat Latitude of City
 	 * @param lng Longtitude of City
 	 */
-	public CityObj(String owner,int lat,int lng){
+	public CityObj(String owner, int lat, int lng) {
 		GUID=UUID.randomUUID().toString();
 		Lat=lat;
 		Lng=lng;
@@ -131,7 +131,6 @@ public class CityObj implements GameObject {
 				"}";
 
 	}
-
 
 
 }

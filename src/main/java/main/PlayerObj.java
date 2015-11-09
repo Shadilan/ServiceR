@@ -1,9 +1,11 @@
 package main;
 
+import javax.naming.NamingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * Player info
@@ -31,11 +33,15 @@ public class PlayerObj implements GameObject {
 	 * @param GUID GUID
 	 */
 	public PlayerObj(Connection con, String GUID) throws SQLException {
-		GetDBData(con,GUID);
-	}
+        if (GUID.substring(1, 1).equals("T")) {
+            GetDBDataByToken(con, GUID);
+        } else
+            GetDBData(con, GUID);
+    }
 
-	public String GetGUID() {
-		return GUID;
+
+    public String GetGUID() {
+        return GUID;
 	}
 
 	public int GetGold() {
@@ -183,10 +189,12 @@ public class PlayerObj implements GameObject {
 
 	}
 
+
+	/* Removed by new conception. Zlodiak
 	/**
 	 * Create City with player as owner
 	 * @param con Connection to DB
-	 */
+
 	public void CreateCity(Connection con) throws SQLException {
 		if (City!=null)
         	{
@@ -213,7 +221,7 @@ public class PlayerObj implements GameObject {
 	 * Remove city (with check if Player is Owner)
 	 * @param con Connection to DB
 	 * @param Target City to remove
-	 */
+
 	public void RemoveCity(Connection con, String Target) throws SQLException {
 		if (!City.equals(Target)) return;
         PreparedStatement pstmt;
@@ -235,5 +243,71 @@ public class PlayerObj implements GameObject {
 
 		SetDBData(con);
     }
+	*/
+
+	public String checkCreateAmbush(int Lat, int Lng) {
+		PreparedStatement stmt;
+		ResultSet rs;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("select count(1) cnt from cities where ((ABS(lat-?)<=CityDef) and (ABS(lng-?)<=CityDef) and (POW((?-lat),2)+POW((?-lng),2)<POW(CityDef,2))");
+			stmt.setInt(1, Lat);
+			stmt.setInt(2, Lng);
+			stmt.setInt(3, Lat);
+			stmt.setInt(4, Lng);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt") > 0) {
+				return "Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!";
+			} else {
+				return "ОК";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+	}
+
+	public String createAmbush(String Owner, int Lat, int Lng) {
+		PreparedStatement stmt;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			String GUID_ROUTE = UUID.randomUUID().toString();
+			stmt = con.prepareStatement("insert into traps (GUID, OWNER, LAT, LNG) VALUES (?,?,?,?)");
+			stmt.setString(1, GUID);
+			stmt.setString(2, Owner);
+			stmt.setInt(3, Lat);
+			stmt.setInt(4, Lng);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "ОК";
+	}
+
+	public String cancelUnfinishedRoute(String Owner) {
+		PreparedStatement stmt;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("delete from routes where FINISH is null and OWNER=?");
+			stmt.setString(1, Owner);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return "ОК";
+	}
 
 }
