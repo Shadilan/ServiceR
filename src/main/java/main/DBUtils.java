@@ -11,16 +11,18 @@ import java.sql.SQLException;
  * @author Shadilan
  */
 public class DBUtils {
+    private static DBUtils instance;
+    private Connection con;
     public static Connection ConnectDB() throws NamingException, SQLException {
-        Context ctx;
-        DataSource ds;
-        Connection con;
-        ctx = new InitialContext();
-        ds = (DataSource) ctx.lookup("java:jboss/datasources/MySQLDS");
-        con = ds.getConnection("adminUuszpdJ", "5FKl3fnWFT55");
-        con.setAutoCommit(false);
-
-        return con;
+        if (instance ==null) {
+            Context ctx;
+            DataSource ds;
+            ctx = new InitialContext();
+            ds = (DataSource) ctx.lookup("java:jboss/datasources/MySQLDS");
+            instance.con = ds.getConnection("adminUuszpdJ", "5FKl3fnWFT55");
+            instance.con.setAutoCommit(false);
+        }
+        return instance.con;
     }
 
 }
