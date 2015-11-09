@@ -168,7 +168,7 @@
                     </timeout>
                     <pool>
                         <flush-strategy>IdleConnections</flush-strategy>
-                        <allow-multiple-users>true</allow-multiple-users>
+                        <allow-multiple-users/>
                     </pool>
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/PostgreSQLDS" enabled="${postgresql.enabled}" use-java-context="true" pool-name="PostgreSQLDS" use-ccm="true">

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -40,7 +41,7 @@ public class SpiritProto {
             ResultSet rs = pstmt.executeQuery();
             rs.first();
 			if (rs.getInt(1)==0) {
-                result = "User not Found: " + Login;
+                result = MyUtils.getJSONError("AccessDenied", "User not found.");
             } else {
                 pstmt = con.prepareStatement("UPDATE gplayers SET USERTOKEN=? WHERE PlayerName=? and Password=?");
                 pstmt.setString(1, Token);
@@ -52,16 +53,13 @@ public class SpiritProto {
             }
 
         } catch (SQLException e) {
-
-            result = e.toString();
+            return MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
 
         } catch (NamingException e) {
-            e.printStackTrace();
-            result = e.toString();
+            return MyUtils.getJSONError("ResourceError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
 
 		}
         if (result.equals("")) return "{Token:" + '"' + Token + '"' + "}";
-            //TODO JSON Format of error
         else return result;
 
     }
@@ -100,10 +98,6 @@ public class SpiritProto {
                         CityObj City = new CityObj();
                         City.GetDBData(con, GUID);
                         Cities.add(City);
-                    } else if (ObjType.equalsIgnoreCase("AMBUSH")) {
-                        //For future
-                    } else if (ObjType.equalsIgnoreCase("CARAVAN")) {
-                        //For future
                     }
 
                 }
@@ -121,8 +115,7 @@ public class SpiritProto {
             }
 
         } catch (NamingException e) {
-            //TODO JSON Format of error
-            result = e.toString();
+            return MyUtils.getJSONError("Resource", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         } catch (SQLException e) {
             try {
                 if (con != null && !con.isClosed()) {
@@ -130,10 +123,9 @@ public class SpiritProto {
                     con.close();
                 }
             } catch (SQLException el) {
-                el.printStackTrace();
+                return MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
             }
-            //TODO JSON Format of error
-            result = e.toString();
+            MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
 
 		return result;
@@ -157,46 +149,51 @@ public class SpiritProto {
             player.GetDBDataByToken(con, token);
             //Check if player have correct Token
             if (!player.isLogin()) {
-                result = "User not login in.";
+                result = "AccessDenied";
             } else {
                 //Set new player position
                 player.setPos(Lat, Lng);
                 //Check Actions (add new action here
-                if (action.equals("addCity")) {
-                    player.CreateCity(con);
-                    result = player.GetLastError();
-                } else if (action.equals("removeCity")) {
-                    player.RemoveCity(con, target);
-                    result = player.GetLastError();
-                } else
+                switch (action) {
+                    case "addCity":
+                        player.CreateCity(con);
+                        result = player.GetLastError();
+                        break;
+                    case "removeCity":
+                        player.RemoveCity(con, target);
+                        result = player.GetLastError();
+                        break;
                     //Create route
-                    if (action.equals("addroute")) {
+                    case "addroute":
                         CityObj targetCity = new CityObj(con, target);
                         CityObj homeCity = new CityObj(con, player.GetCity());
                         //Check if all city founded;
                         RouteObj route = new RouteObj(player, homeCity, targetCity);
                         if (route.GetLastError().equals("")) route.SetDBData(con);
                         else result = route.GetLastError();
-                    } else
+                        break;
+                    default:
                         //Return defaul error for unknown command
-                        result = "Command unknown.";
+                        result = "UnknownCommand";
+                        break;
+                }
             }
             if (!result.equals("")) {
                 try {
                     con.rollback();
                     con.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
-                return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + "E" + '"' + ",Message:" + '"' + result + '"' + "}";
+                return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + result + '"' + ",Message:" + '"' + result + '"' + "}";
             } else {
                 con.commit();
                 con.close();
             }
         } catch (NamingException e) {
-            return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + "E" + '"' + ",Message:" + '"' + e.toString() + '"' + "}";
+            MyUtils.getJSONError("ResourceError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         } catch (SQLException e) {
-            return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + "E" + '"' + ",Message:" + '"' + e.toString() + '"' + "}";
+            MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
         return "{Result:" + '"' + "Success" + '"' + ",Code:" + '"' + "S" + '"' + ",Message:" + '"' + "Done" + '"' + "}";
     }*/
@@ -215,7 +212,8 @@ public class SpiritProto {
     public String NewPlayer(String Login,String Password,String email,String InviteCode){
 
 		PreparedStatement stmt;
-		try {
+        String result;
+        try {
             Connection con = DBUtils.ConnectDB();
             ResultSet rs;
 			//Check inviteCode
@@ -226,9 +224,10 @@ public class SpiritProto {
 			if (rs.getInt("cnt")==0){
 				stmt.close();
 				con.close();
-				return "No Invite Code";
-			}
-			//Check Name Available
+                result = "NoInviteCode";
+                return MyUtils.getJSONError(result, result);
+            }
+            //Check Name Available
             stmt = con.prepareStatement("select count(1) cnt from gplayers where PlayerName=? or email=?");
             stmt.setString(1,Login);
             stmt.setString(2,email);
@@ -237,14 +236,16 @@ public class SpiritProto {
 			if (rs.getInt("cnt")>0){
 				stmt.close();
 				con.close();
-				return "Name or Mail already Exists";
-			}
-			if (Password.length()<6){
+                result = "UserExists";
+                return MyUtils.getJSONError(result, result);
+            }
+            if (Password.length()<6){
 				stmt.close();
 				con.close();
-				return "Name or Mail already Exists";
-			}
-			//Write InviteCode
+                result = "EasyPassword";
+                return MyUtils.getJSONError(result, result);
+            }
+            //Write InviteCode
 			String GUID=UUID.randomUUID().toString();
 			stmt=con.prepareStatement("update invites set Invited=? where inviteCode=?");
             stmt.setString(1, GUID);
@@ -265,15 +266,13 @@ public class SpiritProto {
 			con.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return e.toString();
+            return MyUtils.getJSONError("DBError", e.toString() + Arrays.toString(e.getStackTrace()));
         } catch (NamingException e) {
-            e.printStackTrace();
-            return e.toString();
+            return MyUtils.getJSONError("DBError", e.toString() + Arrays.toString(e.getStackTrace()));
         }
 
-		return "User Created";
-	}
+        return "{Result:\"Success\",Message:\"User created\"";
+    }
 
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;

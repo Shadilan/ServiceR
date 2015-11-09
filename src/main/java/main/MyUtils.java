@@ -79,4 +79,8 @@ public class MyUtils {
 			}
 		return cityarr;
 	}
+
+    public static String getJSONError(String errortype, String errormessage) {
+        return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + errortype + '"' + ",Message:" + '"' + errormessage + '"' + "}";
+    }
 }
