@@ -33,11 +33,15 @@ public class PlayerObj implements GameObject {
 	 * @param GUID GUID
 	 */
 	public PlayerObj(Connection con, String GUID) throws SQLException {
-		GetDBData(con,GUID);
-	}
+        if (GUID.substring(1, 1).equals("T")) {
+            GetDBDataByToken(con, GUID);
+        } else
+            GetDBData(con, GUID);
+    }
 
-	public String GetGUID() {
-		return GUID;
+
+    public String GetGUID() {
+        return GUID;
 	}
 
 	public int GetGold() {

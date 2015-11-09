@@ -30,7 +30,7 @@ public class SpiritProto {
 
         Connection con;
         PreparedStatement pstmt;
-        String Token = UUID.randomUUID().toString();
+        String Token = "T" + UUID.randomUUID().toString();
         String result = "";
         try {
             con = DBUtils.ConnectDB();
@@ -125,7 +125,7 @@ public class SpiritProto {
             result = e.toString();
         } catch (SQLException e) {
             try {
-                if (!con.isClosed()) {
+                if (con != null && !con.isClosed()) {
                     con.rollback();
                     con.close();
                 }
@@ -148,7 +148,7 @@ public class SpiritProto {
 	 * @param target Target of Action
 	 * @return JSON String of result
 	 */
-	public String SimpleCommand(String token,int Lat,int Lng,String action,String target){
+    /*public String SimpleCommand(String token,int Lat,int Lng,String action,String target){
         Connection con;
         String result = "";
         try {
@@ -199,7 +199,7 @@ public class SpiritProto {
             return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + "E" + '"' + ",Message:" + '"' + e.toString() + '"' + "}";
         }
         return "{Result:" + '"' + "Success" + '"' + ",Code:" + '"' + "S" + '"' + ",Message:" + '"' + "Done" + '"' + "}";
-    }
+    }*/
 
 
 
