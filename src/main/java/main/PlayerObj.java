@@ -245,7 +245,7 @@ public class PlayerObj implements GameObject {
     }
 	*/
 
-	public String checkCreateTrap(int Lat, int Lng) {
+	public String checkCreateAmbush(int Lat, int Lng) {
 		PreparedStatement stmt;
 		ResultSet rs;
 		try {
@@ -272,7 +272,7 @@ public class PlayerObj implements GameObject {
 		}
 	}
 
-	public String createTrap(String Owner, int Lat, int Lng) {
+	public String createAmbush(String Owner, int Lat, int Lng) {
 		PreparedStatement stmt;
 		try {
 			Connection con = DBUtils.ConnectDB();

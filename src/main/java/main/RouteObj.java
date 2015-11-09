@@ -40,6 +40,10 @@ public class RouteObj implements GameObject {
 		HP=10;
 	}
 
+	public RouteObj(String Owner, String StartCity) {
+
+	}
+
 	/**
 	 * Constructor Create route from player and cities info
      * @param player Owner of route
