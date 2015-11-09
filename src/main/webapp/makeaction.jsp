@@ -10,6 +10,6 @@ String Action=request.getParameter("Action");
 String Target=request.getParameter("Target");
 
 SpiritProto obj=new SpiritProto();
-obj.ConnectDB();
+//obj.ConnectDB();
 obj.action(Token,LatS,LatL,Target,Action);
 %>
