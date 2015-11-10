@@ -85,8 +85,6 @@ public class SpiritProto {
                 PreparedStatement stmt = con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
                 stmt.setInt(1, Lat);
                 stmt.setInt(2, Lng);
-
-
                 ResultSet rs = stmt.executeQuery();
                 rs.beforeFirst();
                 ArrayList<CityObj> Cities = new ArrayList<>();
@@ -115,17 +113,19 @@ public class SpiritProto {
             }
 
         } catch (NamingException e) {
-            return MyUtils.getJSONError("Resource", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+            result= MyUtils.getJSONError("Resource", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         } catch (SQLException e) {
+
+            result=MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+        } finally {
             try {
                 if (con != null && !con.isClosed()) {
                     con.rollback();
                     con.close();
                 }
             } catch (SQLException el) {
-                return MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                result= MyUtils.getJSONError("DBError", el.toString() + "\n" + Arrays.toString(el.getStackTrace()));
             }
-            MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
 
 		return result;
@@ -276,36 +276,37 @@ public class SpiritProto {
 
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
+        String result="{Result:\"Success\",Message:\"Action done\"";
         try {
             con = DBUtils.ConnectDB();
-        } catch (NamingException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (NamingException | SQLException e) {
+            result=MyUtils.getJSONError("ServerError",e.toString());
         }
         PlayerObj player = null;
         try {
             player = new PlayerObj(con, Token);
         } catch (SQLException e) {
-            e.printStackTrace();
+            result=MyUtils.getJSONError("DBError",e.toString());
         }
-        switch (Action) {
-            case "createRoute":
-                RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
-                if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
-                    return route.createRoute(player.GetGUID(), TargetGUID);
-                }
-                break;
-            case "createAmbush":
-                PlayerObj ambush = new PlayerObj();
-                if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
-                    return ambush.createAmbush(player.GetGUID(), PLat, PLng);
-                }
-                break;
-            default:
-                return "Действие не определено";
-        }
-        return "ОК";
+        if (player!=null) {
+            switch (Action) {
+                case "createRoute":
+                    RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
+                    if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
+                        return route.createRoute(player.GetGUID(), TargetGUID);
+                    }
+                    break;
+                case "createAmbush":
+                    PlayerObj ambush = new PlayerObj();
+                    if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
+                        return ambush.createAmbush(player.GetGUID(), PLat, PLng);
+                    }
+                    break;
+                default:
+                    result= MyUtils.getJSONError("ActtionNotFound","Действие не определено");
+            }
+        } else result= MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn");
+        return result;
 
     }
 
