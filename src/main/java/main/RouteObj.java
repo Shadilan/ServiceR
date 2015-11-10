@@ -215,6 +215,11 @@ public class RouteObj implements GameObject {
 		
 	}
 
+	@Override
+	public String action(Connection con, String Token, int PLat, int PLng, String TargetGUID, String Action) {
+		return null;
+	}
+
 	//проверяем возможность создания маршрута. если есть незавершенный маршрут, то нельзя
 	public String checkCreateRoute(String Owner) {
 		PreparedStatement stmt;
