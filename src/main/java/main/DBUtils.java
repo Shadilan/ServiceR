@@ -19,6 +19,7 @@ public class DBUtils {
             DataSource ds;
             ctx = new InitialContext();
             ds = (DataSource) ctx.lookup("java:jboss/datasources/MySQLDS");
+            instance=new DBUtils();
             instance.con = ds.getConnection("adminUuszpdJ", "5FKl3fnWFT55");
             instance.con.setAutoCommit(false);
         }
