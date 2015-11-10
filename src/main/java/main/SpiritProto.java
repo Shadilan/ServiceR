@@ -203,7 +203,11 @@ public class SpiritProto {
 
         return "{Result:\"Success\",Message:\"User created\"";
     }
-
+    public String action(String Token, String PLat, String PLng, String TargetGUID, String Action){
+        int Lat=Integer.parseInt(PLat);
+        int Lng=Integer.parseInt(PLng);
+        return action(Token,Lat,Lng,TargetGUID,Action);
+    }
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
         String result="{Result:\"Success\",Message:\"Action done\"";
