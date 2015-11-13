@@ -56,12 +56,10 @@ public class DBUtils {
         for (Connection conn:connections){
             try {
                 if (!conn.isClosed()) conn.close();
-                rem.add(conn);
             } catch (SQLException e) {
                 return e.toString();
             }
         }
-        connections.removeAll(rem);
         return "Ok";
     }
 

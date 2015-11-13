@@ -84,6 +84,6 @@ public class MyUtils {
         return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + errortype + '"' + ",Message:" + '"' + errormessage + '"' + "}";
     }
 	public static String getJSONSuccess(String message) {
-		return "{Result:" + '"' + "Success" + '"' + '"' + ",Message:" + '"' + message + '"' + "}";
+		return "{Result:" + '"' + "Success" + '"' + ",Message:" + '"' + message + '"' + "}";
 	}
 }
