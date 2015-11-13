@@ -225,7 +225,7 @@ public class SpiritProto {
         } catch (SQLException e) {
             result=MyUtils.getJSONError("DBError",e.toString());
         }
-        if (player!=null) {
+        if (player.isLogin())  {
             switch (Action) {
                 case "createRoute":
                     RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
@@ -240,9 +240,14 @@ public class SpiritProto {
                     }
                     break;
                 default:
-                    result= MyUtils.getJSONError("ActtionNotFound","Действие не определено");
+                    result = MyUtils.getJSONError("ActtionNotFound", "Действие не определено");
             }
-        } else result= MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn "+Token);
+        } else
+        {
+            result = MyUtils.getJSONError("AccessDenied", "PlayerNotLoginIn " + Token);
+
+        }
+
         return result;
 
     }
