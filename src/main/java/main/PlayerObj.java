@@ -256,7 +256,7 @@ public class PlayerObj implements GameObject {
 		ResultSet rs;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			stmt = con.prepareStatement("select count(1) cnt from cities where ((ABS(lat-?)<=CityDef) and (ABS(lng-?)<=CityDef) and (POW((?-lat),2)+POW((?-lng),2)<POW(CityDef,2))");
+			stmt = con.prepareStatement("select count(1) cnt from cities where ((ABS(lat-?)<=CityDef) and (ABS(lng-?)<=50) and (POW((?-lat),2)+POW((?-lng),2)<POW(50,2))");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			stmt.setInt(3, Lat);
@@ -265,7 +265,7 @@ public class PlayerObj implements GameObject {
 			rs = stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt") > 0) {
-				return MyUtils.getJSONSuccess("Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
+				return MyUtils.getJSONError("AmbushNearCity","Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
 			} else {
 				return "ОК";
 			}
