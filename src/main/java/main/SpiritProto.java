@@ -213,7 +213,7 @@ public class SpiritProto {
     }
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
-        String result="{Result:\"Success\",Message:\"Action done\"";
+        String result=MyUtils.getJSONError("Unknown","Something wrong in action operation.");
         try {
             con = DBUtils.ConnectDB();
         } catch (NamingException | SQLException e) {
@@ -231,13 +231,13 @@ public class SpiritProto {
                 case "createRoute":
                     RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
                     if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
-                        return route.createRoute(player.GetGUID(), TargetGUID);
+                        result= route.createRoute(player.GetGUID(), TargetGUID);
                     }
                     break;
                 case "createAmbush":
                     PlayerObj ambush = new PlayerObj();
                     if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
-                        return ambush.createAmbush(player.GetGUID(), PLat, PLng);
+                        result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
                     }
                     break;
                 default:
