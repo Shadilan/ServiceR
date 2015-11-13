@@ -224,6 +224,7 @@ public class SpiritProto {
                         RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
                         result=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
                         if (result.equalsIgnoreCase("Оk")) {
+                            result="!OK!";
                             result= route.createRoute(player.GetGUID(), TargetGUID);
                         }
                         break;
