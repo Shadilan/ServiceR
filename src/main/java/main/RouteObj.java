@@ -237,11 +237,9 @@ public class RouteObj implements GameObject {
 				return "Ok";//Здесь наверное можно оставить Ok чтобы потом проще проверять было
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return e.toString();
+			return MyUtils.getJSONError("DBError", e.toString());
 		} catch (NamingException e) {
-			e.printStackTrace();
-			return e.toString();
+			return MyUtils.getJSONError("DBError", e.toString());
 		}
 	}
 
