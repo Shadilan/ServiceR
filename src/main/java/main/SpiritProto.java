@@ -242,7 +242,7 @@ public class SpiritProto {
                 default:
                     result= MyUtils.getJSONError("ActtionNotFound","Действие не определено");
             }
-        } else result= MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn");
+        } else result= MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn "+Token);
         return result;
 
     }
