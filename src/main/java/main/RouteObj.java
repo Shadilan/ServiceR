@@ -234,7 +234,7 @@ public class RouteObj implements GameObject {
 			if (rs.getInt("cnt") > 0) {
 				return MyUtils.getJSONError("RouteAlreadyStarted", "Сначала завершите текущий маршрут");
 			} else {
-				return "Ok";//Здесь наверное можно оставить Ok чтобы потом проще проверять было
+				return "OK";//Здесь наверное можно оставить Ok чтобы потом проще проверять было
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
