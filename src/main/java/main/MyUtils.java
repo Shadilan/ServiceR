@@ -83,4 +83,7 @@ public class MyUtils {
     public static String getJSONError(String errortype, String errormessage) {
         return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + errortype + '"' + ",Message:" + '"' + errormessage + '"' + "}";
     }
+	public static String getJSONSuccess(String message) {
+		return "{Result:" + '"' + "Success" + '"' + '"' + ",Message:" + '"' + message + '"' + "}";
+	}
 }

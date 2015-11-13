@@ -232,9 +232,9 @@ public class RouteObj implements GameObject {
 			rs = stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt") > 0) {
-				return "Сначала завершите текущий маршрут";
+				return MyUtils.getJSONError("RouteAlreadyStarted", "Сначала завершите текущий маршрут");
 			} else {
-				return "ОК";
+				return "Ok";//Здесь наверное можно оставить Ok чтобы потом проще проверять было
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -274,16 +274,12 @@ public class RouteObj implements GameObject {
 			stmt.setString(2, GUID_ROUTE);
 			stmt.setInt(3, c_lat);
 			stmt.setInt(4, c_lng);
-
 			stmt.execute();
-
-			return "ОК";
+			return MyUtils.getJSONSuccess("Route created.");
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return e.toString();
+			return MyUtils.getJSONError("DBError", e.toString());
 		} catch (NamingException e) {
-			e.printStackTrace();
-			return e.toString();
+			return MyUtils.getJSONError("NamingError", e.toString());
 		}
 	}
 
@@ -302,9 +298,9 @@ public class RouteObj implements GameObject {
 			rs = stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt") > 0) {
-				return "Такой маршрут уже существует";
+				return MyUtils.getJSONError("RouteAlreadyExists","Route already exists.");
 			} else {
-				return "ОК";
+				return "Ok";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -351,6 +347,6 @@ public class RouteObj implements GameObject {
 			e.printStackTrace();
 			return e.toString();
 		}
-		return "ОК";
+		return MyUtils.getJSONSuccess("Route created.");
 	}
 }

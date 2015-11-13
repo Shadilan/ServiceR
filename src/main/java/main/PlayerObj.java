@@ -265,7 +265,7 @@ public class PlayerObj implements GameObject {
 			rs = stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt") > 0) {
-				return "Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!";
+				return MyUtils.getJSONSuccess("Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
 			} else {
 				return "ОК";
 			}
@@ -302,7 +302,7 @@ public class PlayerObj implements GameObject {
 			e.printStackTrace();
 			return e.toString();
 		}
-		return "ОК";
+		return MyUtils.getJSONSuccess("Ambush created.");
 	}
 
 	public String cancelUnfinishedRoute(String Owner) {
@@ -319,7 +319,7 @@ public class PlayerObj implements GameObject {
 			e.printStackTrace();
 			return e.toString();
 		}
-		return "ОК";
+		return MyUtils.getJSONSuccess("Route canceled.");
 	}
 
 }
