@@ -221,7 +221,8 @@ public class SpiritProto {
         }
         PlayerObj player = null;
         try {
-            player = new PlayerObj(con, Token);
+            player = new PlayerObj();
+            player.GetDBDataByToken(con,Token);
         } catch (SQLException e) {
             result=MyUtils.getJSONError("DBError",e.toString());
         }
