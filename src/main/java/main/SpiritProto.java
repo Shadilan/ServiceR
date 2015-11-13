@@ -213,42 +213,37 @@ public class SpiritProto {
     }
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
-        String result=MyUtils.getJSONError("Unknown","Something wrong in action operation.");
+        String result;
         try {
             con = DBUtils.ConnectDB();
-        } catch (NamingException | SQLException e) {
-            result=MyUtils.getJSONError("ServerError",e.toString());
-        }
-        PlayerObj player = null;
-        try {
-            player = new PlayerObj();
+            PlayerObj player= new PlayerObj();
             player.GetDBDataByToken(con,Token);
-        } catch (SQLException e) {
+            if (player.isLogin())  {
+                switch (Action) {
+                    case "createRoute":
+                        RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
+                        result=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
+                        if (result.equalsIgnoreCase("Оk")) {
+                            result= route.createRoute(player.GetGUID(), TargetGUID);
+                        }
+                        break;
+                    case "createAmbush":
+                        PlayerObj ambush = new PlayerObj();
+                        result=ambush.checkCreateAmbush(PLat, PLng);
+                        if (result.equalsIgnoreCase("ОК")) {
+                            result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
+                        }
+                        break;
+                    default:
+                        result = MyUtils.getJSONError("ActtionNotFound", "Действие не определено");
+                }
+            } else
+            {
+                result = MyUtils.getJSONError("AccessDenied", "PlayerNotLoginIn " + Token);
+            }
+        } catch (SQLException | NamingException e) {
             result=MyUtils.getJSONError("DBError",e.toString());
         }
-        if (player.isLogin())  {
-            switch (Action) {
-                case "createRoute":
-                    RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
-                    if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
-                        result= route.createRoute(player.GetGUID(), TargetGUID);
-                    }
-                    break;
-                case "createAmbush":
-                    PlayerObj ambush = new PlayerObj();
-                    if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
-                        result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
-                    }
-                    break;
-                default:
-                    result = MyUtils.getJSONError("ActtionNotFound", "Действие не определено");
-            }
-        } else
-        {
-            result = MyUtils.getJSONError("AccessDenied", "PlayerNotLoginIn " + Token);
-
-        }
-
         return result;
 
     }
