@@ -256,7 +256,8 @@ public class PlayerObj implements GameObject {
 		ResultSet rs;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			stmt = con.prepareStatement("select count(1) cnt from cities where ((ABS(lat-?)<=50) and (ABS(lng-?)<=50) and (POW((?-lat),2)+POW((?-lng),2)<POW(50,2))");
+			//Correct CityDef => 50
+			stmt = con.prepareStatement("select count(1) cnt from cities where ((ABS(lat-?)<=50) and (ABS(lng-?)<=50) and (POW((?-lat),2)+POW((?-lng),2)<POW(50,2)))");
 			stmt.setInt(1, Lat);
 			stmt.setInt(2, Lng);
 			stmt.setInt(3, Lat);
