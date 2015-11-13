@@ -78,7 +78,10 @@ public class SpiritProto {
             con = DBUtils.ConnectDB();
             PlayerObj player = new PlayerObj();
             player.GetDBDataByToken(con, token);
-            if (!player.isLogin()) con.close();
+            if (!player.isLogin()){
+                con.close();
+                MyUtils.getJSONError("NotLogin","We dont know you.");
+            }
             else {
                 player.setPos(Lat, Lng);
                 player.SetDBData(con);

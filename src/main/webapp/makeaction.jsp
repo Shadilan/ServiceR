@@ -11,5 +11,7 @@ String Target=request.getParameter("Target");
 
 SpiritProto obj=new SpiritProto();
 //obj.ConnectDB();
-obj.action(Token,LatS,LatL,Target,Action);
+String result=obj.action(Token,LatS,LatL,Target,Action);
 %>
+
+<%=result%>
