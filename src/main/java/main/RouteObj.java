@@ -273,6 +273,8 @@ public class RouteObj implements GameObject {
 			stmt.setInt(3, c_lat);
 			stmt.setInt(4, c_lng);
 			stmt.execute();
+			con.commit();
+			con.close();
 			return MyUtils.getJSONSuccess("Route created.");
 		} catch (SQLException e) {
 			return MyUtils.getJSONError("DBError", e.toString());
@@ -338,6 +340,8 @@ public class RouteObj implements GameObject {
 			stmt.setString(1, City);
 			stmt.setString(2, Route);
 			stmt.execute();
+			con.commit();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return e.toString();
@@ -345,6 +349,28 @@ public class RouteObj implements GameObject {
 			e.printStackTrace();
 			return e.toString();
 		}
+
 		return MyUtils.getJSONSuccess("Route created.");
+	}
+
+	//получаем GUID незавершенного маршрута игрока (такой маршрут только один может быть)
+	public String getUnfinishedRoute(String Owner) {
+		PreparedStatement stmt;
+		ResultSet rs;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("select GUID from routes where owner=? and finish is null)");
+			stmt.setString(1, Owner);
+			stmt.execute();
+			rs = stmt.executeQuery();
+			rs.first();
+			return rs.getString("GUID");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
 	}
 }
