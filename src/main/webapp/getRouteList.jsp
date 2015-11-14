@@ -6,7 +6,11 @@ String result="";
 String token="";
 token=request.getParameter("Token");
 String city="";
-city = request.getParameter("City");
+if (request.getParameterMap().containsKey("City"))
+ {
+     city = request.getParameter("City");
+ }
+
 
 SpiritProto obj=new SpiritProto();
 result = obj.getRouteList(token,city);

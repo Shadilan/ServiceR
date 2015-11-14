@@ -263,7 +263,7 @@ public class SpiritProto {
                     stmt = con.prepareStatement("select GUID from routes where owner=?");
                     stmt.setString(1,player.GetGUID());
                 } else {
-                    stmt=con.prepareStatement("select GUID from routes where onwer=? and (start=? or finish=?)");
+                    stmt=con.prepareStatement("select GUID from routes where owner=? and (start=? or finish=?)");
                     stmt.setString(1,player.GetGUID());
                     stmt.setString(2,city);
                     stmt.setString(3,city);
