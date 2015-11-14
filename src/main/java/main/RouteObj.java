@@ -114,8 +114,8 @@ public class RouteObj implements GameObject {
 					"c1.Lat as slat,c1.Lng as slng, c2.lat as elat,c2.lng as elng \n" +
 					"FROM routes r, cities c1, cities c2 " +
 					"WHERE r.GUID = ? " +
-					"AND r.rstart = c1.guid " +
-					"AND r.rend = c2.guid " +
+					"AND r.start = c1.guid " +
+					"AND r.finish = c2.guid " +
 					"LIMIT 0,1");
 			stmt.setString(1, GUID);
 			rs=stmt.executeQuery();
