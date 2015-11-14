@@ -9,8 +9,5 @@ public interface GameObject {
 	void SetDBData(Connection con) throws SQLException;
 
 	String toString();
-	String action(Connection con,String Token, int PLat, int PLng, String TargetGUID, String Action);
-
-
 
 }

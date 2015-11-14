@@ -82,7 +82,7 @@ public class SpiritProto {
             player.GetDBDataByToken(con, token);
             if (!player.isLogin()){
                 con.close();
-                MyUtils.getJSONError("NotLogin","We dont know you.");
+                MyUtils.getJSONError("AccessDenied","We dont know you.");
             }
             else {
                 player.setPos(Lat, Lng);
@@ -93,6 +93,7 @@ public class SpiritProto {
                 ResultSet rs = stmt.executeQuery();
                 rs.beforeFirst();
                 ArrayList<CityObj> Cities = new ArrayList<>();
+                ArrayList<AmbushObj> Ambushes = new ArrayList<>();
                 while (rs.next()) {
 
                     String GUID = rs.getString(1);
@@ -101,6 +102,9 @@ public class SpiritProto {
                         CityObj City = new CityObj();
                         City.GetDBData(con, GUID);
                         Cities.add(City);
+                    } else if (ObjType.equalsIgnoreCase("AMBUSH")) {
+                        AmbushObj ambush=new AmbushObj(con,GUID);
+                        Ambushes.add(ambush);
                     }
 
                 }
@@ -112,16 +116,21 @@ public class SpiritProto {
 
                 }
                 if (citiesinfo != null) result += "," + "Cities:[" + citiesinfo + "]";
+                String ambushinfo = null;
+                for (AmbushObj ambush : Ambushes) {
+                    if (ambushinfo == null) ambushinfo = ambush.toString();
+                    else ambushinfo += "," + ambush.toString();
+
+                }
+                if (ambushinfo != null) result += "," + "Ambushes:[" + ambushinfo + "]";
+
                 result += "}";
 
                 con.commit();
             }
 
-        } catch (NamingException e) {
-            result= MyUtils.getJSONError("Resource", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
-        } catch (SQLException e) {
-
-            result=MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+        } catch (NamingException | SQLException e) {
+            result= MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         } finally {
             try {
                 if (con != null && !con.isClosed()) {
