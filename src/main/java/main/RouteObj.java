@@ -110,7 +110,7 @@ public class RouteObj implements GameObject {
 		PreparedStatement stmt;
 
 			ResultSet rs;
-			stmt=con.prepareStatement("SELECT r.GUID, r.Owner, r.start, r.finish,c1.name start_name,c2.name finish_name,\n" +
+			stmt=con.prepareStatement("SELECT r.GUID, r.Owner, r.start, r.finish,c1.CITYNAME start_name,c2.CITYNAME finish_name,\n" +
 					"c1.Lat as slat,c1.Lng as slng, c2.lat as elat,c2.lng as elng \n" +
 					"FROM routes r, cities c1, cities c2 " +
 					"WHERE r.GUID = ? " +
