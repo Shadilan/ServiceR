@@ -17,6 +17,7 @@ public class SpiritProto {
     /**
      * Default Constructor
 	 */
+    
 	public SpiritProto(){
 
 	}
@@ -78,7 +79,10 @@ public class SpiritProto {
             con = DBUtils.ConnectDB();
             PlayerObj player = new PlayerObj();
             player.GetDBDataByToken(con, token);
-            if (!player.isLogin()) con.close();
+            if (!player.isLogin()){
+                con.close();
+                MyUtils.getJSONError("NotLogin","We dont know you.");
+            }
             else {
                 player.setPos(Lat, Lng);
                 player.SetDBData(con);
@@ -210,36 +214,38 @@ public class SpiritProto {
     }
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
-        String result="{Result:\"Success\",Message:\"Action done\"";
+        String result;
         try {
             con = DBUtils.ConnectDB();
-        } catch (NamingException | SQLException e) {
-            result=MyUtils.getJSONError("ServerError",e.toString());
-        }
-        PlayerObj player = null;
-        try {
-            player = new PlayerObj(con, Token);
-        } catch (SQLException e) {
+            PlayerObj player= new PlayerObj();
+            player.GetDBDataByToken(con,Token);
+            if (player.isLogin())  {
+                switch (Action) {
+                    case "createRoute":
+                        RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
+                        result=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
+                        if (result.equalsIgnoreCase("Ok")) {
+                            result="!OK!";
+                            result= route.createRoute(player.GetGUID(), TargetGUID);
+                        }
+                        break;
+                    case "createAmbush":
+                        PlayerObj ambush = new PlayerObj();
+                        result=ambush.checkCreateAmbush(PLat, PLng);
+                        if (result.equalsIgnoreCase("Оk")) {
+                            result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
+                        }
+                        break;
+                    default:
+                        result = MyUtils.getJSONError("ActtionNotFound", "Действие не определено");
+                }
+            } else
+            {
+                result = MyUtils.getJSONError("AccessDenied", "PlayerNotLoginIn " + Token);
+            }
+        } catch (SQLException | NamingException e) {
             result=MyUtils.getJSONError("DBError",e.toString());
         }
-        if (player!=null) {
-            switch (Action) {
-                case "createRoute":
-                    RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
-                    if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
-                        return route.createRoute(player.GetGUID(), TargetGUID);
-                    }
-                    break;
-                case "createAmbush":
-                    PlayerObj ambush = new PlayerObj();
-                    if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
-                        return ambush.createAmbush(player.GetGUID(), PLat, PLng);
-                    }
-                    break;
-                default:
-                    result= MyUtils.getJSONError("ActtionNotFound","Действие не определено");
-            }
-        } else result= MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn");
         return result;
 
     }
