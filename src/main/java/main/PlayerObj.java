@@ -283,7 +283,7 @@ public class PlayerObj implements GameObject {
 		PreparedStatement stmt;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			String GUID_ROUTE = UUID.randomUUID().toString();
+			String GUID = UUID.randomUUID().toString();
 			//TODO: Need to make object Ambush and do creation through it
 			stmt = con.prepareStatement("insert into traps (GUID, OWNER, LAT, LNG) VALUES (?,?,?,?)");
 			stmt.setString(1, GUID);
