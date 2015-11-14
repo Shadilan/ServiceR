@@ -2,6 +2,7 @@ package main;
 
 
 import javax.naming.NamingException;
+import javax.swing.text.html.HTMLDocument;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ public class SpiritProto {
     /**
      * Default Constructor
 	 */
-    
+
 	public SpiritProto(){
 
 	}
@@ -249,5 +250,54 @@ public class SpiritProto {
         return result;
 
     }
+    public String getRouteList(String token,String city){
+        Connection con = null;
+        String result ;
+        try {
+             con=DBUtils.ConnectDB();
+            PreparedStatement stmt;
+            PlayerObj player=new PlayerObj();
+            player.GetDBDataByToken(con,token);
+            if (player.isLogin()) {
+                if (city.equalsIgnoreCase("")) {
+                    stmt = con.prepareStatement("select GUID from service.routes where owner=?");
+                    stmt.setString(1,player.GetGUID());
+                } else {
+                    stmt=con.prepareStatement("select GUID from service.routes where onwer=? and (start=? or finish=?");
+                    stmt.setString(1,player.GetGUID());
+                    stmt.setString(2,city);
+                    stmt.setString(3,city);
+                }
+                ResultSet rs = stmt.executeQuery();
+                rs.beforeFirst();
+                result="{Routes:[";
+                if (rs.isBeforeFirst()){
 
+                    while (rs.next()){
+                        RouteObj route=new RouteObj(con,rs.getString("GUID"));
+
+                        if (rs.isFirst()) result+=route.toString();
+                        else result+=','+route.toString();
+                    }
+
+                }
+                result+="]}";
+            } else
+            {
+                result=MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn");
+            }
+
+        } catch (NamingException | SQLException e) {
+            result=MyUtils.getJSONError("DBError",e.toString());
+        } finally {
+            try {
+                if (!con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                result=MyUtils.getJSONError("DBError",e.toString());
+            }
+        }
+        return result;
+    }
 }
