@@ -14,14 +14,12 @@ public class RouteObj implements GameObject {
 	private String Owner;
 	private String RStart;
 	private String REnd;
-	private int Gold;
-	private int HP;
-	private int Cooldown;
-	private Date Next;
 	private int SLat;
 	private int SLng;
 	private int ELat;
 	private int ELng;
+	private String StartName;
+	private String FinishName;
 	//TODO: Change to Exception;
 	private String LastError;
 
@@ -36,8 +34,6 @@ public class RouteObj implements GameObject {
 		this.Owner=Owner;
 		this.RStart=RStart;
 		this.REnd=REnd;
-		Gold=0;
-		HP=10;
 	}
 
 	public RouteObj(String Owner, String StartCity) {
@@ -60,8 +56,6 @@ public class RouteObj implements GameObject {
         else if (REnd.equals("")) LastError="Target City not found";
         else if (RStart.equals(REnd)) LastError="Target and Home city is one city";
 
-        Gold=0;
-        HP=10;
 	}
 
 	/**
@@ -105,9 +99,6 @@ public class RouteObj implements GameObject {
 		return ELng;
 	}
 
-	public String GetLastError() {
-		return LastError;
-	}
 
     /**
      * Fill object from DB
@@ -119,83 +110,48 @@ public class RouteObj implements GameObject {
 		PreparedStatement stmt;
 
 			ResultSet rs;
-			stmt=con.prepareStatement("SELECT r.GUID, r.Owner, r.RStart, r.REnd, r.Gold, r.HP, r.Cooldown, r.Next, c1.Lat AS Lat1, c1.Lng AS Lng1, c2.Lat Lat2, c2.Lng AS Lng2\n" +
-                    "FROM route r, cities c1, cities c2 " +
-                    "WHERE r.GUID = ? " +
-                    "AND r.rstart = c1.guid " +
-                    "AND r.rend = c2.guid " +
-                    "LIMIT 0,1");
+			stmt=con.prepareStatement("SELECT r.GUID, r.Owner, r.start, r.finish,c1.name start_name,c2.name finish_name,\n" +
+					"c1.Lat as slat,c1.Lng as slng, c2.lat as elat,c2.lng as elng \n" +
+					"FROM routes r, cities c1, cities c2 " +
+					"WHERE r.GUID = ? " +
+					"AND r.rstart = c1.guid " +
+					"AND r.rend = c2.guid " +
+					"LIMIT 0,1");
 			stmt.setString(1, GUID);
 			rs=stmt.executeQuery();
 			rs.first();
 			this.GUID=rs.getString("GUID");
 			Owner=rs.getString("Owner");
-			RStart=rs.getString("RStart");
-			REnd=rs.getString("REnd");
-            SLat=rs.getInt("Lat1");
-            SLng=rs.getInt("Lng1");
-            ELat=rs.getInt("Lat2");
-            ELng=rs.getInt("Lng2");
-			Gold=rs.getInt("Gold");
-			HP=rs.getInt("HP");
-			Cooldown=rs.getInt("Cooldown");
-			Next=rs.getDate("Next");
+			RStart=rs.getString("start");
+			REnd=rs.getString("finish");
+            SLat=rs.getInt("slat");
+            SLng=rs.getInt("slng");
+            ELat=rs.getInt("elat");
+            ELng=rs.getInt("elng");
+			StartName=rs.getString("start_name");
+			FinishName=rs.getString("finish_name");
 			stmt.close();
 
 
 	}
 
-	public void SetNext(){
-		Next.setTime(Next.getTime()+Cooldown);
-	}
-    /**
-     * Write data to DB
-     * @param con Connection to DB
-     */
 	@Override
 	public void SetDBData(Connection con) throws SQLException {
 		PreparedStatement stmt;
-			ResultSet rs;
-			if (Gold==0) {
-				stmt=con.prepareStatement("SELECT Lat,Lng from route where GUID=? or GUID=?");
-				stmt.setString(1, RStart);
-				stmt.setString(2, REnd);
-				rs=stmt.executeQuery();
-				rs.first();
-				double Lat1=rs.getInt("Lat")/1e6;
-				double Lng1=rs.getInt("Lng")/1e6;
-				rs.next();
-				double Lat2=rs.getInt("Lat")/1e6;
-				double Lng2=rs.getInt("Lng")/1e6;
-				Gold=(int) Math.floor(MyUtils.distVincenty(Lat1, Lng1, Lat2, Lng2)/1000);
-			}
-			stmt=con.prepareStatement("INSERT INTO route(GUID,Owner,RStart,REnd,Gold,HP,Cooldown,Next) VALUES ("
-					+ "?,"
-					+ "?,"
-					+ "?,"
-					+ "?,"
-					+ "?,"
-					+ "?,"
-					+ "?,"
-					+ "?"
-					+ ")"
-					+ "  ON DUPLICATE KEY UPDATE Next=?");
-			stmt.setString(1, GUID);
-			stmt.setString(2, Owner);
-			stmt.setString(3, RStart);
-			stmt.setString(4, REnd);
-			stmt.setInt(5, Gold);
-			stmt.setInt(6, HP);
-			stmt.setInt(7, Cooldown);
-			stmt.setDate(8, Next);
-			stmt.setDate(9, Next);
-			stmt.execute();
-			stmt.close();
-
-
+		stmt=con.prepareStatement("insert into routes(GUID,Owner,Start,Finish) VALUES (?,?,?,?) on DUPLICATE KEY UPDATE Owner=?,Start=?,Finish=?");
+		stmt.setString(1, GUID);
+		stmt.setString(2, Owner);
+		stmt.setString(3, RStart);
+		stmt.setString(4, REnd);
+		stmt.setString(5, Owner);
+		stmt.setString(6, RStart);
+		stmt.setString(7, REnd);
+		stmt.execute();
+		stmt.close();
 	}
 
-    /**
+
+	/**
      * Generate JSON
      * @return JSON of Object
      */
@@ -205,11 +161,9 @@ public class RouteObj implements GameObject {
 				"GUID:"+'"'+GUID+'"'+
 				",Owner:"+'"'+Owner+'"'+
 				",Start:"+'"'+RStart+'"'+
-				",End:"+'"'+REnd+'"'+
-				",Gold:"+Gold+
-				",HP:"+HP+
-				",Cooldown:"+Cooldown+
-				",Next:"+Next.getTime()+
+				",Finish:"+'"'+REnd+'"'+
+				",StartName:"+'"'+StartName+'"'+
+				",FinishName:"+'"'+FinishName+'"'+
 				"}";
 
 		
