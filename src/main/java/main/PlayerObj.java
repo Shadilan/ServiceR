@@ -281,8 +281,9 @@ public class PlayerObj implements GameObject {
 
 	public String createAmbush(String Owner, int Lat, int Lng) {
 		PreparedStatement stmt;
+		Connection con = null;
 		try {
-			Connection con = DBUtils.ConnectDB();
+			con = DBUtils.ConnectDB();
 			String GUID = UUID.randomUUID().toString();
 			//TODO: Need to make object Ambush and do creation through it
 			stmt = con.prepareStatement("insert into traps (GUID, OWNER, LAT, LNG) VALUES (?,?,?,?)");
@@ -297,11 +298,28 @@ public class PlayerObj implements GameObject {
 			stmt.setInt(3, Lng);
 			stmt.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return e.toString();
+			try {
+				if (con != null && !con.isClosed()) {
+					con.rollback();
+				}
+			} catch (SQLException en)
+			{
+				return MyUtils.getJSONError("DBError", en.toString());
+			}
+			return MyUtils.getJSONError("DBError", e.toString());
 		} catch (NamingException e) {
-			e.printStackTrace();
-			return e.toString();
+			return MyUtils.getJSONError("DBError", e.toString());
+		}finally {
+			try {
+				if (con!=null && !con.isClosed()) {
+					con.commit();
+					con.close();
+				}
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		return MyUtils.getJSONSuccess("Ambush created.");
 	}
