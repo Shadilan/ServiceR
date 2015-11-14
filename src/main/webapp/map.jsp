@@ -24,6 +24,7 @@ function create_marker(lat,lng,name,mapa)
 	}
 var map;
 function initMap() {
+alert(1);
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 47.2584933, lng: 39.7722394},
     zoom: 8
