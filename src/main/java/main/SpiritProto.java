@@ -233,7 +233,7 @@ public class SpiritProto {
                     case "createAmbush":
                         PlayerObj ambush = new PlayerObj();
                         result=ambush.checkCreateAmbush(PLat, PLng);
-                        if (result.equalsIgnoreCase("Оk")) {
+                        if (result.equalsIgnoreCase("Ok")) {
                             result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
                         }
                         break;
