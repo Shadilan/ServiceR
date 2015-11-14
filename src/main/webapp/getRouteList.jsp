@@ -4,7 +4,11 @@
 <%
 String result="";
 String token="";
-String token=request.getParameter("Token");
+token=request.getParameter("Token");
+String city="";
+city = request.getParameter("City");
 
+SpiritProto obj=new SpiritProto();
+result = obj.getRouteList(token,city);
 %>
 <%=result%>
