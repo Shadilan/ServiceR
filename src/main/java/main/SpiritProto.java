@@ -85,8 +85,6 @@ public class SpiritProto {
                 PreparedStatement stmt = con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
                 stmt.setInt(1, Lat);
                 stmt.setInt(2, Lng);
-
-
                 ResultSet rs = stmt.executeQuery();
                 rs.beforeFirst();
                 ArrayList<CityObj> Cities = new ArrayList<>();
@@ -115,91 +113,23 @@ public class SpiritProto {
             }
 
         } catch (NamingException e) {
-            return MyUtils.getJSONError("Resource", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+            result= MyUtils.getJSONError("Resource", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         } catch (SQLException e) {
+
+            result=MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+        } finally {
             try {
                 if (con != null && !con.isClosed()) {
                     con.rollback();
                     con.close();
                 }
             } catch (SQLException el) {
-                return MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                result= MyUtils.getJSONError("DBError", el.toString() + "\n" + Arrays.toString(el.getStackTrace()));
             }
-            MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
 
 		return result;
 	}
-
-	/**
-	 * SimpleActions
-	 * @param token  Secure Token
-	 * @param Lat Latitude of command
-	 * @param Lng Longtitude of command
-	 * @param action Action to do
-	 * @param target Target of Action
-	 * @return JSON String of result
-	 */
-    /*public String SimpleCommand(String token,int Lat,int Lng,String action,String target){
-        Connection con;
-        String result = "";
-        try {
-            con = DBUtils.ConnectDB();
-            PlayerObj player = new PlayerObj();
-            player.GetDBDataByToken(con, token);
-            //Check if player have correct Token
-            if (!player.isLogin()) {
-                result = "AccessDenied";
-            } else {
-                //Set new player position
-                player.setPos(Lat, Lng);
-                //Check Actions (add new action here
-                switch (action) {
-                    case "addCity":
-                        player.CreateCity(con);
-                        result = player.GetLastError();
-                        break;
-                    case "removeCity":
-                        player.RemoveCity(con, target);
-                        result = player.GetLastError();
-                        break;
-                    //Create route
-                    case "addroute":
-                        CityObj targetCity = new CityObj(con, target);
-                        CityObj homeCity = new CityObj(con, player.GetCity());
-                        //Check if all city founded;
-                        RouteObj route = new RouteObj(player, homeCity, targetCity);
-                        if (route.GetLastError().equals("")) route.SetDBData(con);
-                        else result = route.GetLastError();
-                        break;
-                    default:
-                        //Return defaul error for unknown command
-                        result = "UnknownCommand";
-                        break;
-                }
-            }
-            if (!result.equals("")) {
-                try {
-                    con.rollback();
-                    con.close();
-                } catch (SQLException e) {
-                    MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
-                }
-                return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + result + '"' + ",Message:" + '"' + result + '"' + "}";
-            } else {
-                con.commit();
-                con.close();
-            }
-        } catch (NamingException e) {
-            MyUtils.getJSONError("ResourceError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
-        } catch (SQLException e) {
-            MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
-        }
-        return "{Result:" + '"' + "Success" + '"' + ",Code:" + '"' + "S" + '"' + ",Message:" + '"' + "Done" + '"' + "}";
-    }*/
-
-
-
 
 
     /**
@@ -273,39 +203,44 @@ public class SpiritProto {
 
         return "{Result:\"Success\",Message:\"User created\"";
     }
-
+    public String action(String Token, String PLat, String PLng, String TargetGUID, String Action){
+        int Lat=Integer.parseInt(PLat);
+        int Lng=Integer.parseInt(PLng);
+        return action(Token,Lat,Lng,TargetGUID,Action);
+    }
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
+        String result="{Result:\"Success\",Message:\"Action done\"";
         try {
             con = DBUtils.ConnectDB();
-        } catch (NamingException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (NamingException | SQLException e) {
+            result=MyUtils.getJSONError("ServerError",e.toString());
         }
         PlayerObj player = null;
         try {
             player = new PlayerObj(con, Token);
         } catch (SQLException e) {
-            e.printStackTrace();
+            result=MyUtils.getJSONError("DBError",e.toString());
         }
-        switch (Action) {
-            case "createRoute":
-                RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
-                if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
-                    return route.createRoute(player.GetGUID(), TargetGUID);
-                }
-                break;
-            case "createAmbush":
-                PlayerObj ambush = new PlayerObj();
-                if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
-                    return ambush.createAmbush(player.GetGUID(), PLat, PLng);
-                }
-                break;
-            default:
-                return "Действие не определено";
-        }
-        return "ОК";
+        if (player!=null) {
+            switch (Action) {
+                case "createRoute":
+                    RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
+                    if (route.checkCreateRoute(player.GetGUID()).equals("ОК")) {
+                        return route.createRoute(player.GetGUID(), TargetGUID);
+                    }
+                    break;
+                case "createAmbush":
+                    PlayerObj ambush = new PlayerObj();
+                    if (ambush.checkCreateAmbush(PLat, PLng).equals("ОК")) {
+                        return ambush.createAmbush(player.GetGUID(), PLat, PLng);
+                    }
+                    break;
+                default:
+                    result= MyUtils.getJSONError("ActtionNotFound","Действие не определено");
+            }
+        } else result= MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn");
+        return result;
 
     }
 

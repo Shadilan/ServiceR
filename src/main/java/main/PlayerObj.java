@@ -189,6 +189,12 @@ public class PlayerObj implements GameObject {
 
 	}
 
+	@Override
+	public String action(Connection con,String Token, int PLat, int PLng, String TargetGUID, String Action) {
+
+		return "{Result:\"Succes\"}";
+	}
+
 
 	/* Removed by new conception. Zlodiak
 	/**
@@ -277,11 +283,17 @@ public class PlayerObj implements GameObject {
 		try {
 			Connection con = DBUtils.ConnectDB();
 			String GUID_ROUTE = UUID.randomUUID().toString();
+			//TODO: Need to make object Ambush and do creation through it
 			stmt = con.prepareStatement("insert into traps (GUID, OWNER, LAT, LNG) VALUES (?,?,?,?)");
 			stmt.setString(1, GUID);
 			stmt.setString(2, Owner);
 			stmt.setInt(3, Lat);
 			stmt.setInt(4, Lng);
+			stmt.execute();
+			stmt = con.prepareStatement("insert into aobject (GUID, LAT, LNG,ObjectType) VALUES (?,?,?,'AMBUSH')");
+			stmt.setString(1, GUID);
+			stmt.setInt(2, Lat);
+			stmt.setInt(3, Lng);
 			stmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
