@@ -268,7 +268,7 @@ public class PlayerObj implements GameObject {
 			if (rs.getInt("cnt") > 0) {
 				return MyUtils.getJSONError("AmbushNearCity","Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
 			} else {
-				return "ОК";
+				return "Ok";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
