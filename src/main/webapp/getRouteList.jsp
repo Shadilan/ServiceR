@@ -2,10 +2,12 @@
     pageEncoding="UTF8"%>
     <%@page import="main.SpiritProto"%>
 <%
-String token=null;
+String token="";
 String token=request.getParameter("Token");
-String city=null;
-
+String city="";
+if (request.getParameterMap().containsKey("City")) {
+            city = request.getParameter("City");
+        }
 SpiritProto obj=new SpiritProto();
 String result = obj.getRouteList(token,city);
 

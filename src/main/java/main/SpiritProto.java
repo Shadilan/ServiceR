@@ -260,10 +260,10 @@ public class SpiritProto {
             player.GetDBDataByToken(con,token);
             if (player.isLogin()) {
                 if (city.equalsIgnoreCase("")) {
-                    stmt = con.prepareStatement("select GUID from service.routes where owner=?");
+                    stmt = con.prepareStatement("select GUID from routes where owner=?");
                     stmt.setString(1,player.GetGUID());
                 } else {
-                    stmt=con.prepareStatement("select GUID from service.routes where onwer=? and (start=? or finish=?");
+                    stmt=con.prepareStatement("select GUID from routes where onwer=? and (start=? or finish=?)");
                     stmt.setString(1,player.GetGUID());
                     stmt.setString(2,city);
                     stmt.setString(3,city);
