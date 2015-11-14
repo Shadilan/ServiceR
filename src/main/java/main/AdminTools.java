@@ -161,6 +161,29 @@ public class AdminTools {
         }
         return result;
     }
+    private String genCityName(Connection con) throws SQLException {
+        String result="";
+        PreparedStatement stmt = con.prepareStatement("SELECT CONCAT( af.part, al.part ) \n" +
+                "FROM cityparts af, cityparts al, (\n" +
+                "\n" +
+                "SELECT ROUND( RAND( ) *10000000 MOD 109576 +1 ) cnt\n" +
+                ")a, (\n" +
+                "\n" +
+                "SELECT ROUND( RAND( ) *10000000 MOD 971 +1 ) cnt\n" +
+                ")b\n" +
+                "WHERE af.randomizer = a.cnt\n" +
+                "AND al.randomizer = b.cnt\n" +
+                "AND al.type =3\n" +
+                "AND af.type =10");
+        ResultSet rs = stmt.executeQuery();
+        rs.beforeFirst();
+        while (rs.next()) {
+            result =rs.getString(1);
+        }
+
+        stmt.close();
+        return result;
+    }
     /**
      * @param Lat1     Latitude of start of rect
      * @param Lng1     Longtitude of start of rect
@@ -216,10 +239,11 @@ public class AdminTools {
             ArrayList<Point> cities = MyUtils.createCitiesOnMap(width, height, count);
             for (Point a : cities) {
                 String GUID = UUID.randomUUID().toString();
-                stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng,CITYNAME)VALUES(?,?,?,'TEST')");
+                stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng,CITYNAME)VALUES(?,?,?,?)");
                 stmt.setString(1, GUID);
                 stmt.setInt(2, (int) a.getX() + Lat1N);
                 stmt.setInt(3, (int) a.getY() + Lng1N);
+                stmt.setString(4,genCityName(con));
                 stmt.execute();
                 stmt = con.prepareStatement("INSERT INTO aobject(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
                 stmt.setString(1, GUID);
