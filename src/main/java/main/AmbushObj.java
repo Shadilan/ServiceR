@@ -38,7 +38,7 @@ public class AmbushObj implements GameObject {
         rs.beforeFirst();
         if (rs.isBeforeFirst()) {
             rs.next();
-            GUID = rs.getString("GUID");
+            this.GUID = rs.getString("GUID");
             Owner = rs.getString("Owner");
             Lat = rs.getInt("Lat");
             Lng = rs.getInt("Lng");
