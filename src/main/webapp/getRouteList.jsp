@@ -2,6 +2,9 @@
     pageEncoding="UTF8"%>
     <%@page import="main.SpiritProto"%>
 <%
-String result="sss";
+String result="";
+String token="";
+String token=request.getParameter("Token");
+
 %>
 <%=result%>
