@@ -37,6 +37,7 @@ public class AmbushObj implements GameObject {
         ResultSet rs = stmt.executeQuery();
         rs.beforeFirst();
         if (rs.isBeforeFirst()) {
+            rs.next();
             GUID = rs.getString("GUID");
             Owner = rs.getString("Owner");
             Lat = rs.getInt("Lat");
