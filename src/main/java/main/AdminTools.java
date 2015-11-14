@@ -137,7 +137,6 @@ public class AdminTools {
                     RouteObj route = new RouteObj(con, rs.getString("GUID"));
                     CaravanObj caravan = new CaravanObj(route);
                     caravan.SetDBData(con);
-                    route.SetNext();
                     route.SetDBData(con);
                 }
             }
