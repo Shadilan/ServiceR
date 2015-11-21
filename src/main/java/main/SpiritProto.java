@@ -233,6 +233,7 @@ public class SpiritProto {
             player.GetDBDataByToken(con,Token);
             if (player.isLogin())  {
                 RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
+                AmbushObj ambush = new AmbushObj();
                 switch (Action) {
                     case "createRoute":
                         check=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
@@ -250,11 +251,16 @@ public class SpiritProto {
                         }
                         break;
                     case "createAmbush":
-                        PlayerObj ambush = new PlayerObj();
                         check=ambush.checkCreateAmbush(PLat, PLng);
                         if (check.equalsIgnoreCase("Ok")) {
                             result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
-                        } else {result=check;};
+                        } else {result=check;}
+                        break;
+                    case "removeAmbush":
+                        check=ambush.checkRemoveAmbush(PLat,PLng,TargetGUID);
+                        if (check.equalsIgnoreCase("Ok")) {
+                            result= ambush.removeAmbush(player.GetGUID(), TargetGUID);
+                        } else {result=check;}
                         break;
                     default:
                         result = MyUtils.getJSONError("ActionNotFound", "Действие не определено");
