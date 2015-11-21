@@ -257,7 +257,7 @@ public class SpiritProto {
                         } else {result=check;};
                         break;
                     default:
-                        result = MyUtils.getJSONError("ActtionNotFound", "Действие не определено");
+                        result = MyUtils.getJSONError("ActionNotFound", "Действие не определено");
                 }
             } else
             {
