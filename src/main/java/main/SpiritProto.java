@@ -225,26 +225,36 @@ public class SpiritProto {
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
         String result;
+        String GUID;
+        String check;
         try {
             con = DBUtils.ConnectDB();
             PlayerObj player= new PlayerObj();
             player.GetDBDataByToken(con,Token);
             if (player.isLogin())  {
+                RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
                 switch (Action) {
                     case "createRoute":
-                        RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
-                        result=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
-                        if (result.equalsIgnoreCase("Ok")) {
-                            result="!OK!";
+                        check=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
+                        if (check.equalsIgnoreCase("Ok")) {
                             result= route.createRoute(player.GetGUID(), TargetGUID);
+                        } else {result=check;}
+                        break;
+                    case "finishRoute":
+                        GUID = route.getUnfinishedRoute(player.GetGUID());
+                        check = route.checkFinishRoute(player.GetGUID(), GUID, TargetGUID);
+                        if (check.equalsIgnoreCase("Ok")) {
+                            result = route.finishRoute(player.GetGUID(), GUID, TargetGUID);
+                        } else {
+                            result = check;
                         }
                         break;
                     case "createAmbush":
                         PlayerObj ambush = new PlayerObj();
-                        result=ambush.checkCreateAmbush(PLat, PLng);
-                        if (result.equalsIgnoreCase("Ok")) {
+                        check=ambush.checkCreateAmbush(PLat, PLng);
+                        if (check.equalsIgnoreCase("Ok")) {
                             result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
-                        }
+                        } else {result=check;};
                         break;
                     default:
                         result = MyUtils.getJSONError("ActtionNotFound", "Действие не определено");
