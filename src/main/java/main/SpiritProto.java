@@ -2,6 +2,7 @@ package main;
 
 
 import javax.naming.NamingException;
+import javax.swing.text.html.HTMLDocument;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ public class SpiritProto {
     /**
      * Default Constructor
 	 */
-    
+
 	public SpiritProto(){
 
 	}
@@ -81,7 +82,7 @@ public class SpiritProto {
             player.GetDBDataByToken(con, token);
             if (!player.isLogin()){
                 con.close();
-                MyUtils.getJSONError("NotLogin","We dont know you.");
+                MyUtils.getJSONError("AccessDenied","We dont know you.");
             }
             else {
                 player.setPos(Lat, Lng);
@@ -92,6 +93,7 @@ public class SpiritProto {
                 ResultSet rs = stmt.executeQuery();
                 rs.beforeFirst();
                 ArrayList<CityObj> Cities = new ArrayList<>();
+                ArrayList<AmbushObj> Ambushes = new ArrayList<>();
                 while (rs.next()) {
 
                     String GUID = rs.getString(1);
@@ -100,6 +102,9 @@ public class SpiritProto {
                         CityObj City = new CityObj();
                         City.GetDBData(con, GUID);
                         Cities.add(City);
+                    } else if (ObjType.equalsIgnoreCase("AMBUSH")) {
+                        AmbushObj ambush=new AmbushObj(con,GUID);
+                        Ambushes.add(ambush);
                     }
 
                 }
@@ -111,16 +116,21 @@ public class SpiritProto {
 
                 }
                 if (citiesinfo != null) result += "," + "Cities:[" + citiesinfo + "]";
+                String ambushinfo = null;
+                for (AmbushObj ambush : Ambushes) {
+                    if (ambushinfo == null) ambushinfo = ambush.toString();
+                    else ambushinfo += "," + ambush.toString();
+
+                }
+                if (ambushinfo != null) result += "," + "Ambushes:[" + ambushinfo + "]";
+
                 result += "}";
 
                 con.commit();
             }
 
-        } catch (NamingException e) {
-            result= MyUtils.getJSONError("Resource", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
-        } catch (SQLException e) {
-
-            result=MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+        } catch (NamingException | SQLException e) {
+            result= MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         } finally {
             try {
                 if (con != null && !con.isClosed()) {
@@ -215,48 +225,29 @@ public class SpiritProto {
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
         Connection con = null;
         String result;
-        String GUID;
-        String check;
         try {
             con = DBUtils.ConnectDB();
             PlayerObj player= new PlayerObj();
             player.GetDBDataByToken(con,Token);
             if (player.isLogin())  {
                 switch (Action) {
-                    case "createRoute": {
+                    case "createRoute":
                         RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
-                        check = route.checkCreateRoute(player.GetGUID()); //Так делать можно!
-                        if (check.equalsIgnoreCase("Ok")) {
-                            result = route.createRoute(player.GetGUID(), TargetGUID);
-                        } else {
-                            result = check;
+                        result=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
+                        if (result.equalsIgnoreCase("Ok")) {
+                            result="!OK!";
+                            result= route.createRoute(player.GetGUID(), TargetGUID);
                         }
                         break;
-                    }
-                    case "finishRoute": {
-                        RouteObj route = new RouteObj(player.GetGUID(), TargetGUID);
-                        GUID = route.getUnfinishedRoute(player.GetGUID());
-                        check = route.checkFinishRoute(player.GetGUID(), GUID, TargetGUID);
-                        if (check.equalsIgnoreCase("Ok")) {
-                            result = route.finishRoute(player.GetGUID(), GUID, TargetGUID);
-                        } else {
-                            result = check;
-                        }
-                        break;
-                    }
-                    case "createAmbush": {
+                    case "createAmbush":
                         PlayerObj ambush = new PlayerObj();
-                        check = ambush.checkCreateAmbush(PLat, PLng);
-                        if (check.equalsIgnoreCase("Оk")) {
-                            result = ambush.createAmbush(player.GetGUID(), PLat, PLng);
-                        } else {
-                            result = check;
+                        result=ambush.checkCreateAmbush(PLat, PLng);
+                        if (result.equalsIgnoreCase("Ok")) {
+                            result= ambush.createAmbush(player.GetGUID(), PLat, PLng);
                         }
                         break;
-                    }
-                    default: {
-                        result = MyUtils.getJSONError("ActionNotFound", "Действие не определено");
-                    }
+                    default:
+                        result = MyUtils.getJSONError("ActtionNotFound", "Действие не определено");
                 }
             } else
             {
@@ -268,5 +259,54 @@ public class SpiritProto {
         return result;
 
     }
+    public String getRouteList(String token,String city){
+        Connection con = null;
+        String result ;
+        try {
+             con=DBUtils.ConnectDB();
+            PreparedStatement stmt;
+            PlayerObj player=new PlayerObj();
+            player.GetDBDataByToken(con,token);
+            if (player.isLogin()) {
+                if (city.equalsIgnoreCase("")) {
+                    stmt = con.prepareStatement("select GUID from routes where owner=?");
+                    stmt.setString(1,player.GetGUID());
+                } else {
+                    stmt=con.prepareStatement("select GUID from routes where owner=? and (start=? or finish=?)");
+                    stmt.setString(1,player.GetGUID());
+                    stmt.setString(2,city);
+                    stmt.setString(3,city);
+                }
+                ResultSet rs = stmt.executeQuery();
+                rs.beforeFirst();
+                result="{Routes:[";
+                if (rs.isBeforeFirst()){
 
+                    while (rs.next()){
+                        RouteObj route=new RouteObj(con,rs.getString("GUID"));
+
+                        if (rs.isFirst()) result+=route.toString();
+                        else result+=','+route.toString();
+                    }
+
+                }
+                result+="]}";
+            } else
+            {
+                result=MyUtils.getJSONError("AccessDenied","PlayerNotLoginIn");
+            }
+
+        } catch (NamingException | SQLException e) {
+            result=MyUtils.getJSONError("DBError",e.toString());
+        } finally {
+            try {
+                if (!con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                result=MyUtils.getJSONError("DBError",e.toString());
+            }
+        }
+        return result;
+    }
 }

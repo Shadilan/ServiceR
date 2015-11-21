@@ -189,11 +189,6 @@ public class PlayerObj implements GameObject {
 
 	}
 
-	@Override
-	public String action(Connection con,String Token, int PLat, int PLng, String TargetGUID, String Action) {
-
-		return "{Result:\"Succes\"}";
-	}
 
 
 	/* Removed by new conception. Zlodiak
@@ -268,7 +263,7 @@ public class PlayerObj implements GameObject {
 			if (rs.getInt("cnt") > 0) {
 				return MyUtils.getJSONError("AmbushNearCity","Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
 			} else {
-				return "ОК";
+				return "Ok";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -281,9 +276,10 @@ public class PlayerObj implements GameObject {
 
 	public String createAmbush(String Owner, int Lat, int Lng) {
 		PreparedStatement stmt;
+		Connection con = null;
 		try {
-			Connection con = DBUtils.ConnectDB();
-			String GUID_ROUTE = UUID.randomUUID().toString();
+			con = DBUtils.ConnectDB();
+			String GUID = UUID.randomUUID().toString();
 			//TODO: Need to make object Ambush and do creation through it
 			stmt = con.prepareStatement("insert into traps (GUID, OWNER, LAT, LNG) VALUES (?,?,?,?)");
 			stmt.setString(1, GUID);
@@ -297,11 +293,28 @@ public class PlayerObj implements GameObject {
 			stmt.setInt(3, Lng);
 			stmt.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return e.toString();
+			try {
+				if (con != null && !con.isClosed()) {
+					con.rollback();
+				}
+			} catch (SQLException en)
+			{
+				return MyUtils.getJSONError("DBError", en.toString());
+			}
+			return MyUtils.getJSONError("DBError", e.toString());
 		} catch (NamingException e) {
-			e.printStackTrace();
-			return e.toString();
+			return MyUtils.getJSONError("DBError", e.toString());
+		}finally {
+			try {
+				if (con!=null && !con.isClosed()) {
+					con.commit();
+					con.close();
+				}
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		return MyUtils.getJSONSuccess("Ambush created.");
 	}

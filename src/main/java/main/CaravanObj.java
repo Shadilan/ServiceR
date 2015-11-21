@@ -161,9 +161,4 @@ public class CaravanObj implements GameObject {
 
     }
 
-    @Override
-    public String action(Connection con, String Token, int PLat, int PLng, String TargetGUID, String Action) {
-        return null;
-    }
-
 }
