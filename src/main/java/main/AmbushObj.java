@@ -161,7 +161,7 @@ public class AmbushObj implements GameObject {
             //if ( Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2) > Math.pow(50,2)) {
                 return MyUtils.getJSONError("AmbushTooFar","Засада слишком далеко, подойдите ближе!:"+Math.round(6378137*Math.acos(Math.cos(lat1)*Math.cos(lat2)*Math.cos(lng1-lng2)+Math.sin(lat1)*Math.sin(lat2))));
             } else {
-                return "Ok";
+                return "Ambush Removed";
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -188,7 +188,7 @@ public class AmbushObj implements GameObject {
 //хмм, для этого AGuid нужен, а не PGuid, т.е. не факт, что PGuid будет использоваться и в будущем...
 //Хотя можно статистику снятых чужих засад вести, тогда пригодится...
 //Вот так и появляются разные медальки - веселее придумать функциональность под переменную, чем код поправить )))
-            return "Ok";
+            return MyUtils.getJSONSuccess("Ok");
         } catch (SQLException e) {
             e.printStackTrace();
             return e.toString();
