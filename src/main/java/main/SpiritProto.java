@@ -108,7 +108,7 @@ public class SpiritProto {
                     }
 
                 }
-                result = "{Player:" + player.toString();
+                result = "{Result:\"Succes\",Player:" + player.toString();
                 String citiesinfo = null;
                 for (CityObj city : Cities) {
                     if (citiesinfo == null) citiesinfo = city.toString();
