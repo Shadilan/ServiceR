@@ -243,11 +243,16 @@ public class SpiritProto {
                         break;
                     case "finishRoute":
                         GUID = route.getUnfinishedRoute(player.GetGUID());
-                        check = route.checkFinishRoute(player.GetGUID(), GUID, TargetGUID);
-                        if (check.equalsIgnoreCase("Ok")) {
-                            result = route.finishRoute(player.GetGUID(), GUID, TargetGUID);
-                        } else {
-                            result = check;
+                        if (GUID.length()>40) {
+                            result = GUID;
+                        }
+                        else {
+                            check = route.checkFinishRoute(player.GetGUID(), GUID, TargetGUID);
+                            if (check.equalsIgnoreCase("Ok")) {
+                                result = route.finishRoute(player.GetGUID(), GUID, TargetGUID);
+                            } else {
+                                result = check;
+                            }
                         }
                         break;
                     case "createAmbush":
@@ -269,6 +274,7 @@ public class SpiritProto {
             {
                 result = MyUtils.getJSONError("AccessDenied", "PlayerNotLoginIn " + Token);
             }
+            con.close();
         } catch (SQLException | NamingException e) {
             result=MyUtils.getJSONError("DBError",e.toString());
         }

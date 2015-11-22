@@ -82,11 +82,14 @@ public class AmbushObj implements GameObject {
             stmt.execute();
             rs = stmt.executeQuery();
             rs.first();
+            String result;
             if (rs.getInt("cnt") > 0) {
-                return MyUtils.getJSONError("AmbushNearCity","Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
+                result= MyUtils.getJSONError("AmbushNearCity","Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
             } else {
-                return "Ok";
+                result ="Ok";
             }
+            con.close();
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             return e.toString();
@@ -153,9 +156,16 @@ public class AmbushObj implements GameObject {
             //lat=rs.getInt("lat");
             //lng=rs.getInt("lng");
             //Correct CityDef => 50
-            if ( Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2) > Math.pow(50,2)) {
-                return MyUtils.getJSONError("AmbushTooFar","Засада слишком далеко, подойдите ближе!");
+            double lat1=PLat/1e6*Math.PI/180;
+            double lat2=rs.getInt("lat")/1e6*Math.PI/180;
+            double lng1=PLng/1e6*Math.PI/180;
+            double lng2=rs.getInt("lng")/1e6*Math.PI/180;
+            if ( Math.round(6378137*Math.acos(Math.cos(lat1)*Math.cos(lat2)*Math.cos(lng1 - lng2)+Math.sin(lat1)*Math.sin(lat2))) > 50) {
+            //if ( Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2) > Math.pow(50,2)) {
+                con.close();
+                return MyUtils.getJSONError("AmbushTooFar","Засада слишком далеко, подойдите ближе!:"+Math.round(6378137*Math.acos(Math.cos(lat1)*Math.cos(lat2)*Math.cos(lng1-lng2)+Math.sin(lat1)*Math.sin(lat2))));
             } else {
+                con.close();
                 return "Ok";
             }
         } catch (SQLException e) {
@@ -178,12 +188,14 @@ public class AmbushObj implements GameObject {
             stmt.setString(1, AGuid);
             stmt.execute();
             stmt.close();
+            con.commit();
+            con.close();
 //Zlodiak: Реализовать увеличение количества ловушек у владельца ловушки, запустить кулдаун восстановление (если он будет на снятии, а не на установке)
 //для этого и передаю PGuid, который сейчас не используется
 //хмм, для этого AGuid нужен, а не PGuid, т.е. не факт, что PGuid будет использоваться и в будущем...
 //Хотя можно статистику снятых чужих засад вести, тогда пригодится...
 //Вот так и появляются разные медальки - веселее придумать функциональность под переменную, чем код поправить )))
-            return "Ok";
+            return MyUtils.getJSONSuccess("Ambush removed.");
         } catch (SQLException e) {
             e.printStackTrace();
             return e.toString();

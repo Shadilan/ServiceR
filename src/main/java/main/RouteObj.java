@@ -308,12 +308,13 @@ public class RouteObj implements GameObject {
 		ResultSet rs;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			stmt = con.prepareStatement("select GUID from routes where owner=? and finish is null)");
+			stmt = con.prepareStatement("select GUID from routes where owner=? and finish is null");
 			stmt.setString(1, Owner);
 			stmt.execute();
 			rs = stmt.executeQuery();
 			rs.first();
 			return rs.getString("GUID");
+			//Плохо, если не получили результата то будет хрен знает какая строка и не понятные ошибки...
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return e.toString();
