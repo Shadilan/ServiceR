@@ -82,12 +82,14 @@ public class AmbushObj implements GameObject {
             stmt.execute();
             rs = stmt.executeQuery();
             rs.first();
-            con.close();
+            String result;
             if (rs.getInt("cnt") > 0) {
-                return MyUtils.getJSONError("AmbushNearCity","Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
+                result= MyUtils.getJSONError("AmbushNearCity","Нельзя ставить засады так близко к городу. Засада будет уничтожена защитой города!");
             } else {
-                return "Ok";
+                result ="Ok";
             }
+            con.close();
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             return e.toString();
