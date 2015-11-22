@@ -154,7 +154,7 @@ public class AmbushObj implements GameObject {
             //lng=rs.getInt("lng");
             //Correct CityDef => 50
             if ( Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2) > Math.pow(50,2)) {
-                return MyUtils.getJSONError("AmbushTooFar","Засада слишком далеко, подойдите ближе!");
+                return MyUtils.getJSONError("AmbushTooFar","Засада слишком далеко, подойдите ближе!:"+(Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2)));
             } else {
                 return "Ok";
             }
