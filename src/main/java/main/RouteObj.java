@@ -314,6 +314,7 @@ public class RouteObj implements GameObject {
 			rs = stmt.executeQuery();
 			rs.first();
 			return rs.getString("GUID");
+			//Плохо, если не получили результата то будет хрен знает какая строка и не понятные ошибки...
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return e.toString();
