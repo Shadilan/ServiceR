@@ -153,8 +153,13 @@ public class AmbushObj implements GameObject {
             //lat=rs.getInt("lat");
             //lng=rs.getInt("lng");
             //Correct CityDef => 50
-            if ( Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2) > Math.pow(50,2)) {
-                return MyUtils.getJSONError("AmbushTooFar","Засада слишком далеко, подойдите ближе!:"+(Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2)));
+            double lat1=PLat/1e6*Math.PI/180;
+            double lat2=rs.getInt("lat")/1e6*Math.PI/180;
+            double lng1=PLng/1e6*Math.PI/180;
+            double lng2=rs.getInt("lng")/1e6*Math.PI/180;
+            if ( Math.round(6378137*Math.acos(Math.cos(lat1)*Math.cos(lat2)*Math.cos(lng1 - lng2)+Math.sin(lat1)*Math.sin(lat2))) > 50) {
+            //if ( Math.pow(PLat-rs.getInt("lat"),2) + Math.pow(PLng-rs.getInt("lng"),2) > Math.pow(50,2)) {
+                return MyUtils.getJSONError("AmbushTooFar","Засада слишком далеко, подойдите ближе!:"+Math.round(6378137*Math.acos(Math.cos(lat1)*Math.cos(lat2)*Math.cos(lng1-lng2)+Math.sin(lat1)*Math.sin(lat2))));
             } else {
                 return "Ok";
             }
