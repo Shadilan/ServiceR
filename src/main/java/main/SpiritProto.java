@@ -236,7 +236,7 @@ public class SpiritProto {
                 AmbushObj ambush = new AmbushObj();
                 switch (Action) {
                     case "createRoute":
-                        check=route.checkCreateRoute(player.GetGUID()); //Так делать нельзя
+                        check=route.checkCreateRoute(player.GetGUID()); //Так делать можно!
                         if (check.equalsIgnoreCase("Ok")) {
                             result= route.createRoute(player.GetGUID(), TargetGUID);
                         } else {result=check;}
