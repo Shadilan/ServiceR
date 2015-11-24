@@ -14,6 +14,7 @@ import java.util.UUID;
  * @author Zlodiak
  */
 public class AdminTools {
+    public static int speed=1666;
     final Runnable task = new Runnable() {
         public void run() {
             try {
@@ -141,10 +142,9 @@ public class AdminTools {
     public void DoCaravanInAmbush(Connection con) throws SQLException {
         PreparedStatement stmt;
         //Проверить есть ли караваны рядом с засадами
-        //Для каждого каравана рядом с засадой удалить маршрут
-        //Указать в качестве конечной точки домашний город владельца засады
-        //Удадить засаду.
-      String sql="update caravan c, traps a,gplayers g,cities t\n" +
+
+        String sql;
+      /*sql="update caravan c, traps a,gplayers g,cities t\n" +
               "set c.ENDPOINT = g.HomeCity,\n" +
               "spdLat=(c.lat-t.lat)*(ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 )/1666),\n" +
               "spdLng=(c.lng-t.lng)*(ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 )/1666),\n" +
@@ -157,17 +157,105 @@ public class AdminTools {
               "AND ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 ) <1666\n" +
               "AND ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 - c.spdLat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 + c.spdLng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 - c.SpdLat * PI( ) /180 ) ) /1000 ) <1666\n" +
               "and g.guid=a.owner\n" +
-              "and g.HomeCity=t.guid";
+              "and g.HomeCity=t.guid";*/
+        sql="select c,route,g.HomeCity,c.lat clat,t.lat tlat,a.lat alat,a.lng alng,c.lng clng,t.lng tlng,c.spdLat,c.spdLng, g.GUID gGUID, c.guid cGUID,t.GUID tGUID,\n" +
+                "              c.startpoint\n" +
+                "from caravan c, traps a,gplayers g,cities t\n" +
+                "WHERE 1 =1\n" +
+                "AND (ABS( a.lat - c.lat ) <ABS(c.spdLat) or ABS( a.lat - c.lat ) <ABS(c.spdLng))\n" +
+                "AND (ABS( a.lng - c.lng ) <ABS(c.spdLat) or ABS( a.lng - c.lng ) <ABS(c.spdLng))\n" +
+                "and g.guid=a.owner\n" +
+                "and g.HomeCity=t.guid\n" +
+                "and stealed!='R'";
         stmt=con.prepareStatement(sql);
-        stmt.execute();
-        stmt=con.prepareStatement("DELETE FROM aobject WHERE guid IN (\n" +
-                "SELECT guid\n" +
-                "FROM traps\n" +
-                "WHERE owner =  ''\n" +
-                ")");
-        stmt.execute();
-        stmt.execute("delete FROM traps WHERE owner =  ''");
-        stmt.execute();
+        ResultSet rs=stmt.executeQuery();
+        rs.beforeFirst();
+        while (rs.next()) {
+            int dLat = rs.getInt("spdLat");
+            int dLng = rs.getInt("spdLng");
+            int sLat = rs.getInt("clat");
+            int sLng = rs.getByte("clng");
+            int aLat = rs.getInt("alat");
+            int aLng = rs.getInt("alng");
+            int eLat =rs.getInt("tLat");
+            int eLng=rs.getInt("tLng");
+            int tLat;
+            int tLng;
+            double u = ((aLat - sLat) * dLat + (aLng - sLng) * dLng) / (dLat * dLat + dLng * dLng);
+            if (u < 0) {
+                tLat = sLat;
+                tLng = sLng;
+            } else if (u > 1) {
+                tLat = sLat + dLat;
+                tLng = sLng + dLng;
+            } else {
+                tLat = (int) (sLat + dLat * u);
+                tLng = (int) (sLng + dLng * u);
+            }
+            PreparedStatement stmt2;
+            //Проверяем что караван не угнан и засада все еще стоит.
+            stmt2=con.prepareStatement("select count(1) cnt from caravans where guid=? and stealed!='R'");
+            stmt2.setString(1,rs.getString("cGUID"));
+            ResultSet rs2=stmt2.executeQuery();
+            int cnt1=rs.getInt("cnt");
+            stmt2=con.prepareStatement("select count(1) cnt from trap where guid=?");
+            stmt2.setString(1,rs.getString("aGUID"));
+            rs2=stmt2.executeQuery();
+            int cnt2=rs.getInt("cnt");
+            int distance = (int) MyUtils.distVincenty(aLat, aLng, tLat, tLng);
+            if (distance < 200 && cnt1==1 && cnt2==1) {
+                //Для каждого каравана рядом с засадой удалить маршрут
+                stmt2 = con.prepareStatement("delete from routes where guid=?");
+                stmt2.setString(1, rs.getString("route"));
+                stmt2.execute();
+                //Удалить вэйпоинты
+                stmt2 = con.prepareStatement("delete from waypoints where route=?");
+                stmt2.setString(1, rs.getString("route"));
+                stmt2.execute();
+                //Создать маршрут
+                stmt2 = con.prepareStatement("insert into routes (guid,owner,start,finish) values(?,?,?,?)");
+                String GUID_ROUTE = UUID.randomUUID().toString();
+                stmt2.setString(1,GUID_ROUTE);
+                stmt2.setString(2, rs.getString("gGuid"));
+                stmt2.setString(3, rs.getString("startpoint"));
+                stmt2.setString(4, rs.getString("homecity"));
+                stmt2.execute();
+                //Создать Вэйпоинты
+                stmt2 = con.prepareStatement("insert into waypoints (guid,lat,lng,number,route) values(?,?,?,1,?),(?,?,?,2,?)");
+                String w1GUID = UUID.randomUUID().toString();
+                String w2GUID = UUID.randomUUID().toString();
+                stmt2.setString(1, w1GUID);
+                stmt2.setInt(2, tLat);
+                stmt2.setInt(3, tLng);
+                stmt2.setString(4, GUID_ROUTE);
+                stmt2.setString(1, w2GUID);
+                stmt2.setInt(2, eLat);
+                stmt2.setInt(3, eLng);
+                stmt2.setString(4, GUID_ROUTE);
+                stmt2.execute();
+                //Указать в качестве конечной точки домашний город владельца засады
+                stmt2 = con.prepareStatement("update caravan set  EndPoint=?, Owner=?, stealed=\"R\",Lat=?,Lng=?,spdLat=?,spdLng=?,route=? where guid=?");
+                stmt2.setString(1, rs.getString("HomeCity"));
+                stmt2.setString(2, rs.getString("gGuid"));
+                stmt2.setInt(3, tLat);
+                stmt2.setInt(4,tLng);
+                double k=MyUtils.distVincenty(tLat,tLng,eLat,eLng)/speed;
+                //Создать новый маршрут.
+                stmt2.setInt(5, (int) ((eLat - tLat) / k));
+                stmt2.setInt(6, (int) ((eLng - tLng) / k));
+                stmt2.setString(7, GUID_ROUTE);
+                stmt2.setString(8, rs.getString("cGuid"));
+                stmt2.execute();
+                //Удадить засаду.
+                stmt2 = con.prepareStatement("delete from traps where guid=?");
+                stmt2.setString(1, rs.getString("aGuid"));
+                stmt2.execute();
+                stmt2 = con.prepareStatement("delete from aobject where guid=?");
+                stmt2.setString(1, rs.getString("aGuid"));
+                stmt2.execute();
+            }
+        }
+
     }
     public String GenMap() {
         String result = "";
