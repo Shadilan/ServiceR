@@ -21,13 +21,20 @@ public class AdminTools {
                 Connection con;
                 con = DBUtils.ConnectDB();
                 PreparedStatement stmt;
+
+                //Передвинуть караваны
+                MoveCaravans(con);
+                DoCaravanInCity(con);
+                DoCaravanInAmbush(con);
+                //Проверить есть ли караваны рядом с засадами
+                //Для каждого каравана рядом с засадой удалить маршрут
+                //Указать в качестве конечной точки домашний город владельца засады
+                //Удадить засаду.
                 stmt = con.prepareStatement("select count(1) as cnt from service.PROCESS_CONTROL where PROCESS_NAME='MAIN' and STOP_FLAG='Y'");
                 ResultSet rs = stmt.executeQuery();
                 rs.first();
                 if (rs.getInt("cnt") == 0) new Thread(task).start();
                 stmt.close();
-                CreateCaravans(con);
-                MoveCaravans(con);
                 stmt = con.prepareStatement("update service.PROCESS_CONTROL set LAST_RUN=NOW() where PROCESS_NAME='MAIN'");
                 stmt.execute();
                 con.commit();
@@ -88,18 +95,13 @@ public class AdminTools {
      *
      * @param con DB Connection
      */
-    public void MoveCaravans(Connection con) {
+    public void MoveCaravans(Connection con) throws SQLException {
         //Update all Caravans
         PreparedStatement stmt;
-        try {
             stmt = con.prepareStatement("UPDATE caravan a, aobject b SET b.Lat = a.Lat + a.SpdLat, b.Lng = a.Lng + a.SpdLng, a.Lat = a.Lat + a.SpdLat, a.Lng = a.Lng + a.SpdLng");
             stmt.execute();
             //Maybe do it in
-            stmt = con.prepareStatement("SELECT a.GUID " +
-                    "FROM caravan a, cities b " +
-                    "WHERE a.endpoint = b.guid " +
-                    "AND FLOOR( a.lat / ABS( a.SpdLat ) ) = FLOOR( b.lat / ABS( a.SpdLat ) )  " +
-                    "AND FLOOR( a.lng / ABS( a.SpdLng ) ) = FLOOR( b.lng / ABS( a.SpdLng ) ) ");
+
             ResultSet rs = stmt.executeQuery();
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
@@ -111,43 +113,62 @@ public class AdminTools {
             }
             stmt.close();
             //Check Cross with Ambush
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         //Check Cross with Cities
 
 
     }
-
-    /**
-     * Create new Caravans
-     *
-     * @param con Connection DB
-     */
-    public void CreateCaravans(Connection con) {
-        //Check All Routes with timeout
+    public void DoCaravanInCity(Connection con) throws SQLException {
         PreparedStatement stmt;
-        try {
-            stmt = con.prepareStatement("SELECT guid, owner\n" +
-                    "FROM route " +
-                    "WHERE NEXT < NOW( ) ");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.isBeforeFirst()) {
-                while (rs.next()) {
-                    RouteObj route = new RouteObj(con, rs.getString("GUID"));
-                    CaravanObj caravan = new CaravanObj(route);
-                    caravan.SetDBData(con);
-                    route.SetDBData(con);
-                }
-            }
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //Проверить есть ли караваны рядом с конечными точками
+        String inSQL="and c.guid in (SELECT a.GUID " +
+                "FROM caravan a, cities b " +
+                "WHERE a.endpoint = b.guid " +
+                "AND  a.lat between b.lat-ABS(a.SpdLat) and b.lat+ABS(a.SpdLat)" +
+                "AND  a.lng between b.lng-ABS(a.SpdLng) and b.lng+ABS(a.SpdLng))";
+        //Для каждого каравана  рядом с конечной точкой начислить хозяину деньги,
+        //Для каждого каравана поменять начальную и конечную точку и умножить скорость на -1
+        String sql="UPDATE gplayers a,\n" +
+                "caravan c,\n" +
+                "cities t1,\n" +
+                "cities t2 SET a.gold = a.gold + ROUND( 6378137 * ACOS( COS( t1.lat* PI( ) /180 ) * COS( t2.lat* PI( ) /180 ) * COS( t1.lng* PI( ) /180 - t2.lng* PI( ) /180 ) + SIN( t1.lat* PI( ) /180 ) * SIN( t2.lat* PI( ) /180 ) ) /1000 ) ,\n" +
+                "c.endpoint = t1.guid,\n" +
+                "c.startpoint = t2.guid,\n" +
+                "c.spdLat = c.spdLat * -1,\n" +
+                "c.spdLng = c.spdLng * -1 WHERE a.guid = c.owner AND c.startpoint = t1.guid AND c.endpoint = t2.guid \n"+inSQL;
+        stmt=con.prepareStatement(sql);
+        stmt.execute();
     }
-
-
-
+    public void DoCaravanInAmbush(Connection con) throws SQLException {
+        PreparedStatement stmt;
+        //Проверить есть ли караваны рядом с засадами
+        //Для каждого каравана рядом с засадой удалить маршрут
+        //Указать в качестве конечной точки домашний город владельца засады
+        //Удадить засаду.
+      String sql="update caravan c, traps a,gplayers g,cities t\n" +
+              "set c.ENDPOINT = g.HomeCity,\n" +
+              "spdLat=(c.lat-t.lat)*(ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 )/1666),\n" +
+              "spdLng=(c.lng-t.lng)*(ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 )/1666),\n" +
+              "c.owner=g.guid,\n" +
+              "a.owner=''\n" +
+              "\n" +
+              "WHERE 1 =1\n" +
+              "AND ABS( a.lat - c.lat ) <1000\n" +
+              "AND ABS( a.lng - c.lng ) <1000\n" +
+              "AND ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 ) <1666\n" +
+              "AND ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 - c.spdLat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 + c.spdLng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 - c.SpdLat * PI( ) /180 ) ) /1000 ) <1666\n" +
+              "and g.guid=a.owner\n" +
+              "and g.HomeCity=t.guid";
+        stmt=con.prepareStatement(sql);
+        stmt.execute();
+        stmt=con.prepareStatement("DELETE FROM aobject WHERE guid IN (\n" +
+                "SELECT guid\n" +
+                "FROM traps\n" +
+                "WHERE owner =  ''\n" +
+                ")");
+        stmt.execute();
+        stmt.execute("delete FROM traps WHERE owner =  ''");
+        stmt.execute();
+    }
     public String GenMap() {
         String result = "";
         try {
