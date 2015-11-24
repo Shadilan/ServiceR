@@ -323,4 +323,45 @@ public class RouteObj implements GameObject {
 			return e.toString();
 		}
 	}
+//Zlodiak имхо такая функция не нужна
+	/*
+	public String cancelUnfinishedRoute(String Owner) {
+		PreparedStatement stmt;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("delete from routes where FINISH is null and OWNER=?");
+			stmt.setString(1, Owner);
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return MyUtils.getJSONSuccess("Route canceled.");
+	}
+	*/
+	public String dropRoute(String GUID) {
+		PreparedStatement stmt;
+		try {
+			Connection con = DBUtils.ConnectDB();
+			stmt = con.prepareStatement("delete from routes where GUID=?");
+			stmt.setString(1, GUID);
+			stmt.execute();
+			stmt = con.prepareStatement("delete from aobjects where GUID=?");
+			stmt.setString(1, GUID);
+			stmt.execute();
+			con.commit();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		return MyUtils.getJSONSuccess("Route dropped.");
+	}
+
 }

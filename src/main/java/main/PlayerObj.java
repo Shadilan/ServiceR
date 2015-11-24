@@ -246,13 +246,16 @@ public class PlayerObj implements GameObject {
     }
 	*/
 
-	public String cancelUnfinishedRoute(String Owner) {
+	public String setHome(String Player, String City) {
 		PreparedStatement stmt;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			stmt = con.prepareStatement("delete from routes where FINISH is null and OWNER=?");
-			stmt.setString(1, Owner);
+			stmt = con.prepareStatement("update gplayers set HomeCity=? where GUID=?");
+			stmt.setString(1, City);
+			stmt.setString(2, Player);
 			stmt.execute();
+			con.commit();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return e.toString();
@@ -260,7 +263,7 @@ public class PlayerObj implements GameObject {
 			e.printStackTrace();
 			return e.toString();
 		}
-		return MyUtils.getJSONSuccess("Route canceled.");
+		return MyUtils.getJSONSuccess("Home city changed.");
 	}
 
 }

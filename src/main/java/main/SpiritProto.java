@@ -267,6 +267,14 @@ public class SpiritProto {
                             result= ambush.removeAmbush(player.GetGUID(), TargetGUID);
                         } else {result=check;}
                         break;
+                    case "dropRoute":
+                        //Zlodiak: вставить чек на возможность дропа
+                        result=route.dropRoute(TargetGUID);
+                        break;
+                    case "setHome":
+                        result=player.setHome(player.GetGUID(),TargetGUID);
+                        break;
+
                     default:
                         result = MyUtils.getJSONError("ActionNotFound", "Действие не определено");
                 }
