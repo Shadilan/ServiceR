@@ -197,11 +197,11 @@ public class AdminTools {
             stmt2=con.prepareStatement("select count(1) cnt from caravans where guid=? and stealed!='R'");
             stmt2.setString(1,rs.getString("cGUID"));
             ResultSet rs2=stmt2.executeQuery();
-            int cnt1=rs.getInt("cnt");
+            int cnt1=rs2.getInt("cnt");
             stmt2=con.prepareStatement("select count(1) cnt from trap where guid=?");
             stmt2.setString(1,rs.getString("aGUID"));
             rs2=stmt2.executeQuery();
-            int cnt2=rs.getInt("cnt");
+            int cnt2=rs2.getInt("cnt");
             int distance = (int) MyUtils.distVincenty(aLat, aLng, tLat, tLng);
             if (distance < 200 && cnt1==1 && cnt2==1) {
                 //Для каждого каравана рядом с засадой удалить маршрут
@@ -255,6 +255,8 @@ public class AdminTools {
                 stmt2.execute();
             }
         }
+        stmt=con.prepareStatement("update caravan set stealed='Y' where stealed='R'");
+        stmt.execute();
 
     }
     public String GenMap() {
