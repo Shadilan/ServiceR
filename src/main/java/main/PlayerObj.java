@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
 
 /**
  * Player info
@@ -21,6 +20,7 @@ public class PlayerObj implements GameObject {
 	private int Lng;
 	private int Gold;
 	private String City;
+	private String CityName;
 	private int Influence;
 
 	public PlayerObj() {
@@ -89,7 +89,7 @@ public class PlayerObj implements GameObject {
 
 		PreparedStatement stmt;
 
-		stmt = con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence FROM gplayers a WHERE GUID=? LIMIT 0,1");
+		stmt = con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence,HomeCity,(select cityname from cities c where c.guid=a.guid) cityname FROM gplayers a WHERE GUID=? LIMIT 0,1");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
 			rs.first();
@@ -100,6 +100,8 @@ public class PlayerObj implements GameObject {
 			Lng=rs.getInt("Lng");
 			Gold=rs.getInt("Gold");
 			Influence=rs.getInt("Influence");
+		City = rs.getString("HomeCity");
+		CityName = rs.getString("cityname");
 			stmt.close();
 
 		
@@ -173,10 +175,7 @@ public class PlayerObj implements GameObject {
 	 */
 	@Override
 	public String toString(){
-		String CityB="N";
-		if (City!=null && City.length()>0){
-			CityB="Y";
-		}
+
 		return"{"+
 				"GUID:"+'"'+GUID+'"'+
 				",PlayerName:"+'"'+UserName+'"'+
@@ -184,7 +183,7 @@ public class PlayerObj implements GameObject {
 				",Lng:"+Lng+
 				",Gold:"+Gold+
 				",Influence:"+Influence+
-				",City:"+'"'+CityB+'"'+
+				",City:" + '"' + CityName + '"' +
 				"}";
 
 	}
