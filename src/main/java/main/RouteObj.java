@@ -352,7 +352,7 @@ public class RouteObj implements GameObject {
 			stmt = con.prepareStatement("delete from routes where GUID=?");
 			stmt.setString(1, GUID);
 			stmt.execute();
-			stmt = con.prepareStatement("delete from aobjects where GUID=?");
+			stmt = con.prepareStatement("delete from aobject where GUID=?");
 			stmt.setString(1, GUID);
 			stmt.execute();
 			con.commit();
