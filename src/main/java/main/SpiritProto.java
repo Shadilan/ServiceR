@@ -195,7 +195,7 @@ public class SpiritProto {
             stmt.setString(2, InviteCode);
             stmt.execute();
             //Write Player Info
-            stmt = con.prepareStatement("insert into gplayers(GUID,PlayerName,Password,email,HomeCity) VALUES(?,?,?,?,(select guid from ciies order by random() limit 1,0)");
+            stmt = con.prepareStatement("insert into gplayers(GUID,PlayerName,Password,email,HomeCity) VALUES(?,?,?,?,(select guid from cities order by RAND() limit 0,1))");
             stmt.setString(1, GUID);
             stmt.setString(2,Login);
 			stmt.setString(3,Password);
