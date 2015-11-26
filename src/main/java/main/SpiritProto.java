@@ -275,7 +275,7 @@ public class SpiritProto {
                         //Остановить создание маршрута
                         result=route.getUnfinishedRoute(player.GetGUID());
                         if (result.equalsIgnoreCase("Not found"))
-                            result=MyUtils.getJSONError("RouteNotFound","Unfinished route not found.")
+                            result=MyUtils.getJSONError("RouteNotFound","Unfinished route not found.");
                             else result=route.dropRoute(TargetGUID);
                         break;
                     case "setHome":
