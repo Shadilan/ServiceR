@@ -2,7 +2,6 @@ package main;
 
 
 import javax.naming.NamingException;
-import javax.swing.text.html.HTMLDocument;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -196,9 +195,9 @@ public class SpiritProto {
             stmt.setString(2, InviteCode);
             stmt.execute();
             //Write Player Info
-			stmt=con.prepareStatement("insert into gplayers(GUID,PlayerName,Password,email) VALUES(?,?,?,?)");
-			stmt.setString(1,GUID);
-			stmt.setString(2,Login);
+            stmt = con.prepareStatement("insert into gplayers(GUID,PlayerName,Password,email,HomeCity) VALUES(?,?,?,?,(select guid from ciies order by random() limit 1,0)");
+            stmt.setString(1, GUID);
+            stmt.setString(2,Login);
 			stmt.setString(3,Password);
             stmt.setString(4, email);
             stmt.execute();
@@ -223,7 +222,7 @@ public class SpiritProto {
         return action(Token,Lat,Lng,TargetGUID,Action);
     }
     public String action(String Token, int PLat, int PLng, String TargetGUID, String Action) {
-        Connection con = null;
+        Connection con;
         String result;
         String GUID;
         String check;
@@ -337,7 +336,7 @@ public class SpiritProto {
             result=MyUtils.getJSONError("DBError",e.toString());
         } finally {
             try {
-                if (!con.isClosed()) {
+                if (con != null && !con.isClosed()) {
                     con.close();
                 }
             } catch (SQLException e) {
