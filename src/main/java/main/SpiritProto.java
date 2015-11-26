@@ -262,7 +262,7 @@ public class SpiritProto {
                         } else {result=check;}
                         break;
                     case "removeAmbush":
-                        check=ambush.checkRemoveAmbush(PLat,PLng,TargetGUID);
+                        check=ambush.checkRemoveAmbush(PLat, PLng, TargetGUID);
                         if (check.equalsIgnoreCase("Ok")) {
                             result= ambush.removeAmbush(player.GetGUID(), TargetGUID);
                         } else {result=check;}
@@ -270,6 +270,13 @@ public class SpiritProto {
                     case "dropRoute":
                         //Zlodiak: вставить чек на возможность дропа
                         result=route.dropRoute(TargetGUID);
+                        break;
+                    case "stopRoute":
+                        //Остановить создание маршрута
+                        result=route.getUnfinishedRoute(player.GetGUID());
+                        if (result.equalsIgnoreCase("Not found"))
+                            result=MyUtils.getJSONError("RouteNotFound","Unfinished route not found.")
+                            else result=route.dropRoute(TargetGUID);
                         break;
                     case "setHome":
                         result=player.setHome(player.GetGUID(),TargetGUID);

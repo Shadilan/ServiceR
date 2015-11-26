@@ -312,8 +312,11 @@ public class RouteObj implements GameObject {
 			stmt.setString(1, Owner);
 			stmt.execute();
 			rs = stmt.executeQuery();
-			rs.first();
-			return rs.getString("GUID");
+			if (rs.isBeforeFirst()) {
+				rs.first();
+				return rs.getString("GUID");
+			}
+			else return "Not Found";
 			//Плохо, если не получили результата то будет хрен знает какая строка и не понятные ошибки...
 		} catch (SQLException e) {
 			e.printStackTrace();
