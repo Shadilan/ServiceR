@@ -203,7 +203,7 @@ public class SpiritProto {
             stmt.execute();
             stmt = con.prepareStatement("insert into aobject(GUID,ObjectType) VALUES(?,\"PLAYER\")");
             stmt.setString(1, GUID);
-			stmt.execute();
+            stmt.execute();
 			stmt.close();
 			con.commit();
 			con.close();
@@ -305,7 +305,7 @@ public class SpiritProto {
             player.GetDBDataByToken(con,token);
             if (player.isLogin()) {
                 if (city.equalsIgnoreCase("")) {
-                    stmt = con.prepareStatement("select GUID from routes where owner=?");
+                    stmt = con.prepareStatement("select GUID from routes where owner=? and start!='' and finish!=''");
                     stmt.setString(1,player.GetGUID());
                 } else {
                     stmt=con.prepareStatement("select GUID from routes where owner=? and (start=? or finish=?)");
