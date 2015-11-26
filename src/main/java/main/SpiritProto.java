@@ -198,11 +198,11 @@ public class SpiritProto {
             stmt = con.prepareStatement("insert into gplayers(GUID,PlayerName,Password,email,HomeCity) VALUES(?,?,?,?,(select guid from cities order by RAND() limit 0,1))");
             stmt.setString(1, GUID);
             stmt.setString(2,Login);
-			stmt.setString(3,Password);
+            stmt.setString(3, Password);
             stmt.setString(4, email);
             stmt.execute();
-            stmt=con.prepareStatement("insert into aobject(GUID) VALUES(?)");
-			stmt.setString(1, GUID);
+            stmt = con.prepareStatement("insert into aobject(GUID,ObjectType) VALUES(?,\"PLAYER\")");
+            stmt.setString(1, GUID);
 			stmt.execute();
 			stmt.close();
 			con.commit();
