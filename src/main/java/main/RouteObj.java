@@ -1,7 +1,10 @@
 package main;
 
 import javax.naming.NamingException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 /**
@@ -289,6 +292,42 @@ public class RouteObj implements GameObject {
 			stmt.setString(1, City);
 			stmt.setString(2, Route);
 			stmt.execute();
+			//Выбрать точки начала и конца
+			stmt = con.prepareStatement("select c1.GUID start, c2.GUID finish, c1.lat lat1,c1.lng lng1,c2.lat lat2,c2.lng lng2 from routes r,cities c1, cities c2 " +
+					"where c1.guid=r.start and c2.guid=r.finish and r.guid=?");
+			stmt.setString(2, Route);
+
+			rs = stmt.executeQuery();
+			//Рассчитать скорость по Lat и Lng
+			rs.first();
+			int lat1 = rs.getInt("lat1");
+			int lng1 = rs.getInt("lng1");
+			int lat2 = rs.getInt("lat2");
+			int lng2 = rs.getInt("lng2");
+			String start = rs.getString("start");
+			String finish = rs.getString("finish");
+			double k = MyUtils.distVincenty(lat1, lng1, lat2, lng2) / 1666;
+			int spdLat = (int) ((lat2 - lat1) / k);
+			int spdLng = (int) ((lng2 - lng1) / k);
+			String caravan = UUID.randomUUID().toString();
+			//Сохранить караван
+			stmt = con.prepareStatement("insert into caravan(GUID,Owner,route,StartPoint,EndPoint,Lat,Lng,SpdLat,SpdLng) " +
+					"Values(?,?,?,?,?,?,?,?,?)");
+			stmt.setString(1, caravan);
+			stmt.setString(2, Owner);
+			stmt.setString(3, GUID);
+			stmt.setString(4, start);
+			stmt.setString(5, finish);
+			stmt.setInt(6, lat1);
+			stmt.setInt(7, lng1);
+			stmt.setInt(8, spdLat);
+			stmt.setInt(9, spdLng);
+			stmt.execute();
+			stmt = con.prepareStatement("insert into aobject(GUID,ObjectType,Lat,Lng) VALUES(?,?,\"CARAVAN\",?)");
+			stmt.setString(1, caravan);
+			stmt.setInt(2, lat1);
+			stmt.setInt(3, lng1);
+			stmt.execute();
 			con.commit();
 			con.close();
 		} catch (SQLException e) {
@@ -360,6 +399,7 @@ public class RouteObj implements GameObject {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return e.toString();
+
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return e.toString();
