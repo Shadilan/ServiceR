@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Bug: Домашний город">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/PlayerObj.java" afterPath="$PROJECT_DIR$/src/main/java/main/PlayerObj.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" afterPath="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
@@ -26,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PlayerObj.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PlayerObj.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/PlayerObj.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.44299674">
+            <state vertical-scroll-proportion="0.0">
               <caret line="118" column="176" selection-start-line="118" selection-start-column="176" selection-end-line="118" selection-end-column="176" />
               <folding>
                 <element signature="e#876#877#0" expanded="true" />
@@ -39,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpiritProto.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SpiritProto.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="253" column="29" selection-start-line="253" selection-start-column="29" selection-end-line="253" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.41530946">
+              <caret line="216" column="54" selection-start-line="216" selection-start-column="54" selection-end-line="216" selection-end-column="54" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -111,7 +111,7 @@
     <option name="WARN_ABOUT_CRLF" value="false" />
     <option name="WARN_ABOUT_DETACHED_HEAD" value="false" />
     <push-targets>
-      <push-target-info repo="$PROJECT_DIR$" source="master" target-remote="origin" target-branch="master" />
+      <push-target-info repo="$PROJECT_DIR$" source="master" target-remote="GitHub" target-branch="master" />
     </push-targets>
   </component>
   <component name="GradleLocalSettings">
@@ -129,9 +129,9 @@
         <option value="$PROJECT_DIR$/src/main/webapp/create_region.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/map.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
-        <option value="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/RouteObj.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/PlayerObj.java" />
+        <option value="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" />
       </list>
     </option>
   </component>
@@ -667,12 +667,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00003" summary="Commit">
-      <created>1445878857739</created>
-      <option name="number" value="00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1445878857739</updated>
-    </task>
     <task id="LOCAL-00004" summary="Commit">
       <created>1445879260918</created>
       <option name="number" value="00004" />
@@ -961,7 +955,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448619944920</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Bug: Домашний город">
+      <created>1448620187378</created>
+      <option name="number" value="00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1448620187378</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1366,14 +1366,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/adduser.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/makeaction.jsp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1393,23 +1385,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="253" column="29" selection-start-line="253" selection-start-column="29" selection-end-line="253" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/PlayerObj.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44299674">
+        <state vertical-scroll-proportion="0.0">
           <caret line="118" column="176" selection-start-line="118" selection-start-column="176" selection-end-line="118" selection-end-column="176" />
           <folding>
             <element signature="e#876#877#0" expanded="true" />
             <element signature="e#900#901#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/adduser.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="27" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41530946">
+          <caret line="216" column="54" selection-start-line="216" selection-start-column="54" selection-end-line="216" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

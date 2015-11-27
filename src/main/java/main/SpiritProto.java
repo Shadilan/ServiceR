@@ -214,7 +214,7 @@ public class SpiritProto {
             return MyUtils.getJSONError("DBError", e.toString() + Arrays.toString(e.getStackTrace()));
         }
 
-        return "{Result:\"Success\",Message:\"User created\"";
+        return MyUtils.getJSONSuccess("User Creater.");
     }
     public String action(String Token, String PLat, String PLng, String TargetGUID, String Action){
         int Lat=Integer.parseInt(PLat);
