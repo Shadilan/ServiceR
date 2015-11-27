@@ -116,7 +116,7 @@ public class PlayerObj implements GameObject {
 		PreparedStatement stmt;
 
 
-        stmt = con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence,HomeCity,(select cityname from cities c where c.guid=a.guid) cityname FROM gplayers a  WHERE USERTOKEN=? LIMIT 0,1");
+        stmt = con.prepareStatement("SELECT a.PlayerName, a.USERTOKEN, a.GUID, a.Lat, a.Lng, a.Gold, a.Influence,HomeCity,(select cityname from cities c where c.guid=a.HomeCity) cityname FROM gplayers a  WHERE USERTOKEN=? LIMIT 0,1");
         stmt.setString(1, UserToken);
 			ResultSet rs=stmt.executeQuery();
 			if (rs.isBeforeFirst()){

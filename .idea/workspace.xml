@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Bug: Караван в точку">
+    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Bug: Домашний город">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/PlayerObj.java" afterPath="$PROJECT_DIR$/src/main/java/main/PlayerObj.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -29,8 +29,8 @@
       <file leaf-file-name="PlayerObj.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/PlayerObj.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8029316">
-              <caret line="131" column="50" selection-start-line="131" selection-start-column="50" selection-end-line="131" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.44299674">
+              <caret line="118" column="176" selection-start-line="118" selection-start-column="176" selection-end-line="118" selection-end-column="176" />
               <folding>
                 <element signature="e#876#877#0" expanded="true" />
                 <element signature="e#900#901#0" expanded="true" />
@@ -667,12 +667,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00002" summary="Commit">
-      <created>1445878571211</created>
-      <option name="number" value="00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1445878571211</updated>
-    </task>
     <task id="LOCAL-00003" summary="Commit">
       <created>1445878857739</created>
       <option name="number" value="00003" />
@@ -961,7 +955,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448618259462</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Bug: Домашний город">
+      <created>1448619944920</created>
+      <option name="number" value="00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1448619944920</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1015,7 +1015,8 @@
     <MESSAGE value="Add" />
     <MESSAGE value="Bug: Не создаются маршруты" />
     <MESSAGE value="Bug: Караван в точку" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug: Караван в точку" />
+    <MESSAGE value="Bug: Домашний город" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug: Домашний город" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1404,8 +1405,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/PlayerObj.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8029316">
-          <caret line="131" column="50" selection-start-line="131" selection-start-column="50" selection-end-line="131" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.44299674">
+          <caret line="118" column="176" selection-start-line="118" selection-start-column="176" selection-end-line="118" selection-end-column="176" />
           <folding>
             <element signature="e#876#877#0" expanded="true" />
             <element signature="e#900#901#0" expanded="true" />
