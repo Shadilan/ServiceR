@@ -323,7 +323,7 @@ public class RouteObj implements GameObject {
 			stmt.setInt(8, spdLat);
 			stmt.setInt(9, spdLng);
 			stmt.execute();
-			stmt = con.prepareStatement("insert into aobject(GUID,ObjectType,Lat,Lng) VALUES(?,?,\"CARAVAN\",?)");
+			stmt = con.prepareStatement("insert into aobject(GUID,ObjectType,Lat,Lng) VALUES(?,\"CARAVAN\",?,?)");
 			stmt.setString(1, caravan);
 			stmt.setInt(2, lat1);
 			stmt.setInt(3, lng1);
