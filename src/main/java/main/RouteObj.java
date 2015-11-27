@@ -246,12 +246,21 @@ public class RouteObj implements GameObject {
 			stmt.setString(2, Route);
 			stmt.setString(3, City);
 			stmt.setString(4, Route);
-			stmt.execute();
 			rs = stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt") > 0) {
 				return MyUtils.getJSONError("RouteAlreadyExists","Route already exists.");
+			}
+			//Shadilan: проверка что города не совпадают
+			stmt = con.prepareStatement("select count(1) cnt from routes where start=? and guid=?");
+			stmt.setString(1, City);
+			stmt.setString(2, Route);
+			rs = stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt") > 0) {
+				return MyUtils.getJSONError("InvalidRoute", "Route start and end in one city.");
 			} else {
+
 				return "Ok";
 			}
 		} catch (SQLException e) {
