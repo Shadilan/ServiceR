@@ -120,14 +120,16 @@ public class AdminTools {
                 "AND  a1.lng between b1.lng-ABS(a1.SpdLng) and b1.lng+ABS(a1.SpdLng))";
         //Для каждого каравана  рядом с конечной точкой начислить хозяину деньги,
         //Для каждого каравана поменять начальную и конечную точку и умножить скорость на -1
-        String sql="UPDATE gplayers a,\n" +
+        String sql = "UPDATE gplayers gp,\n" +
                 "caravan c,\n" +
                 "cities t1,\n" +
-                "cities t2 SET a.gold = a.gold + ROUND( 6378137 * ACOS( COS( t1.lat* PI( ) /180 ) * COS( t2.lat* PI( ) /180 ) * COS( t1.lng* PI( ) /180 - t2.lng* PI( ) /180 ) + SIN( t1.lat* PI( ) /180 ) * SIN( t2.lat* PI( ) /180 ) ) /1000 ) ,\n" +
+                "cities t2 SET gp.gold = gp.gold + ROUND( 6378137 * ACOS( COS( t1.lat* PI( ) /180 ) * COS( t2.lat* PI( ) /180 ) * COS( t1.lng* PI( ) /180 - t2.lng* PI( ) /180 ) + SIN( t1.lat* PI( ) /180 ) * SIN( t2.lat* PI( ) /180 ) ) /1000 ) ,\n" +
                 "c.endpoint = t1.guid,\n" +
                 "c.startpoint = t2.guid,\n" +
                 "c.spdLat = c.spdLat * -1,\n" +
-                "c.spdLng = c.spdLng * -1 WHERE a.guid = c.owner AND c.startpoint = t1.guid AND c.endpoint = t2.guid \n"+inSQL;
+                "c.spdLng = c.spdLng * -1 " +
+                "WHERE gp.guid = c.owner " +
+                "AND c.startpoint = t1.guid AND c.endpoint = t2.guid \n" + inSQL;
         stmt=con.prepareStatement(sql);
         stmt.execute();
     }

@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="AutoProc correct">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" afterPath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
@@ -40,8 +39,8 @@
       <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.110486895">
-              <caret line="117" column="39" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.6516854">
+              <caret line="131" column="57" selection-start-line="131" selection-start-column="57" selection-end-line="131" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -457,12 +456,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00004" summary="Commit">
-      <created>1445879260918</created>
-      <option name="number" value="00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1445879260918</updated>
-    </task>
     <task id="LOCAL-00005" summary="Commit">
       <created>1445879540398</created>
       <option name="number" value="00005" />
@@ -751,7 +744,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448703026302</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="AutoProc correct">
+      <created>1448703627357</created>
+      <option name="number" value="00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1448703627357</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1181,8 +1180,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.110486895">
-          <caret line="117" column="39" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.6516854">
+          <caret line="131" column="57" selection-start-line="131" selection-start-column="57" selection-end-line="131" selection-end-column="57" />
           <folding />
         </state>
       </provider>
