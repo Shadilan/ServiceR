@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="simple map caravan add">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" afterPath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
@@ -533,12 +532,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00023" summary="City_map&#10;">
-      <created>1446476845254</created>
-      <option name="number" value="00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1446476845254</updated>
-    </task>
     <task id="LOCAL-00024" summary="City_map&#10;">
       <created>1446477006324</created>
       <option name="number" value="00024" />
@@ -827,7 +820,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448728838920</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="simple map caravan add">
+      <created>1448729390690</created>
+      <option name="number" value="00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1448729390690</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="ToolWindowManager">
