@@ -283,8 +283,11 @@ public class AdminTools {
             while (rs.next()) {
                 result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/city.png');\n";
             }
-            stmt = con.prepareStatement("select a.Lat,a.Lng,c1.CITYNAME||'-'||c2.CITYNAME as CITYNAME from cities c1,cities c2,caravan a " +
-                    "where a.startpoin=c1.guid, a.endpoin=c2.guid");
+            stmt = con.prepareStatement("SELECT a.Lat, a.Lng, CONCAT( c1.CITYNAME,  ' - ', c2.CITYNAME ) AS CITYNAME\n" +
+                    "FROM cities c1, cities c2, caravan a\n" +
+                    "WHERE a.startpoint = c1.guid\n" +
+                    "AND a.endpoint = c2.guid\n" +
+                    "LIMIT 0 , 30");
             rs = stmt.executeQuery();
             rs.beforeFirst();
             while (rs.next()) {

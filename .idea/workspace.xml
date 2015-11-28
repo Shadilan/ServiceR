@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="speedup caravans 10x">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/images/caravan.png" />
+    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="simple map caravan add">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" afterPath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/map.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/map.jsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
@@ -62,8 +59,8 @@
       <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7132216">
-              <caret line="291" column="13" selection-start-line="291" selection-start-column="13" selection-end-line="291" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.6499069">
+              <caret line="289" column="33" selection-start-line="289" selection-start-column="33" selection-end-line="289" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -536,12 +533,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00022" summary="City_map&#10;">
-      <created>1446476031792</created>
-      <option name="number" value="00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1446476031792</updated>
-    </task>
     <task id="LOCAL-00023" summary="City_map&#10;">
       <created>1446476845254</created>
       <option name="number" value="00023" />
@@ -830,7 +821,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448726925495</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="simple map caravan add">
+      <created>1448728838919</created>
+      <option name="number" value="00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1448728838920</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -892,7 +889,8 @@
     <MESSAGE value="Enlarge Radius" />
     <MESSAGE value="set Radius 10k" />
     <MESSAGE value="speedup caravans 10x" />
-    <option name="LAST_COMMIT_MESSAGE" value="speedup caravans 10x" />
+    <MESSAGE value="simple map caravan add" />
+    <option name="LAST_COMMIT_MESSAGE" value="simple map caravan add" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1268,8 +1266,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7132216">
-          <caret line="291" column="13" selection-start-line="291" selection-start-column="13" selection-end-line="291" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.6499069">
+          <caret line="289" column="33" selection-start-line="289" selection-start-column="33" selection-end-line="289" selection-end-column="33" />
           <folding />
         </state>
       </provider>
