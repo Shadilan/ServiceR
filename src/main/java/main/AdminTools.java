@@ -113,11 +113,11 @@ public class AdminTools {
     public void DoCaravanInCity(Connection con) throws SQLException {
         PreparedStatement stmt;
         //Проверить есть ли караваны рядом с конечными точками
-        String inSQL="and c.guid in (SELECT a.GUID " +
-                "FROM caravan a, cities b " +
-                "WHERE a.endpoint = b.guid " +
-                "AND  a.lat between b.lat-ABS(a.SpdLat) and b.lat+ABS(a.SpdLat)" +
-                "AND  a.lng between b.lng-ABS(a.SpdLng) and b.lng+ABS(a.SpdLng))";
+        String inSQL = "and c.guid in (SELECT a1.GUID " +
+                "FROM caravan a1, cities b1 " +
+                "WHERE a1.endpoint = b1.guid " +
+                "AND  a1.lat between b1.lat-ABS(a1.SpdLat) and b1.lat+ABS(a1.SpdLat)" +
+                "AND  a1.lng between b1.lng-ABS(a1.SpdLng) and b1.lng+ABS(a1.SpdLng))";
         //Для каждого каравана  рядом с конечной точкой начислить хозяину деньги,
         //Для каждого каравана поменять начальную и конечную точку и умножить скорость на -1
         String sql="UPDATE gplayers a,\n" +
