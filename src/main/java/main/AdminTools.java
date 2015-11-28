@@ -113,23 +113,29 @@ public class AdminTools {
     public void DoCaravanInCity(Connection con) throws SQLException {
         PreparedStatement stmt;
         //Проверить есть ли караваны рядом с конечными точками
-        String inSQL = "and c.guid in (SELECT a1.GUID " +
-                "FROM caravan a1, cities b1 " +
-                "WHERE a1.endpoint = b1.guid " +
-                "AND  a1.lat between b1.lat-ABS(a1.SpdLat) and b1.lat+ABS(a1.SpdLat)" +
-                "AND  a1.lng between b1.lng-ABS(a1.SpdLng) and b1.lng+ABS(a1.SpdLng))";
         //Для каждого каравана  рядом с конечной точкой начислить хозяину деньги,
         //Для каждого каравана поменять начальную и конечную точку и умножить скорость на -1
         String sql = "UPDATE gplayers gp,\n" +
                 "caravan c,\n" +
                 "cities t1,\n" +
-                "cities t2 SET gp.gold = gp.gold + ROUND( 6378137 * ACOS( COS( t1.lat* PI( ) /180 ) * COS( t2.lat* PI( ) /180 ) * COS( t1.lng* PI( ) /180 - t2.lng* PI( ) /180 ) + SIN( t1.lat* PI( ) /180 ) * SIN( t2.lat* PI( ) /180 ) ) /1000 ) ,\n" +
+                "cities t2 SET gp.gold = gp.gold + ROUND( 6378137 * ACOS( COS( t1.lat * PI( ) /180 ) * COS( t2.lat * PI( ) /180 ) * COS( t1.lng * PI( ) /180 - t2.lng * PI( ) /180 ) + SIN( t1.lat * PI( ) /180 ) * SIN( t2.lat * PI( ) /180 ) ) /1000 ) ,\n" +
                 "c.endpoint = t1.guid,\n" +
                 "c.startpoint = t2.guid,\n" +
                 "c.spdLat = c.spdLat * -1,\n" +
-                "c.spdLng = c.spdLng * -1 " +
-                "WHERE gp.guid = c.owner " +
-                "AND c.startpoint = t1.guid AND c.endpoint = t2.guid \n" + inSQL;
+                "c.spdLng = c.spdLng * -1 WHERE gp.guid = c.owner AND c.startpoint = t1.guid AND c.endpoint = t2.guid AND c.guid IN (\n" +
+                "SELECT GUID\n" +
+                "FROM (\n" +
+                "\n" +
+                "SELECT a1.GUID\n" +
+                "FROM caravan a1, cities b1\n" +
+                "WHERE a1.endpoint = b1.guid\n" +
+                "AND a1.lat\n" +
+                "BETWEEN b1.lat - ABS( a1.SpdLat ) \n" +
+                "AND b1.lat + ABS( a1.SpdLat ) \n" +
+                "AND a1.lng\n" +
+                "BETWEEN b1.lng - ABS( a1.SpdLng ) \n" +
+                "AND b1.lng + ABS( a1.SpdLng )\n" +
+                ")k )";
         stmt=con.prepareStatement(sql);
         stmt.execute();
     }
