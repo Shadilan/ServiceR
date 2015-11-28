@@ -246,12 +246,21 @@ public class RouteObj implements GameObject {
 			stmt.setString(2, Route);
 			stmt.setString(3, City);
 			stmt.setString(4, Route);
-			stmt.execute();
 			rs = stmt.executeQuery();
 			rs.first();
 			if (rs.getInt("cnt") > 0) {
 				return MyUtils.getJSONError("RouteAlreadyExists","Route already exists.");
+			}
+			//Shadilan: проверка что города не совпадают
+			stmt = con.prepareStatement("select count(1) cnt from routes where start=? and guid=?");
+			stmt.setString(1, City);
+			stmt.setString(2, Route);
+			rs = stmt.executeQuery();
+			rs.first();
+			if (rs.getInt("cnt") > 0) {
+				return MyUtils.getJSONError("InvalidRoute", "Route start and end in one city.");
 			} else {
+
 				return "Ok";
 			}
 		} catch (SQLException e) {
@@ -295,7 +304,7 @@ public class RouteObj implements GameObject {
 			//Выбрать точки начала и конца
 			stmt = con.prepareStatement("select c1.GUID start, c2.GUID finish, c1.lat lat1,c1.lng lng1,c2.lat lat2,c2.lng lng2 from routes r,cities c1, cities c2 " +
 					"where c1.guid=r.start and c2.guid=r.finish and r.guid=?");
-			stmt.setString(2, Route);
+			stmt.setString(1, Route);
 
 			rs = stmt.executeQuery();
 			//Рассчитать скорость по Lat и Lng
@@ -323,7 +332,7 @@ public class RouteObj implements GameObject {
 			stmt.setInt(8, spdLat);
 			stmt.setInt(9, spdLng);
 			stmt.execute();
-			stmt = con.prepareStatement("insert into aobject(GUID,ObjectType,Lat,Lng) VALUES(?,?,\"CARAVAN\",?)");
+			stmt = con.prepareStatement("insert into aobject(GUID,ObjectType,Lat,Lng) VALUES(?,\"CARAVAN\",?,?)");
 			stmt.setString(1, caravan);
 			stmt.setInt(2, lat1);
 			stmt.setInt(3, lng1);
@@ -392,6 +401,13 @@ public class RouteObj implements GameObject {
 			stmt.setString(1, GUID);
 			stmt.execute();
 			stmt = con.prepareStatement("delete from aobject where GUID=?");
+			stmt.setString(1, GUID);
+			stmt.execute();
+			//Shadilan: Удаляем караваны при удалении маршрута.
+			stmt = con.prepareStatement("delete from aobject where GUID=(select guid from caravan where route=?)");
+			stmt.setString(1, GUID);
+			stmt.execute();
+			stmt = con.prepareStatement("delete from caravan where GUID=?");
 			stmt.setString(1, GUID);
 			stmt.execute();
 			con.commit();
