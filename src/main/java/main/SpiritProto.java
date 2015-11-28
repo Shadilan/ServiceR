@@ -86,26 +86,28 @@ public class SpiritProto {
             else {
                 player.setPos(Lat, Lng);
                 player.SetDBData(con);
-                PreparedStatement stmt = con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<50000");
+                PreparedStatement stmt = con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<3000");
                 stmt.setInt(1, Lat);
                 stmt.setInt(2, Lng);
                 ResultSet rs = stmt.executeQuery();
                 rs.beforeFirst();
                 ArrayList<CityObj> Cities = new ArrayList<>();
                 ArrayList<AmbushObj> Ambushes = new ArrayList<>();
-                while (rs.next()) {
+                if (rs.isBeforeFirst()) {
+                    while (rs.next()) {
 
-                    String GUID = rs.getString(1);
-                    String ObjType = rs.getString(2);
-                    if (ObjType.equalsIgnoreCase("CITY")) {
-                        CityObj City = new CityObj();
-                        City.GetDBData(con, GUID);
-                        Cities.add(City);
-                    } else if (ObjType.equalsIgnoreCase("AMBUSH")) {
-                        AmbushObj ambush=new AmbushObj(con,GUID);
-                        Ambushes.add(ambush);
+                        String GUID = rs.getString(1);
+                        String ObjType = rs.getString(2);
+                        if (ObjType.equalsIgnoreCase("CITY")) {
+                            CityObj City = new CityObj();
+                            City.GetDBData(con, GUID);
+                            Cities.add(City);
+                        } else if (ObjType.equalsIgnoreCase("AMBUSH")) {
+                            AmbushObj ambush = new AmbushObj(con, GUID);
+                            Ambushes.add(ambush);
+                        }
+
                     }
-
                 }
                 result = "{Result:\"Succes\",Player:" + player.toString();
                 String citiesinfo = null;
