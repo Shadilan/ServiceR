@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="AutoProc correct">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" afterPath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
+    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Correct DoCaravanInCity">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.openshift/action_hooks/post_deploy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
@@ -36,11 +36,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.87265915">
+            <state vertical-scroll-proportion="0.0">
               <caret line="137" column="20" selection-start-line="137" selection-start-column="20" selection-end-line="137" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.openshift/action_hooks/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-1.2592592">
+              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="103" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="post_deploy" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.openshift/action_hooks/post_deploy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="58" />
               <folding />
             </state>
           </provider>
@@ -94,6 +114,7 @@
         <option value="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/PlayerObj.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
+        <option value="$PROJECT_DIR$/.openshift/action_hooks/post_deploy" />
       </list>
     </option>
   </component>
@@ -165,15 +186,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
+              <option name="myItemId" value="deployments" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -187,19 +200,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mage" />
+              <option name="myItemId" value=".openshift" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -213,63 +214,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value=".openshift" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="serviceR" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ServiceR" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="serviceR" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ServiceR" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
+              <option name="myItemId" value="action_hooks" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -455,12 +404,6 @@
       <created>1445698454128</created>
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Commit">
-      <created>1445880640332</created>
-      <option name="number" value="00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1445880640332</updated>
     </task>
     <task id="LOCAL-00007" summary="Commit">
       <created>1445891624413</created>
@@ -750,7 +693,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448705741365</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Correct DoCaravanInCity">
+      <created>1448706331894</created>
+      <option name="number" value="00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1448706331894</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -808,7 +757,8 @@
     <MESSAGE value="Bug:Домашний город" />
     <MESSAGE value="Add Error Write to DB on AutoProc" />
     <MESSAGE value="AutoProc correct" />
-    <option name="LAST_COMMIT_MESSAGE" value="AutoProc correct" />
+    <MESSAGE value="Correct DoCaravanInCity" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correct DoCaravanInCity" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -822,22 +772,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/MyUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="73" column="40" selection-start-line="73" selection-start-column="40" selection-end-line="73" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/RouteObj.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1180,8 +1114,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.87265915">
+        <state vertical-scroll-proportion="0.0">
           <caret line="137" column="20" selection-start-line="137" selection-start-column="20" selection-end-line="137" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.openshift/action_hooks/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.2592592">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="103" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.openshift/action_hooks/post_deploy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="58" />
           <folding />
         </state>
       </provider>
