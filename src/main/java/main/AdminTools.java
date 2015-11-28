@@ -15,6 +15,7 @@ public class AdminTools {
     public static int speed=1666;
     final Runnable task = new Runnable() {
         public void run() {
+            String Step = "";
             try {
                 Thread.sleep(60000);
                 Connection con;
@@ -23,12 +24,15 @@ public class AdminTools {
 
                 //Передвинуть караваны
                 try {
+                    Step = "MoveCaravans";
                     MoveCaravans(con);
+                    Step = "DoCaravanInCity";
                     DoCaravanInCity(con);
+                    Step = "DoCaravanInAmbush";
                     DoCaravanInAmbush(con);
                 } catch (Exception e) {
                     stmt = con.prepareStatement("update PROCESS_CONTROL set last_error=? where PROCESS_NAME='MAIN'");
-                    stmt.setString(1, e.toString());
+                    stmt.setString(1, Step + ":" + e.toString());
                     stmt.execute();
                 }
                 //Проверить есть ли караваны рядом с засадами
@@ -105,22 +109,6 @@ public class AdminTools {
         PreparedStatement stmt;
             stmt = con.prepareStatement("UPDATE caravan a, aobject b SET b.Lat = a.Lat + a.SpdLat, b.Lng = a.Lng + a.SpdLng, a.Lat = a.Lat + a.SpdLat, a.Lng = a.Lng + a.SpdLng");
             stmt.execute();
-            //Maybe do it in
-
-            ResultSet rs = stmt.executeQuery();
-            if (rs.isBeforeFirst()) {
-                while (rs.next()) {
-                    CaravanObj caravan = new CaravanObj(con, rs.getString("GUID"));
-                    PlayerObj player = new PlayerObj(con, caravan.GetOwner());
-                    player.SetGold(player.GetGold() + caravan.GetGold(con));
-                    player.SetDBData(con);
-                }
-            }
-            stmt.close();
-            //Check Cross with Ambush
-        //Check Cross with Cities
-
-
     }
     public void DoCaravanInCity(Connection con) throws SQLException {
         PreparedStatement stmt;
