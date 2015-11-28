@@ -107,7 +107,7 @@ public class AdminTools {
     public void MoveCaravans(Connection con) throws SQLException {
         //Update all Caravans
         PreparedStatement stmt;
-            stmt = con.prepareStatement("UPDATE caravan a, aobject b SET b.Lat = a.Lat + a.SpdLat, b.Lng = a.Lng + a.SpdLng, a.Lat = a.Lat + a.SpdLat, a.Lng = a.Lng + a.SpdLng");
+        stmt = con.prepareStatement("UPDATE caravan a, aobject b SET b.Lat = a.Lat + a.SpdLat, b.Lng = a.Lng + a.SpdLng, a.Lat = a.Lat + a.SpdLat, a.Lng = a.Lng + a.SpdLng where a.guid=b.guid");
             stmt.execute();
     }
     public void DoCaravanInCity(Connection con) throws SQLException {
