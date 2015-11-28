@@ -1,12 +1,10 @@
 package main;
 
 import javax.naming.NamingException;
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -24,9 +22,15 @@ public class AdminTools {
                 PreparedStatement stmt;
 
                 //Передвинуть караваны
-                MoveCaravans(con);
-                DoCaravanInCity(con);
-                DoCaravanInAmbush(con);
+                try {
+                    MoveCaravans(con);
+                    DoCaravanInCity(con);
+                    DoCaravanInAmbush(con);
+                } catch (Exception e) {
+                    stmt = con.prepareStatement("update PROCESS_CONTROL set last_error=? where PROCESS_NAME='MAIN'");
+                    stmt.setString(1, e.toString());
+                    stmt.execute();
+                }
                 //Проверить есть ли караваны рядом с засадами
                 //Для каждого каравана рядом с засадой удалить маршрут
                 //Указать в качестве конечной точки домашний город владельца засады
