@@ -98,7 +98,9 @@ public class SpiritProto {
 
                         String GUID = rs.getString(1);
                         String ObjType = rs.getString(2);
-                        if (ObjType.equalsIgnoreCase("CITY")) {
+                        if (ObjType == null) {
+
+                        } else if (ObjType.equalsIgnoreCase("CITY")) {
                             CityObj City = new CityObj();
                             City.GetDBData(con, GUID);
                             Cities.add(City);
