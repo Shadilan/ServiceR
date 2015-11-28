@@ -401,7 +401,7 @@ public class RouteObj implements GameObject {
 			stmt = con.prepareStatement("delete from aobject where GUID=(select guid from caravan where route=?)");
 			stmt.setString(1, GUID);
 			stmt.execute();
-			stmt = con.prepareStatement("delete from caravan where GUID=(select guid from caravan where route=?)");
+			stmt = con.prepareStatement("delete from caravan where route=?");
 			stmt.setString(1, GUID);
 			stmt.execute();
 			stmt = con.prepareStatement("delete from routes where GUID=?");
