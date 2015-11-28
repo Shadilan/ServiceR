@@ -86,7 +86,7 @@ public class SpiritProto {
             else {
                 player.setPos(Lat, Lng);
                 player.SetDBData(con);
-                PreparedStatement stmt = con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<1000");
+                PreparedStatement stmt = con.prepareStatement("select GUID,ObjectType from aobject where SQRT(POWER(?-Lat,2)+POWER(?-Lng,2))<50000");
                 stmt.setInt(1, Lat);
                 stmt.setInt(2, Lng);
                 ResultSet rs = stmt.executeQuery();
