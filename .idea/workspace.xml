@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Enlarge Radius">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" afterPath="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/CityObj.java" afterPath="$PROJECT_DIR$/src/main/java/main/CityObj.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
@@ -46,11 +46,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpiritProto.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SpiritProto.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.2883896">
-              <caret line="110" column="17" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="105" column="56" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AmbushObj.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/main/AmbushObj.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.46067417">
+              <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -106,7 +116,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/main/CaravanObj.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/MyUtils.java" />
-        <option value="$PROJECT_DIR$/src/main/java/main/CityObj.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/create.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/create_region.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/map.jsp" />
@@ -115,6 +124,7 @@
         <option value="$PROJECT_DIR$/.openshift/action_hooks/post_deploy" />
         <option value="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" />
+        <option value="$PROJECT_DIR$/src/main/java/main/CityObj.java" />
       </list>
     </option>
   </component>
@@ -461,12 +471,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00010" summary="Just Restart">
-      <created>1446389348874</created>
-      <option name="number" value="00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1446389348874</updated>
-    </task>
     <task id="LOCAL-00011" summary="create_region">
       <created>1446443519700</created>
       <option name="number" value="00011" />
@@ -755,7 +759,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448708864152</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="Enlarge Radius">
+      <created>1448709585276</created>
+      <option name="number" value="00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1448709585276</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1066,13 +1076,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/CityObj.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="70" column="90" selection-start-line="70" selection-start-column="90" selection-end-line="70" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/DBUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1129,13 +1132,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/AmbushObj.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29962546">
-          <caret line="197" column="0" selection-start-line="192" selection-start-column="0" selection-end-line="197" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/MyUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.2921348">
@@ -1184,10 +1180,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/CityObj.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.82051283">
+          <caret line="81" column="34" selection-start-line="81" selection-start-column="34" selection-end-line="81" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2883896">
-          <caret line="110" column="17" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="105" column="56" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/AmbushObj.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.46067417">
+          <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
           <folding />
         </state>
       </provider>

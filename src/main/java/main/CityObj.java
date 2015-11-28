@@ -71,12 +71,15 @@ public class CityObj implements GameObject {
 		stmt = con.prepareStatement("SELECT GUID,CITYNAME,Lat,Lng from cities WHERE GUID=?");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
+		if (rs.isBeforeFirst()) {
 			rs.first();
-			this.GUID=rs.getString("GUID");
-			CityName=rs.getString("CITYNAME");
-			Lat=rs.getInt("Lat");
-			Lng=rs.getInt("Lng");
+
+			this.GUID = rs.getString("GUID");
+			CityName = rs.getString("CITYNAME");
+			Lat = rs.getInt("Lat");
+			Lng = rs.getInt("Lng");
 			stmt.close();
+		} else this.GUID = GUID;
 
 	}
 
