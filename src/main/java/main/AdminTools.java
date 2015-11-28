@@ -281,9 +281,15 @@ public class AdminTools {
             ResultSet rs = stmt.executeQuery();
             rs.beforeFirst();
             while (rs.next()) {
-                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map);\n";
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/city.png');\n";
             }
-
+            stmt = con.prepareStatement("select a.Lat,a.Lng,c1.CITYNAME||'-'||c2.CITYNAME as CITYNAME from cities c1,cities c2,caravan a " +
+                    "where a.startpoin=c1.guid, a.endpoin=c2.guid");
+            rs = stmt.executeQuery();
+            rs.beforeFirst();
+            while (rs.next()) {
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/caravan.png');\n";
+            }
             stmt.close();
             con.commit();
             con.close();

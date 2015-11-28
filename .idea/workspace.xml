@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="set Radius 10k">
+    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="speedup caravans 10x">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/images/caravan.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" afterPath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/RouteObj.java" afterPath="$PROJECT_DIR$/src/main/java/main/RouteObj.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/map.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/map.jsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
@@ -37,31 +39,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2849162">
-              <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RouteObj.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/main/RouteObj.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="317" column="75" selection-start-line="317" selection-start-column="75" selection-end-line="317" selection-end-column="75" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="SpiritProto.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="88" column="146" selection-start-line="88" selection-start-column="146" selection-end-line="88" selection-end-column="146" />
+              <caret line="93" column="28" selection-start-line="93" selection-start-column="28" selection-end-line="93" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="map.jsp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.7132216">
+              <caret line="291" column="13" selection-start-line="291" selection-start-column="13" selection-end-line="291" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -149,12 +151,12 @@
         <option value="$PROJECT_DIR$/src/main/java/main/MyUtils.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/create.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/create_region.jsp" />
-        <option value="$PROJECT_DIR$/src/main/webapp/map.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/main/PlayerObj.java" />
         <option value="$PROJECT_DIR$/.openshift/action_hooks/post_deploy" />
         <option value="$PROJECT_DIR$/src/main/java/main/CityObj.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/SpiritProto.java" />
         <option value="$PROJECT_DIR$/src/main/java/main/RouteObj.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/map.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
       </list>
     </option>
@@ -232,6 +234,36 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="serviceR" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ServiceR" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -337,6 +369,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Java.SRC\ServiceR\src\main\webapp\images" />
       <recent name="D:\Java.SRC\ServiceR\src\main\webapp" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -502,12 +535,6 @@
       <created>1445698454128</created>
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
-    </task>
-    <task id="LOCAL-00021" summary="City_map&#10;">
-      <created>1446475532724</created>
-      <option name="number" value="00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1446475532724</updated>
     </task>
     <task id="LOCAL-00022" summary="City_map&#10;">
       <created>1446476031792</created>
@@ -797,7 +824,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448715105393</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="speedup caravans 10x">
+      <created>1448726925495</created>
+      <option name="number" value="00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1448726925495</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -858,7 +891,8 @@
     <MESSAGE value="Correct DoCaravanInCity" />
     <MESSAGE value="Enlarge Radius" />
     <MESSAGE value="set Radius 10k" />
-    <option name="LAST_COMMIT_MESSAGE" value="set Radius 10k" />
+    <MESSAGE value="speedup caravans 10x" />
+    <option name="LAST_COMMIT_MESSAGE" value="speedup caravans 10x" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1116,18 +1150,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/images/city.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49671054">
-          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/GameObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.1118421">
@@ -1207,6 +1229,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main/RouteObj.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.640596">
+          <caret line="317" column="16" selection-start-line="317" selection-start-column="16" selection-end-line="317" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/PlayerObj.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1218,23 +1248,28 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/main/SpiritProto.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="88" column="146" selection-start-line="88" selection-start-column="146" selection-end-line="88" selection-end-column="146" />
+          <caret line="93" column="28" selection-start-line="93" selection-start-column="28" selection-end-line="93" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main/RouteObj.java">
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/map.jsp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="317" column="75" selection-start-line="317" selection-start-column="75" selection-end-line="317" selection-end-column="75" />
+          <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/images/city.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2849162">
-          <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.7132216">
+          <caret line="291" column="13" selection-start-line="291" selection-start-column="13" selection-end-line="291" selection-end-column="13" />
           <folding />
         </state>
       </provider>
