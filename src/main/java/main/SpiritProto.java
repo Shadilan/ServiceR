@@ -132,6 +132,9 @@ public class SpiritProto {
 
         } catch (NamingException | SQLException e) {
             result= MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+
+        } catch (Exception e) {
+            result = MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         } finally {
             try {
                 if (con != null && !con.isClosed()) {
