@@ -158,8 +158,20 @@ public class AdminTools {
               "AND ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 - c.spdLat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 + c.spdLng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 - c.SpdLat * PI( ) /180 ) ) /1000 ) <1666\n" +
               "and g.guid=a.owner\n" +
               "and g.HomeCity=t.guid";*/
-        sql="select c,route,g.HomeCity,c.lat clat,t.lat tlat,a.lat alat,a.lng alng,c.lng clng,t.lng tlng,c.spdLat,c.spdLng, g.GUID gGUID, c.guid cGUID,t.GUID tGUID,\n" +
-                "              c.startpoint\n" +
+        sql = "select c.route,\n" +
+                "\t   g.HomeCity,\n" +
+                "\t   c.lat clat,\n" +
+                "\t   t.lat tlat,\n" +
+                "\t   a.lat alat,\n" +
+                "\t   a.lng alng,\n" +
+                "\t   c.lng clng,\n" +
+                "\t   t.lng tlng,\n" +
+                "\t   c.spdLat,\n" +
+                "\t   c.spdLng, \n" +
+                "\t   g.GUID gGUID, \n" +
+                "\t   c.guid cGUID,\n" +
+                "\t   t.GUID tGUID,\n" +
+                "       c.startpoint\n" +
                 "from caravan c, traps a,gplayers g,cities t\n" +
                 "WHERE 1 =1\n" +
                 "AND (ABS( a.lat - c.lat ) <ABS(c.spdLat) or ABS( a.lat - c.lat ) <ABS(c.spdLng))\n" +
