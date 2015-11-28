@@ -12,7 +12,7 @@ import java.util.UUID;
  * @author Zlodiak
  */
 public class AdminTools {
-    public static int speed=1666;
+    public static int speed = 16666;
     final Runnable task = new Runnable() {
         public void run() {
             String Step = "";
