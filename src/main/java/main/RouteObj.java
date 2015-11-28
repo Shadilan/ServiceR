@@ -315,7 +315,7 @@ public class RouteObj implements GameObject {
 			int lng2 = rs.getInt("lng2");
 			String start = rs.getString("start");
 			String finish = rs.getString("finish");
-			double k = MyUtils.distVincenty(lat1, lng1, lat2, lng2) / 16666;
+			double k = MyUtils.distVincenty(lat1, lng1, lat2, lng2) / 166666;
 			int spdLat = (int) ((lat2 - lat1) / k);
 			int spdLng = (int) ((lng2 - lng1) / k);
 			String caravan = UUID.randomUUID().toString();
@@ -397,17 +397,14 @@ public class RouteObj implements GameObject {
 		PreparedStatement stmt;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			stmt = con.prepareStatement("delete from routes where GUID=?");
-			stmt.setString(1, GUID);
-			stmt.execute();
-			stmt = con.prepareStatement("delete from aobject where GUID=?");
-			stmt.setString(1, GUID);
-			stmt.execute();
 			//Shadilan: Удаляем караваны при удалении маршрута.
 			stmt = con.prepareStatement("delete from aobject where GUID=(select guid from caravan where route=?)");
 			stmt.setString(1, GUID);
 			stmt.execute();
-			stmt = con.prepareStatement("delete from caravan where GUID=?");
+			stmt = con.prepareStatement("delete from caravan where GUID=(select guid from caravan where route=?)");
+			stmt.setString(1, GUID);
+			stmt.execute();
+			stmt = con.prepareStatement("delete from routes where GUID=?");
 			stmt.setString(1, GUID);
 			stmt.execute();
 			con.commit();
