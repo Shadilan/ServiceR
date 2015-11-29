@@ -124,6 +124,7 @@ public class AdminTools {
                 "c.startpoint = t2.guid,\n" +
                 "c.spdLat = c.spdLat * -1,\n" +
                 "c.spdLng = c.spdLng * -1 WHERE gp.guid = c.owner AND c.startpoint = t1.guid AND c.endpoint = t2.guid AND c.guid IN (\n" +
+                "c.stealed=case when stealed='Y' then 'E' else setealed end" +
                 "SELECT GUID\n" +
                 "FROM (\n" +
                 "\n" +
@@ -138,6 +139,19 @@ public class AdminTools {
                 "AND b1.lng + ABS( a1.SpdLng )\n" +
                 ")k )";
         stmt=con.prepareStatement(sql);
+        stmt.execute();
+        //Удалить доехавшие караваны и маршруты.
+        //Точки
+        //В аобжект?
+        stmt = con.prepareStatement("delete from waypoints where route in (select route from caravan c where stealed='E')");
+        stmt.execute();
+        //Маршрут
+        stmt = con.prepareStatement("delete from routes where guid in (select route from caravan c where stealed='E')");
+        stmt.execute();
+        //Караван
+        stmt = con.prepareStatement("delete from aobject where guid in (select guid from caravan c where stealed='E')");
+        stmt.execute();
+        stmt = con.prepareStatement("delete from caravan c where stealed='E'");
         stmt.execute();
     }
     public void DoCaravanInAmbush(Connection con) throws SQLException {
