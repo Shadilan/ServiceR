@@ -118,7 +118,7 @@ public class AdminTools {
         String sql = "UPDATE gplayers gp,\n" +
                 "caravan c,\n" +
                 "cities t1,\n" +
-                "cities t2 SET gp.gold = gp.gold + ROUND( 6378137 * ACOS( COS( t1.lat * PI( ) /180 ) * COS( t2.lat * PI( ) /180 ) * COS( t1.lng * PI( ) /180 - t2.lng * PI( ) /180 ) + SIN( t1.lat * PI( ) /180 ) * SIN( t2.lat * PI( ) /180 ) ) /1000 ) ,\n" +
+                "cities t2 SET gp.gold = gp.gold + ROUND( 6378137 * ACOS( COS( t1.lat/1e6 * PI( ) /180 ) * COS( t2.lat/1e6 * PI( ) /180 ) * COS( t1.lng/1e6 * PI( ) /180 - t2.lng/1e6 * PI( ) /180 ) + SIN( t1.lat/1e6 * PI( ) /180 ) * SIN( t2.lat/1e6 * PI( ) /180 ) ) /1000 ) ,\n" +
                 "c.endpoint = t1.guid,\n" +
                 "c.startpoint = t2.guid,\n" +
                 "c.spdLat = c.spdLat * -1,\n" +
