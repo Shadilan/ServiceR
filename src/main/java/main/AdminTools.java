@@ -187,7 +187,7 @@ public class AdminTools {
             int dLat = rs.getInt("spdLat");
             int dLng = rs.getInt("spdLng");
             int sLat = rs.getInt("clat");
-            int sLng = rs.getByte("clng");
+            int sLng = rs.getInt("clng");
             int aLat = rs.getInt("alat");
             int aLng = rs.getInt("alng");
             int eLat =rs.getInt("tLat");
