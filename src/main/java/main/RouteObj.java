@@ -324,7 +324,7 @@ public class RouteObj implements GameObject {
 					"Values(?,?,?,?,?,?,?,?,?)");
 			stmt.setString(1, caravan);
 			stmt.setString(2, Owner);
-			stmt.setString(3, GUID);
+			stmt.setString(3, Route);
 			stmt.setString(4, start);
 			stmt.setString(5, finish);
 			stmt.setInt(6, lat1);
