@@ -172,6 +172,7 @@ public class AdminTools {
                 "\t   g.GUID gGUID, \n" +
                 "\t   c.guid cGUID,\n" +
                 "\t   t.GUID tGUID,\n" +
+                "\t   a.GUID aGUID,\n" +
                 "       c.startpoint\n" +
                 "from caravan c, traps a,gplayers g,cities t\n" +
                 "WHERE 1 =1\n" +
