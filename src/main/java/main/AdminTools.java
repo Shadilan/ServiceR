@@ -193,7 +193,8 @@ public class AdminTools {
             int eLng=rs.getInt("tLng");
             int tLat;
             int tLng;
-            double u = ((aLat - sLat) * dLat + (aLng - sLng) * dLng) / (dLat * dLat + dLng * dLng);
+            double u = ((aLat / 1e6 - sLat / 1e6) * dLat / 1e6 + (aLng / 1e6 - sLng / 1e6) * dLng / 1e6) /
+                    (dLat / 1e6 * dLat / 1e6 + dLng / 1e6 * dLng / 1e6);
             if (u < 0) {
                 tLat = sLat;
                 tLng = sLng;
