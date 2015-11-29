@@ -220,7 +220,7 @@ public class AdminTools {
             rs2.first();
             int cnt2=rs2.getInt("cnt");
             int distance = (int) MyUtils.distVincenty(aLat, aLng, tLat, tLng);
-            if (distance < 200 && cnt1==1 && cnt2==1) {
+            if (distance < 50 && cnt1 == 1 && cnt2 == 1) {
                 //Для каждого каравана рядом с засадой удалить маршрут
                 stmt2 = con.prepareStatement("delete from routes where guid=?");
                 stmt2.setString(1, rs.getString("route"));
@@ -245,10 +245,10 @@ public class AdminTools {
                 stmt2.setInt(2, tLat);
                 stmt2.setInt(3, tLng);
                 stmt2.setString(4, GUID_ROUTE);
-                stmt2.setString(1, w2GUID);
-                stmt2.setInt(2, eLat);
-                stmt2.setInt(3, eLng);
-                stmt2.setString(4, GUID_ROUTE);
+                stmt2.setString(5, w2GUID);
+                stmt2.setInt(6, eLat);
+                stmt2.setInt(7, eLng);
+                stmt2.setString(8, GUID_ROUTE);
                 stmt2.execute();
                 //Указать в качестве конечной точки домашний город владельца засады
                 stmt2 = con.prepareStatement("update caravan set  EndPoint=?, Owner=?, stealed=\"R\",Lat=?,Lng=?,spdLat=?,spdLng=?,route=? where guid=?");
