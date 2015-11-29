@@ -282,12 +282,7 @@ public class AdminTools {
             Connection con;
             con = DBUtils.ConnectDB();
             PreparedStatement stmt;
-            stmt = con.prepareStatement("select Lat,Lng,CITYNAME from service.cities");
-            ResultSet rs = stmt.executeQuery();
-            rs.beforeFirst();
-            while (rs.next()) {
-                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/city.png');\n";
-            }
+            ResultSet rs;
             stmt = con.prepareStatement("SELECT a.Lat, a.Lng, CONCAT( c1.CITYNAME,  ' - ', c2.CITYNAME ) AS CITYNAME\n" +
                     "FROM cities c1, cities c2, caravan a\n" +
                     "WHERE a.startpoint = c1.guid\n" +
@@ -298,6 +293,13 @@ public class AdminTools {
             while (rs.next()) {
                 result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/caravan.png');\n";
             }
+            stmt = con.prepareStatement("select Lat,Lng,CITYNAME from service.cities");
+            rs = stmt.executeQuery();
+            rs.beforeFirst();
+            while (rs.next()) {
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/city.png');\n";
+            }
+
             stmt.close();
             con.commit();
             con.close();
