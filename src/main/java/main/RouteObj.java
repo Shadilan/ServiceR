@@ -315,7 +315,7 @@ public class RouteObj implements GameObject {
 			int lng2 = rs.getInt("lng2");
 			String start = rs.getString("start");
 			String finish = rs.getString("finish");
-			double k = MyUtils.distVincenty(lat1, lng1, lat2, lng2) / 166666;
+			double k = MyUtils.distVincenty(lat1, lng1, lat2, lng2) / 1666;
 			int spdLat = (int) ((lat2 - lat1) / k);
 			int spdLng = (int) ((lng2 - lng1) / k);
 			String caravan = UUID.randomUUID().toString();

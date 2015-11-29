@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -12,7 +13,7 @@ import java.util.UUID;
  * @author Zlodiak
  */
 public class AdminTools {
-    public static int speed = 16666;
+    public static int speed = 1666;
     final Runnable task = new Runnable() {
         public void run() {
             String Step = "";
@@ -32,7 +33,7 @@ public class AdminTools {
                     DoCaravanInAmbush(con);
                 } catch (Exception e) {
                     stmt = con.prepareStatement("update PROCESS_CONTROL set last_error=? where PROCESS_NAME='MAIN'");
-                    stmt.setString(1, Step + ":" + e.toString());
+                    stmt.setString(1, Step + ":" + e.toString() + '\n' + Arrays.toString(e.getStackTrace()));
                     stmt.execute();
                 }
                 //Проверить есть ли караваны рядом с засадами
