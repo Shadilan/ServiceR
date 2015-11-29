@@ -211,6 +211,7 @@ public class AdminTools {
             stmt2 = con.prepareStatement("select count(1) cnt from caravan where guid=? and stealed!='R'");
             stmt2.setString(1,rs.getString("cGUID"));
             ResultSet rs2=stmt2.executeQuery();
+            rs2.first();
             int cnt1=rs2.getInt("cnt");
             stmt2=con.prepareStatement("select count(1) cnt from trap where guid=?");
             stmt2.setString(1,rs.getString("aGUID"));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Ошибка при перемещении каравана">
+    <list default="true" id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Корректировка имени таблицы caravans-caravan">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" afterPath="$PROJECT_DIR$/src/main/java/main/AdminTools.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -79,8 +79,8 @@
       <file leaf-file-name="AdminTools.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9326733">
-              <caret line="242" column="38" selection-start-line="242" selection-start-column="38" selection-end-line="242" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.46138614">
+              <caret line="213" column="24" selection-start-line="213" selection-start-column="24" selection-end-line="213" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -543,12 +543,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00032" summary="City_map&#10;">
-      <created>1446479441305</created>
-      <option name="number" value="00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1446479441305</updated>
-    </task>
     <task id="LOCAL-00033" summary="City_map&#10;">
       <created>1446479587235</created>
       <option name="number" value="00033" />
@@ -837,7 +831,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448790363451</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="Корректировка имени таблицы caravans-caravan">
+      <created>1448793953869</created>
+      <option name="number" value="00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1448793953869</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -905,7 +905,8 @@
     <MESSAGE value="Ошибка при создании каравана. Использовался не гуид маршрута а гуид точки." />
     <MESSAGE value="Корректировка проверки засады, точка получения засады получалась без учета 1e6" />
     <MESSAGE value="Ошибка при перемещении каравана" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ошибка при перемещении каравана" />
+    <MESSAGE value="Корректировка имени таблицы caravans-caravan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Корректировка имени таблицы caravans-caravan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1281,8 +1282,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/AdminTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9326733">
-          <caret line="242" column="38" selection-start-line="242" selection-start-column="38" selection-end-line="242" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.46138614">
+          <caret line="213" column="24" selection-start-line="213" selection-start-column="24" selection-end-line="213" selection-end-column="24" />
           <folding />
         </state>
       </provider>
