@@ -208,7 +208,7 @@ public class AdminTools {
             }
             PreparedStatement stmt2;
             //Проверяем что караван не угнан и засада все еще стоит.
-            stmt2=con.prepareStatement("select count(1) cnt from caravans where guid=? and stealed!='R'");
+            stmt2 = con.prepareStatement("select count(1) cnt from caravan where guid=? and stealed!='R'");
             stmt2.setString(1,rs.getString("cGUID"));
             ResultSet rs2=stmt2.executeQuery();
             int cnt1=rs2.getInt("cnt");
