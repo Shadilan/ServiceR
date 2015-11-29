@@ -214,7 +214,7 @@ public class AdminTools {
             ResultSet rs2=stmt2.executeQuery();
             rs2.first();
             int cnt1=rs2.getInt("cnt");
-            stmt2=con.prepareStatement("select count(1) cnt from trap where guid=?");
+            stmt2 = con.prepareStatement("select count(1) cnt from traps where guid=?");
             stmt2.setString(1,rs.getString("aGUID"));
             rs2=stmt2.executeQuery();
             int cnt2=rs2.getInt("cnt");
