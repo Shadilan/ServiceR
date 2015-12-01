@@ -54,10 +54,10 @@ public class SpiritProto {
             }
 
         } catch (SQLException e) {
-            return MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+            result = MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
 
         } catch (NamingException e) {
-            return MyUtils.getJSONError("ResourceError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+            result = MyUtils.getJSONError("ResourceError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
 
 		}
         if (result.equals("")) return "{Token:" + '"' + Token + '"' + "}";
@@ -81,7 +81,7 @@ public class SpiritProto {
             player.GetDBDataByToken(con, token);
             if (!player.isLogin()){
                 con.close();
-                MyUtils.getJSONError("AccessDenied","We dont know you.");
+                result = MyUtils.getJSONError("AccessDenied", "We dont know you.");
             }
             else {
                 player.setPos(Lat, Lng);
