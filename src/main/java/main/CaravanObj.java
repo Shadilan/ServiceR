@@ -19,6 +19,8 @@ public class CaravanObj implements GameObject {
     private String Finish;
     private int Lat;
 	private int Lng;
+    private int OldLat;
+    private int OldLng;
     private String LastError;
     /**
      * Constructor
@@ -143,44 +145,102 @@ public class CaravanObj implements GameObject {
         double SpeedLng = (TargetCity.GetLng() - Lng) / cnt;
         //Изменить Положение
         if (Math.abs(cnt) < 1) {
-            SpeedLat = (TargetCity.GetLat() - Lat);
-            SpeedLng = (TargetCity.GetLng() - Lng);
+            CityObj StartCity = new CityObj(con, Start);
+            StartCity.addGold(getGoldAmount() / 3);
+            TargetCity.addGold(getGoldAmount() / 3);
+            PlayerObj player = new PlayerObj(con, PGUID);
+            StartCity.SetDBData(con);
+            TargetCity.SetDBData(con);
+            player.SetDBData(con);
+            Lat = TargetCity.GetLat();
+            Lng = TargetCity.GetLng();
+            String Swap = Finish;
+            Finish = Start;
+            Start = Swap;
+            SetDBData(con);
+            //Начислить деньги городу старта
+            //Начислить деньги городу конца
+            //Начислить деньги герою
+            //Установить текущую позицию в позицию города
+            //Поменять точку начала и точку конца местами.
+        } else {
+            OldLat = Lat;
+            OldLng = Lng;
+            Lat += SpeedLat;
+            Lng += SpeedLng;
         }
-        Lat += SpeedLat;
-        Lng += SpeedLng;
     }
 
-    public boolean CheckAmbush() {
+    public boolean CheckAmbush(Connection con) throws SQLException {
         //Проверить наличие засады в радиусе
         //Отобрать все засады в квадрате10000 от X и Y
-        //Для каждой найденной засады.
-        //Загрузить засаду
-        //Проверить пересекает ли прамая радиус засады
-        //Если пересекает то сохранить засады и выйти из цикла
-        //Если есть найденная засада
-        //Загрузить игрок влаедльца засады
-        //Начислить деньги владельцу
-        //Удалить караван
-        //Удалить засаду
-        //Вернуть засаду к доступным засадам игрока.
-        //Вернуть True
+        int Lim = 10000;
+        int LatS = Lat - Lim;
+        int LatF = Lat + Lim;
+        int LngS = Lng - Lim;
+        int LngF = Lng + Lim;
+        AmbushObj LocateAmbush = null;
+        PreparedStatement stmt;
+        stmt = con.prepareStatement("select GUID\n" +
+                "FROM GameObjects b\n" +
+                "where b.Lat BETWEEN ? and ?\n" +
+                "and b.Lng BETWEEN ? and ?\n" +
+                "and Type='AMBUSH'");
+        stmt.setInt(1, LatS);
+        stmt.setInt(2, LatF);
+        stmt.setInt(3, LngS);
+        stmt.setInt(4, LngF);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.isBeforeFirst()) {
+            while (rs.next()) {
+                //Для каждой найденной засады.
+                //Загрузить засаду
+                String AmbushGUID = rs.getString("GUID");
+                AmbushObj Ambush = new AmbushObj(con, AmbushGUID);
+                if (MyUtils.commonSectionCircle(OldLat, OldLng, Lat, Lng, Ambush.getLat(), Ambush.getLng(), Ambush.getDistance())) {
+                    LocateAmbush = Ambush;
+                    break;
+                    //Проверить пересекает ли прамая радиус засады
+                    //Если пересекает то сохранить засады и выйти из цикла
+                }
+
+                //Если есть найденная засада
+            }
+        }
+        if (LocateAmbush != null) {
+            //Загрузить игрок влаедльца засады
+            PlayerObj player = new PlayerObj(con, LocateAmbush.getOwner());
+            //Начислить деньги владельцу
+            player.addGold(getGoldAmount() / 3);
+            player.SetDBData(con);
+            //Удалить караван
+            this.Remove();
+            //Удалить засаду
+            LocateAmbush.Remove();
+            //Вернуть True
+            return true;
+        }
         //Если нет засады вернуть FALSE
         return false;
     }
 
-    public boolean CheckCity() {
-        //Проверить достижение караваном города
-        //Загрузить целевой город
-        //Определить растояние до города
-        //Если растояние меньше скорости то
-        //Расчитать награду
-        //Начислить деньги городу старта
-        //Начислить деньги городу конца
-        //Начислить деньги герою
-        //Установить текущую позицию в позицию города
-        //Поменять точку начала и точку конца местами.
-        return false;
+    /**
+     * Удалить караван из базы
+     * todo:Реализовать удаление
+     */
+    public void Remove() {
+
     }
+
+    /**
+     * Сколько стоит караван.
+     *
+     * @return возвращает сумму.
+     */
+    public int getGoldAmount() {
+        return 0;
+    }
+
 
 
 }

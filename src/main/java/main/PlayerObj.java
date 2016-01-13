@@ -26,7 +26,6 @@ public class PlayerObj implements GameObject {
 	public PlayerObj() {
 
 	}
-
 	/**
 	 * Load data from DB by GUID
 	 * @param con DB Connection
@@ -39,6 +38,9 @@ public class PlayerObj implements GameObject {
             GetDBData(con, GUID);
     }
 
+	public void addGold(int Gold) {
+		this.Gold += Gold;
+	}
 
     public String GetGUID() {
         return GUID;

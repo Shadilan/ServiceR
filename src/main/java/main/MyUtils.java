@@ -69,6 +69,46 @@ public class MyUtils {
 
 
 	}
+
+	/**
+	 * Пересечение отрезка и окружности
+	 *
+	 * @param x1 Начало отрезка
+	 * @param y1 Начало отрезка
+	 * @param x2 Конец отрезка
+	 * @param y2 Конец отрезка
+	 * @param xC Центр Окружности
+	 * @param yC Центр Окружности
+	 * @param R  Радиус окружности
+	 * @return true если пересекает
+	 * <p/>
+	 * todo: Доделать для сферических координат координат.
+	 */
+	public static boolean commonSectionCircle(double x1, double y1, double x2, double y2,
+											  double xC, double yC, double R) {
+		x1 -= xC;
+		y1 -= yC;
+		x2 -= xC;
+		y2 -= yC;
+
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+
+		//составляем коэффициенты квадратного уравнения на пересечение прямой и окружности.
+		//если на отрезке [0..1] есть отрицательные значения, значит отрезок пересекает окружность
+		double a = dx * dx + dy * dy;
+		double b = 2. * (x1 * dx + y1 * dy);
+		double c = x1 * x1 + y1 * y1 - R * R;
+
+		//а теперь проверяем, есть ли на отрезке [0..1] решения
+		if (-b < 0)
+			return (c < 0);
+		if (-b < (2. * a))
+			return ((4. * a * c - b * b) < 0);
+
+		return (a + b + c < 0);
+	}
+
 	public static ArrayList<Point> createCitiesOnMap(int width, int height, int citycount)
 	{
 		ArrayList<Point> cityarr = new ArrayList<>();
