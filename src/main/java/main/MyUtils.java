@@ -25,9 +25,9 @@ public class MyUtils {
 
 	public static double distVincentyOld(double lat1, double lon1, double lat2, double lon2) {
 		double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
-	    double L = Math.toRadians(lon2 - lon1);
-	    double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat1)));
-	    double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat2)));
+		double L = Math.toRadians(lon2 - lon1);
+		double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat1)));
+		double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat2)));
 	    double sinU1 = Math.sin(U1), cosU1 = Math.cos(U1);
 	    double sinU2 = Math.sin(U2), cosU2 = Math.cos(U2);
 
