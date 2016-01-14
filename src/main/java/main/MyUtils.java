@@ -11,13 +11,20 @@ public class MyUtils {
 	/**
 	 * Count distance in meters
 	 * @param lat1 Latitude of start point
-	 * @param lon1 Longtitude of start point
+	 * @param lng1 Longtitude of start point
 	 * @param lat2 Latitude of end point
-	 * @param lon2 Longtitude of end point
+	 * @param lng2 Longtitude of end point
 	 * @return Distance in meters
 	 */
-	public static double distVincenty(double lat1, double lon1, double lat2, double lon2) {
-	    double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
+	public static double distVincenty(double lat1, double lng1, double lat2, double lng2) {
+		double result = Math.round(6378137 * Math.acos(Math.cos(lat1 / 1e6 * Math.PI / 180) *
+				Math.cos(lat2 / 1e6 * Math.PI / 180) * Math.cos(lng1 / 1e6 * Math.PI / 180 - lng2 / 1e6 * Math.PI / 180) +
+				Math.sin(lat1 / 1e6 * Math.PI / 180) * Math.sin(lat2 / 1e6 * Math.PI / 180)));
+		return result;
+	}
+
+	public static double distVincentyOld(double lat1, double lon1, double lat2, double lon2) {
+		double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
 	    double L = Math.toRadians(lon2 - lon1);
 	    double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat1)));
 	    double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat2)));

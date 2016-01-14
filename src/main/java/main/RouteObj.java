@@ -324,7 +324,7 @@ public class RouteObj implements GameObject {
 					"Values(?,?,?,?,?,?,?,?,?)");
 			stmt.setString(1, caravan);
 			stmt.setString(2, Owner);
-			stmt.setString(3, GUID);
+			stmt.setString(3, Route);
 			stmt.setString(4, start);
 			stmt.setString(5, finish);
 			stmt.setInt(6, lat1);
@@ -397,17 +397,14 @@ public class RouteObj implements GameObject {
 		PreparedStatement stmt;
 		try {
 			Connection con = DBUtils.ConnectDB();
-			stmt = con.prepareStatement("delete from routes where GUID=?");
-			stmt.setString(1, GUID);
-			stmt.execute();
-			stmt = con.prepareStatement("delete from aobject where GUID=?");
-			stmt.setString(1, GUID);
-			stmt.execute();
 			//Shadilan: Удаляем караваны при удалении маршрута.
 			stmt = con.prepareStatement("delete from aobject where GUID=(select guid from caravan where route=?)");
 			stmt.setString(1, GUID);
 			stmt.execute();
-			stmt = con.prepareStatement("delete from caravan where GUID=?");
+			stmt = con.prepareStatement("delete from caravan where route=?");
+			stmt.setString(1, GUID);
+			stmt.execute();
+			stmt = con.prepareStatement("delete from routes where GUID=?");
 			stmt.setString(1, GUID);
 			stmt.execute();
 			con.commit();
