@@ -15,53 +15,79 @@ public class AmbushObj implements GameObject {
     private String Owner;
     private int Lat;
     private int Lng;
-
-    public String getGUID() {
-        return GUID;
-    }
+    private int Radius;
 
     public AmbushObj(String Owner, int lat, int lng) {
         GUID = UUID.randomUUID().toString();
         Lat = lat;
         Lng = lng;
         this.Owner = Owner;
+        Radius = 20;
     }
 
     public AmbushObj(Connection con, String GUID) throws SQLException {
         GetDBData(con, GUID);
     }
 
-    public AmbushObj()  {
+    public AmbushObj() {
+
+    }
+
+    public int getLat() {
+        return Lat;
+    }
+
+    public int getLng() {
+        return Lng;
+    }
+
+    public String getOwner() {
+        return Owner;
+    }
+
+    public int getDistance() {
+        return Radius;
+    }
+
+    public String getGUID() {
+        return GUID;
+    }
+
+    /**
+     * Удалить засаду из базы.
+     * todo:Реализовать удаление
+     */
+    public void Remove() {
 
     }
 
     @Override
     public void GetDBData(Connection con, String GUID) throws SQLException {
-        PreparedStatement stmt = con.prepareStatement("select GUID,Owner,Lat,Lng from traps where GUID=?");
+        PreparedStatement stmt = con.prepareStatement("select a.GUID,a.PGUID,a.Radius, b.Lat,b.Lng from Ambushes a,GameObjects b where a.GUID=? and a.GUID=b.GUID");
         stmt.setString(1, GUID);
         ResultSet rs = stmt.executeQuery();
         rs.beforeFirst();
         if (rs.isBeforeFirst()) {
             rs.next();
             this.GUID = rs.getString("GUID");
-            Owner = rs.getString("Owner");
+            Owner = rs.getString("PGUID");
+            Radius = rs.getInt("Radius");
             Lat = rs.getInt("Lat");
             Lng = rs.getInt("Lng");
         }
+
         stmt.close();
     }
 
     @Override
     public void SetDBData(Connection con) throws SQLException {
-        PreparedStatement stmt = con.prepareStatement("insert ignore into traps(GUID,Owner,Lat,Lng) VALUES(?,?,?,?)");
+        PreparedStatement stmt = con.prepareStatement("insert ignore into traps(GUID,PGUID,Radius) VALUES(?,?,?)");
         stmt.setString(1, GUID);
         stmt.setString(2, Owner);
-        stmt.setInt(3, Lat);
-        stmt.setInt(4, Lng);
+        stmt.setInt(3, Radius);
         stmt.execute();
-        stmt = con.prepareStatement("insert ignore into aobject(GUID,Lat,Lng,ObjectType) VALUES(?,?,?,'AMBUSH')");
+        stmt = con.prepareStatement("insert ignore into GameObjects(GUID,Lat,Lng,Type) VALUES(?,?,?,'AMBUSH')");
         stmt.setString(1, GUID);
-        stmt.setString(2, Owner);
         stmt.setInt(3, Lat);
         stmt.setInt(4, Lng);
         stmt.execute();

@@ -136,6 +136,13 @@ public class CityObj implements GameObject {
 
 	}
 
+	/**
+	 * Добавление денег городу
+	 *
+	 * @param Gold todo:Доработать метод.
+	 */
+	public void addGold(int Gold) {
 
+	}
 
 }
