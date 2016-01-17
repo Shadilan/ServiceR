@@ -39,15 +39,17 @@ public class Ambush {
                     query.setInt(3, Radius);
                     query.execute();
                     con.commit();
-                    Server.SendData()
+                    //Server.SendData();
                 } catch (SQLException e) {
                     result = MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
             } else {
                 //return FALSE, not enough ambushes
+                //Server.SendData();
             }
         } else {
             //return FALSE, too far
+            //Server.SendData();
         }
     }
 
