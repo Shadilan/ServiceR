@@ -7,11 +7,11 @@ public class Caravan {
     public Caravan() {
     }
 
-    public static void StartRoute(String PGUID, String CGUID, int PLAT, int PLNG) {
+    public static void StartRoute(String PGUID, String CGUID, double PLAT, double PLNG) {
         //check range to city, start route
     }
 
-    public static void FinishRoute(String PGUID, String CGUID, int PLAT, int PLNG) {
+    public static void FinishRoute(String PGUID, String CGUID, double PLAT, double PLNG) {
         //check range to city, finish route
     }
 

@@ -1,24 +1,40 @@
 package main;
 
+import javax.naming.NamingException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Arrays;
+
 /**
  * Created by Well on 17.01.2016.
  */
 public class Client {
+    String result = "";
+    Connection con = null;
     public Client() {
         //create connection to DB
+        try {
+            con = DBUtils.ConnectDB();
+        } catch (SQLException e) {
+            result = MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+        } catch (NamingException e) {
+            result = MyUtils.getJSONError("ResourceError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+        }
+        if (!result.equals("")) result = "No access to DB: " + result;
     }
 
-    public void sendData(String ACTION, String PGUID, int PLAT, int PLNG) {
+    public void sendData(String ACTION, String PGUID, double PLAT, double PLNG) {
         //It's ScanRange
-        Server.ScanRange(PGUID, PLAT, PLNG);
+        if (result.equals("")) Server.ScanRange(PGUID, PLAT, PLNG, con);
+        //else Server.SendData(..)
     }
 
-    public void sendData(String ACTION, String PGUID, int PLAT, int PLNG, int LAT, int LNG) {
+    public void sendData(String ACTION, String PGUID, double PLAT, double PLNG, double LAT, double LNG) {
         //It's SetAmbush
-        Ambush.Set(PGUID, PLAT, PLNG, LAT, LNG);
+        Ambush.Set(PGUID, PLAT, PLNG, LAT, LNG, con);
     }
 
-    public void sendData(String ACTION, String PGUID, String TGUID, int PLAT, int PLNG) {
+    public void sendData(String ACTION, String PGUID, String TGUID, double PLAT, double PLNG) {
         //It's DestroyAmbush or StartRoute or FinishRoute or BuyUpgrade
         switch (ACTION) {
             case "DestroyAmbush":
