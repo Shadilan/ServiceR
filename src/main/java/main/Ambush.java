@@ -53,7 +53,7 @@ public class Ambush {
         }
     }
 
-    public static void Destroy(String PGUID, String AGUID, double PLAT, double PLNG) {
+    public static void Destroy(String PGUID, String AGUID, double PLAT, double PLNG, Connection con) {
         //do range check,
     }
 }

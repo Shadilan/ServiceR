@@ -10,15 +10,17 @@ import java.util.Arrays;
  * Created by Well on 17.01.2016.
  */
 public class Player {
+    String LastError;
+    String GUID = "";
     public Player() {
 
     }
 
-    public static void BuyUpgrade(String PGUID, String CGUID, double PLAT, double PLNG) {
+    public static void BuyUpgrade(String PGUID, String CGUID, double PLAT, double PLNG, Connection con) {
         //range check, coins check, db changes, return result
     }
 
-    public static void GetPlayerInfo(String PGUID) {
+    public static void GetPlayerInfo(String PGUID, Connection con) {
         //
     }
 
@@ -46,4 +48,47 @@ public class Player {
         }
         return ret;
     }
+
+    public static void ScanRange(String PGUID, double PLAT, double PLNG, Connection con) {
+        PreparedStatement query;
+     /*   query = con.prepareStatement("select GUID,Lat,Lng,Type from GameObjects where ");
+        query.setString(1, Token);
+        ResultSet rs = query.executeQuery();
+        if (rs.isBeforeFirst()) {
+            rs.first();
+            GUID = rs.getString("PGUID");
+            query.close();
+            return GUID;
+        } else {
+            query.close();
+            LastError = "Error: NOUSERFOUND (" + Token + ")";
+            return LastError;
+        }*/
+    }
+
+    public String GetGUIDByToken(Connection con, String Token) throws SQLException {
+        PreparedStatement query;
+        query = con.prepareStatement("select PGUID from Connection where Token=? limit 1");
+        query.setString(1, Token);
+        ResultSet rs = query.executeQuery();
+        if (rs.isBeforeFirst()) {
+            rs.first();
+            GUID = rs.getString("PGUID");
+            query.close();
+            return GUID;
+        } else {
+            query.close();
+            LastError = "Error: NOUSERFOUND (" + Token + ")";
+            return LastError;
+        }
+    }
+
+    public String GetGUID() {
+        return GUID;
+    }
+
+    public String getLastError() {
+        return LastError;
+    }
+
 }

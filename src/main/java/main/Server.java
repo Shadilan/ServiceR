@@ -1,17 +1,11 @@
 package main;
 
-import java.sql.Connection;
-
 /**
  * Created by Well on 17.01.2016.
  */
 public class Server {
     public Server() {
 
-    }
-
-    public static void ScanRange(String PGUID, double PLAT, double PLNG, Connection con) {
-        //select info from base
     }
 
     public static double RangeCheck(double PLAT, double PLNG, double LAT, double LNG) {
