@@ -14,8 +14,8 @@ double PLNG=Double.parseDouble(PLngS);
 double LAT=Double.parseDouble(LatS);
 double LNG=Double.parseDouble(LngS);
 Client client=new Client();
-Player player=new Player(client.getCon());
-String PGUID=player.getGUIDByToken(con,token);
+Player player=new Player(client.getCon(), token);
+String PGUID=player.getGUID();
 String result = Client.SendData(nvl(ReqName,""),nvl(PGUID,""),nvl(TGUID,""),nvl(PLAT,100),nvl(PLNG,200),nvl(LAT,100),nvl(LNG,200));
 %>
 <%=result%>
