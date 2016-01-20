@@ -1,14 +1,13 @@
 package main;
 
-import javax.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
 
 /**
  * Created by Well on 17.01.2016.
@@ -88,7 +87,8 @@ public class Player {
     public static void ScanRange(String PGUID, double PLAT, double PLNG, Connection con) {
         PreparedStatement query;
         String GUID, Type, Lat, Lng, Result;
-        JSONObject obj = new JSONObject();
+        JSONObject json = new JSONObject();
+        JSONArray jarr = new JSONArray();
 
         try {
             query = con.prepareStatement("select GUID,Lat,Lng,Type from GameObjects where abs(Lat-?)<10000 and abs(Lng-?)<10000");
