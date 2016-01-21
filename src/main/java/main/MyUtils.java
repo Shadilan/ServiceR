@@ -11,16 +11,23 @@ public class MyUtils {
 	/**
 	 * Count distance in meters
 	 * @param lat1 Latitude of start point
-	 * @param lon1 Longtitude of start point
+	 * @param lng1 Longtitude of start point
 	 * @param lat2 Latitude of end point
-	 * @param lon2 Longtitude of end point
+	 * @param lng2 Longtitude of end point
 	 * @return Distance in meters
 	 */
-	public static double distVincenty(double lat1, double lon1, double lat2, double lon2) {
-	    double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
-	    double L = Math.toRadians(lon2 - lon1);
-	    double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat1)));
-	    double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat2)));
+	public static double distVincenty(double lat1, double lng1, double lat2, double lng2) {
+		double result = Math.round(6378137 * Math.acos(Math.cos(lat1 / 1e6 * Math.PI / 180) *
+				Math.cos(lat2 / 1e6 * Math.PI / 180) * Math.cos(lng1 / 1e6 * Math.PI / 180 - lng2 / 1e6 * Math.PI / 180) +
+				Math.sin(lat1 / 1e6 * Math.PI / 180) * Math.sin(lat2 / 1e6 * Math.PI / 180)));
+		return result;
+	}
+
+	public static double distVincentyOld(double lat1, double lon1, double lat2, double lon2) {
+		double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
+		double L = Math.toRadians(lon2 - lon1);
+		double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat1)));
+		double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(lat2)));
 	    double sinU1 = Math.sin(U1), cosU1 = Math.cos(U1);
 	    double sinU2 = Math.sin(U2), cosU2 = Math.cos(U2);
 
@@ -62,19 +69,68 @@ public class MyUtils {
 
 
 	}
+
+	/**
+	 * Пересечение отрезка и окружности
+	 *
+	 * @param x1 Начало отрезка
+	 * @param y1 Начало отрезка
+	 * @param x2 Конец отрезка
+	 * @param y2 Конец отрезка
+	 * @param xC Центр Окружности
+	 * @param yC Центр Окружности
+	 * @param R  Радиус окружности
+	 * @return true если пересекает
+	 * <p/>
+	 * todo: Доделать для сферических координат координат.
+	 */
+	public static boolean commonSectionCircle(double x1, double y1, double x2, double y2,
+											  double xC, double yC, double R) {
+		x1 -= xC;
+		y1 -= yC;
+		x2 -= xC;
+		y2 -= yC;
+
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+
+		//составляем коэффициенты квадратного уравнения на пересечение прямой и окружности.
+		//если на отрезке [0..1] есть отрицательные значения, значит отрезок пересекает окружность
+		double a = dx * dx + dy * dy;
+		double b = 2. * (x1 * dx + y1 * dy);
+		double c = x1 * x1 + y1 * y1 - R * R;
+
+		//а теперь проверяем, есть ли на отрезке [0..1] решения
+		if (-b < 0)
+			return (c < 0);
+		if (-b < (2. * a))
+			return ((4. * a * c - b * b) < 0);
+
+		return (a + b + c < 0);
+	}
+
 	public static ArrayList<Point> createCitiesOnMap(int width, int height, int citycount)
 	{
 		ArrayList<Point> cityarr = new ArrayList<>();
 
 		double i;
 		double j;
-		double size_square=Math.sqrt((width*height)/citycount);
-		for (i=0;i<width;i+=size_square)
-			for (j=0;j<height;j+=size_square)
+		//double size_square=Math.sqrt((width*height)/citycount);
+		double size_i = width / Math.sqrt(citycount);
+		double size_j = height / Math.sqrt(citycount);
+		for (i = 0; i < width; i += size_i)
+			for (j = 0; j < height; j += size_j)
 			{
-				cityarr.add(new Point ((int) (Math.random()*size_square+i), (int) (Math.random()*size_square+j)));
+				cityarr.add(new Point((int) (Math.random() * size_i + i), (int) (Math.random() * size_j + j)));
 
 			}
 		return cityarr;
+	}
+
+    public static String getJSONError(String errortype, String errormessage) {
+        return "{Result:" + '"' + "Error" + '"' + ",Code:" + '"' + errortype + '"' + ",Message:" + '"' + errormessage + '"' + "}";
+    }
+	public static String getJSONSuccess(String message) {
+		return "{Result:" + '"' + "Success" + '"' + ",Message:" + '"' + message + '"' + "}";
 	}
 }

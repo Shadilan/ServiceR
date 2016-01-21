@@ -11,7 +11,6 @@ import java.util.UUID;
  */
 public class CityObj implements GameObject {
 	private String GUID;
-	private String Owner;
 	private String CityName;
 	private int Lat;
 	private int Lng;
@@ -23,9 +22,8 @@ public class CityObj implements GameObject {
 	 * @param lat Latitude of City
 	 * @param lng Longtitude of City
 	 */
-	public CityObj(String owner,int lat,int lng){
+	public CityObj(String owner, int lat, int lng) {
 		GUID=UUID.randomUUID().toString();
-		Owner=owner;
 		Lat=lat;
 		Lng=lng;
 	}
@@ -48,9 +46,6 @@ public class CityObj implements GameObject {
 		return GUID;
 	}
 
-	public String GetOwner() {
-		return this.Owner;
-	}
 
 	public int GetLat() {
 		return Lat;
@@ -73,16 +68,19 @@ public class CityObj implements GameObject {
 	public void GetDBData(Connection con, String GUID) throws SQLException {
 		PreparedStatement stmt;
 
-			stmt=con.prepareStatement("SELECT GUID,Owner,CITYNAME,Lat,Lng from cities WHERE GUID=? LIMIT 0,1");
+		stmt = con.prepareStatement("SELECT GUID,CITYNAME,Lat,Lng from cities WHERE GUID=?");
 			stmt.setString(1, GUID);
 			ResultSet rs=stmt.executeQuery();
+		rs.beforeFirst();
+		if (rs.isBeforeFirst()) {
 			rs.first();
-			this.GUID=rs.getString("GUID");
-			Owner=rs.getString("Owner");
-			CityName=rs.getString("CITYNAME");
-			Lat=rs.getInt("Lat");
-			Lng=rs.getInt("Lng");
+
+			this.GUID = rs.getString("GUID");
+			CityName = rs.getString("CITYNAME");
+			Lat = rs.getInt("Lat");
+			Lng = rs.getInt("Lng");
 			stmt.close();
+		} else this.GUID = GUID;
 
 	}
 
@@ -94,7 +92,7 @@ public class CityObj implements GameObject {
 	public void SetDBData(Connection con) throws SQLException {
 		PreparedStatement stmt;
 
-		stmt=con.prepareStatement("INSERT IGNORE INTO cities(GUID,CITYNAME,Owner,Lat,Lng) VALUES ("
+		stmt = con.prepareStatement("INSERT IGNORE INTO cities(GUID,CITYNAME,Lat,Lng) VALUES ("
 					+ "?,"
 					+ "?,"
 					+ "?,"
@@ -103,9 +101,8 @@ public class CityObj implements GameObject {
 					+ ")");
 			stmt.setString(1, GUID);
 			stmt.setString(2, CityName);
-			stmt.setString(3, Owner);
-			stmt.setInt(4, Lat);
-			stmt.setInt(5, Lng);
+		stmt.setInt(3, Lat);
+		stmt.setInt(4, Lng);
 			stmt.execute();
 			stmt=con.prepareStatement("INSERT IGNORE INTO aobject(GUID,ObjectType,Lat,Lng) VALUES("
 					+ "?,"
@@ -132,7 +129,6 @@ public class CityObj implements GameObject {
 	public String toString(){
 		return"{"+
 				"GUID:"+'"'+GUID+'"'+
-				",Owner:"+'"'+Owner+'"'+
 				",CityName:"+'"'+CityName+'"'+
 				",Lat:"+Lat+
 				",Lng:"+Lng+
@@ -140,6 +136,13 @@ public class CityObj implements GameObject {
 
 	}
 
+	/**
+	 * Добавление денег городу
+	 *
+	 * @param Gold todo:Доработать метод.
+	 */
+	public void addGold(int Gold) {
 
+	}
 
 }

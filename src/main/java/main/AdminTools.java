@@ -1,12 +1,11 @@
 package main;
 
 import javax.naming.NamingException;
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -14,20 +13,38 @@ import java.util.UUID;
  * @author Zlodiak
  */
 public class AdminTools {
+    public static int speed = 1666;
     final Runnable task = new Runnable() {
         public void run() {
+            String Step = "";
             try {
                 Thread.sleep(60000);
                 Connection con;
                 con = DBUtils.ConnectDB();
                 PreparedStatement stmt;
+
+                //Передвинуть караваны
+                try {
+                    Step = "MoveCaravans";
+                    MoveCaravans(con);
+                    Step = "DoCaravanInCity";
+                    DoCaravanInCity(con);
+                    Step = "DoCaravanInAmbush";
+                    DoCaravanInAmbush(con);
+                } catch (Exception e) {
+                    stmt = con.prepareStatement("update PROCESS_CONTROL set last_error=? where PROCESS_NAME='MAIN'");
+                    stmt.setString(1, Step + ":" + e.toString() + '\n' + Arrays.toString(e.getStackTrace()));
+                    stmt.execute();
+                }
+                //Проверить есть ли караваны рядом с засадами
+                //Для каждого каравана рядом с засадой удалить маршрут
+                //Указать в качестве конечной точки домашний город владельца засады
+                //Удадить засаду.
                 stmt = con.prepareStatement("select count(1) as cnt from service.PROCESS_CONTROL where PROCESS_NAME='MAIN' and STOP_FLAG='Y'");
                 ResultSet rs = stmt.executeQuery();
                 rs.first();
                 if (rs.getInt("cnt") == 0) new Thread(task).start();
                 stmt.close();
-                CreateCaravans(con);
-                MoveCaravans(con);
                 stmt = con.prepareStatement("update service.PROCESS_CONTROL set LAST_RUN=NOW() where PROCESS_NAME='MAIN'");
                 stmt.execute();
                 con.commit();
@@ -88,107 +105,221 @@ public class AdminTools {
      *
      * @param con DB Connection
      */
-    public void MoveCaravans(Connection con) {
+    public void MoveCaravans(Connection con) throws SQLException {
         //Update all Caravans
         PreparedStatement stmt;
-        try {
-            stmt = con.prepareStatement("UPDATE caravan a, aobject b SET b.Lat = a.Lat + a.SpdLat, b.Lng = a.Lng + a.SpdLng, a.Lat = a.Lat + a.SpdLat, a.Lng = a.Lng + a.SpdLng");
+        stmt = con.prepareStatement("UPDATE caravan a, aobject b SET b.Lat = a.Lat + a.SpdLat, b.Lng = a.Lng + a.SpdLng, a.Lat = a.Lat + a.SpdLat, a.Lng = a.Lng + a.SpdLng where a.guid=b.guid");
             stmt.execute();
-            //Maybe do it in
-            stmt = con.prepareStatement("SELECT a.GUID " +
-                    "FROM caravan a, cities b " +
-                    "WHERE a.endpoint = b.guid " +
-                    "AND FLOOR( a.lat / ABS( a.SpdLat ) ) = FLOOR( b.lat / ABS( a.SpdLat ) )  " +
-                    "AND FLOOR( a.lng / ABS( a.SpdLng ) ) = FLOOR( b.lng / ABS( a.SpdLng ) ) ");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.isBeforeFirst()) {
-                while (rs.next()) {
-                    CaravanObj caravan = new CaravanObj(con, rs.getString("GUID"));
-                    PlayerObj player = new PlayerObj(con, caravan.GetOwner());
-                    player.SetGold(player.GetGold() + caravan.GetGold(con));
-                    player.SetDBData(con);
-                }
-            }
-            stmt.close();
-            //Check Cross with Ambush
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        //Check Cross with Cities
-
-
     }
-
-    /**
-     * Create new Caravans
-     *
-     * @param con Connection DB
-     */
-    public void CreateCaravans(Connection con) {
-        //Check All Routes with timeout
+    public void DoCaravanInCity(Connection con) throws SQLException {
         PreparedStatement stmt;
-        try {
-            stmt = con.prepareStatement("SELECT guid, owner\n" +
-                    "FROM route " +
-                    "WHERE NEXT < NOW( ) ");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.isBeforeFirst()) {
-                while (rs.next()) {
-                    RouteObj route = new RouteObj(con, rs.getString("GUID"));
-                    CaravanObj caravan = new CaravanObj(route);
-                    caravan.SetDBData(con);
-                    route.SetNext();
-                    route.SetDBData(con);
-                }
-            }
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //Проверить есть ли караваны рядом с конечными точками
+        //Для каждого каравана  рядом с конечной точкой начислить хозяину деньги,
+        //Для каждого каравана поменять начальную и конечную точку и умножить скорость на -1
+        String sql = "UPDATE gplayers gp,\n" +
+                "caravan c,\n" +
+                "cities t1,\n" +
+                "cities t2 SET gp.gold = gp.gold + ROUND( 6378137 * ACOS( COS( t1.lat/1e6 * PI( ) /180 ) * COS( t2.lat/1e6 * PI( ) /180 ) * COS( t1.lng/1e6 * PI( ) /180 - t2.lng/1e6 * PI( ) /180 ) + SIN( t1.lat/1e6 * PI( ) /180 ) * SIN( t2.lat/1e6 * PI( ) /180 ) ) /1000 ) ,\n" +
+                "c.endpoint = t1.guid,\n" +
+                "c.startpoint = t2.guid,\n" +
+                "c.spdLat = c.spdLat * -1,\n" +
+                "c.spdLng = c.spdLng * -1 WHERE gp.guid = c.owner AND c.startpoint = t1.guid AND c.endpoint = t2.guid AND c.guid IN (\n" +
+                "c.stealed=case when stealed='Y' then 'E' else setealed end" +
+                "SELECT GUID\n" +
+                "FROM (\n" +
+                "\n" +
+                "SELECT a1.GUID\n" +
+                "FROM caravan a1, cities b1\n" +
+                "WHERE a1.endpoint = b1.guid\n" +
+                "AND a1.lat\n" +
+                "BETWEEN b1.lat - ABS( a1.SpdLat ) \n" +
+                "AND b1.lat + ABS( a1.SpdLat ) \n" +
+                "AND a1.lng\n" +
+                "BETWEEN b1.lng - ABS( a1.SpdLng ) \n" +
+                "AND b1.lng + ABS( a1.SpdLng )\n" +
+                ")k )";
+        stmt=con.prepareStatement(sql);
+        stmt.execute();
+        //Удалить доехавшие караваны и маршруты.
+        //Точки
+        //В аобжект?
+        stmt = con.prepareStatement("delete from waypoints where route in (select route from caravan c where stealed='E')");
+        stmt.execute();
+        //Маршрут
+        stmt = con.prepareStatement("delete from routes where guid in (select route from caravan c where stealed='E')");
+        stmt.execute();
+        //Караван
+        stmt = con.prepareStatement("delete from aobject where guid in (select guid from caravan c where stealed='E')");
+        stmt.execute();
+        stmt = con.prepareStatement("delete from caravan c where stealed='E'");
+        stmt.execute();
     }
+    public void DoCaravanInAmbush(Connection con) throws SQLException {
+        PreparedStatement stmt;
+        //Проверить есть ли караваны рядом с засадами
 
-    /**
-     * @param x     Width
-     * @param y     Height
-     * @param count Count of cities
-     * @return Result of operation
-     */
-    public String GenCity(int x, int y, int count) {
-        //Remove all current city
-        try {
-            Connection con = DBUtils.ConnectDB();
-            PreparedStatement stmt;
-            stmt = con.prepareStatement("delete from cities");
-            stmt.execute();
-            stmt = con.prepareStatement("delete from aobject where ObjectType='CITY'");
-            stmt.execute();
-            ArrayList<Point> cities = MyUtils.createCitiesOnMap(x, y, count);
-            for (Point a : cities) {
-                String GUID = UUID.randomUUID().toString();
-                stmt = con.prepareStatement("INSERT INTO cities(GUID,Lat,Lng,CITYNAME)VALUES(?,?,?,'TEST')");
-                stmt.setString(1, GUID);
-                stmt.setInt(2, a.x);
-                stmt.setInt(3, a.y);
-                stmt.execute();
-                stmt = con.prepareStatement("INSERT INTO aobject(GUID,Lat,Lng,ObjectType)VALUES(?,?,?,'CITY')");
-                stmt.setString(1, GUID);
-                stmt.setInt(2, a.x);
-                stmt.setInt(3, a.y);
-                stmt.execute();
-                con.commit();
+        String sql;
+      /*sql="update caravan c, traps a,gplayers g,cities t\n" +
+              "set c.ENDPOINT = g.HomeCity,\n" +
+              "spdLat=(c.lat-t.lat)*(ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 )/1666),\n" +
+              "spdLng=(c.lng-t.lng)*(ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 )/1666),\n" +
+              "c.owner=g.guid,\n" +
+              "a.owner=''\n" +
+              "\n" +
+              "WHERE 1 =1\n" +
+              "AND ABS( a.lat - c.lat ) <1000\n" +
+              "AND ABS( a.lng - c.lng ) <1000\n" +
+              "AND ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 ) ) /1000 ) <1666\n" +
+              "AND ROUND( 6378137 * ACOS( COS( c.lat * PI( ) /180 - c.spdLat * PI( ) /180 ) * COS( a.lat * PI( ) /180 ) * COS( a.lng * PI( ) /180 - c.lng * PI( ) /180 + c.spdLng * PI( ) /180 ) + SIN( a.lat * PI( ) /180 ) * SIN( c.lat * PI( ) /180 - c.SpdLat * PI( ) /180 ) ) /1000 ) <1666\n" +
+              "and g.guid=a.owner\n" +
+              "and g.HomeCity=t.guid";*/
+        sql = "select c.route,\n" +
+                "\t   g.HomeCity,\n" +
+                "\t   c.lat clat,\n" +
+                "\t   t.lat tlat,\n" +
+                "\t   a.lat alat,\n" +
+                "\t   a.lng alng,\n" +
+                "\t   c.lng clng,\n" +
+                "\t   t.lng tlng,\n" +
+                "\t   c.spdLat,\n" +
+                "\t   c.spdLng, \n" +
+                "\t   g.GUID gGUID, \n" +
+                "\t   c.guid cGUID,\n" +
+                "\t   t.GUID tGUID,\n" +
+                "\t   a.GUID aGUID,\n" +
+                "       c.startpoint\n" +
+                "from caravan c, traps a,gplayers g,cities t\n" +
+                "WHERE 1 =1\n" +
+                "AND (ABS( a.lat - c.lat ) <ABS(c.spdLat) or ABS( a.lat - c.lat ) <ABS(c.spdLng))\n" +
+                "AND (ABS( a.lng - c.lng ) <ABS(c.spdLat) or ABS( a.lng - c.lng ) <ABS(c.spdLng))\n" +
+                "and g.guid=a.owner\n" +
+                "and g.HomeCity=t.guid\n" +
+                "and stealed!='R'";
+        stmt=con.prepareStatement(sql);
+        ResultSet rs=stmt.executeQuery();
+        rs.beforeFirst();
+        while (rs.next()) {
+            int dLat = rs.getInt("spdLat");
+            int dLng = rs.getInt("spdLng");
+            int sLat = rs.getInt("clat");
+            int sLng = rs.getInt("clng");
+            int aLat = rs.getInt("alat");
+            int aLng = rs.getInt("alng");
+            int eLat =rs.getInt("tLat");
+            int eLng=rs.getInt("tLng");
+            int tLat;
+            int tLng;
+            double u = ((aLat / 1e6 - sLat / 1e6) * dLat / 1e6 + (aLng / 1e6 - sLng / 1e6) * dLng / 1e6) /
+                    (dLat / 1e6 * dLat / 1e6 + dLng / 1e6 * dLng / 1e6);
+            if (u < 0) {
+                tLat = sLat;
+                tLng = sLng;
+            } else if (u > 1) {
+                tLat = sLat + dLat;
+                tLng = sLng + dLng;
+            } else {
+                tLat = (int) (sLat + dLat * u);
+                tLng = (int) (sLng + dLng * u);
             }
+            PreparedStatement stmt2;
+            //Проверяем что караван не угнан и засада все еще стоит.
+            stmt2 = con.prepareStatement("select count(1) cnt from caravan where guid=? and stealed!='R'");
+            stmt2.setString(1,rs.getString("cGUID"));
+            ResultSet rs2=stmt2.executeQuery();
+            rs2.first();
+            int cnt1=rs2.getInt("cnt");
+            stmt2 = con.prepareStatement("select count(1) cnt from traps where guid=?");
+            stmt2.setString(1,rs.getString("aGUID"));
+            rs2=stmt2.executeQuery();
+            rs2.first();
+            int cnt2=rs2.getInt("cnt");
+            int distance = (int) MyUtils.distVincenty(aLat, aLng, tLat, tLng);
+            if (distance < 50 && cnt1 == 1 && cnt2 == 1) {
+                //Для каждого каравана рядом с засадой удалить маршрут
+                stmt2 = con.prepareStatement("delete from routes where guid=?");
+                stmt2.setString(1, rs.getString("route"));
+                stmt2.execute();
+                //Удалить вэйпоинты
+                stmt2 = con.prepareStatement("delete from waypoints where route=?");
+                stmt2.setString(1, rs.getString("route"));
+                stmt2.execute();
+                //Создать маршрут
+                stmt2 = con.prepareStatement("insert into routes (guid,owner,start,finish) values(?,?,?,?)");
+                String GUID_ROUTE = UUID.randomUUID().toString();
+                stmt2.setString(1,GUID_ROUTE);
+                stmt2.setString(2, rs.getString("gGuid"));
+                stmt2.setString(3, rs.getString("startpoint"));
+                stmt2.setString(4, rs.getString("homecity"));
+                stmt2.execute();
+                //Создать Вэйпоинты
+                stmt2 = con.prepareStatement("insert into waypoints (guid,lat,lng,number,route) values(?,?,?,1,?),(?,?,?,2,?)");
+                String w1GUID = UUID.randomUUID().toString();
+                String w2GUID = UUID.randomUUID().toString();
+                stmt2.setString(1, w1GUID);
+                stmt2.setInt(2, tLat);
+                stmt2.setInt(3, tLng);
+                stmt2.setString(4, GUID_ROUTE);
+                stmt2.setString(5, w2GUID);
+                stmt2.setInt(6, eLat);
+                stmt2.setInt(7, eLng);
+                stmt2.setString(8, GUID_ROUTE);
+                stmt2.execute();
+                //Указать в качестве конечной точки домашний город владельца засады
+                stmt2 = con.prepareStatement("update caravan set  EndPoint=?, Owner=?, stealed=\"R\",Lat=?,Lng=?,spdLat=?,spdLng=?,route=? where guid=?");
+                stmt2.setString(1, rs.getString("HomeCity"));
+                stmt2.setString(2, rs.getString("gGuid"));
+                stmt2.setInt(3, tLat);
+                stmt2.setInt(4,tLng);
+                double k=MyUtils.distVincenty(tLat,tLng,eLat,eLng)/speed;
+                //Создать новый маршрут.
+                stmt2.setInt(5, (int) ((eLat - tLat) / k));
+                stmt2.setInt(6, (int) ((eLng - tLng) / k));
+                stmt2.setString(7, GUID_ROUTE);
+                stmt2.setString(8, rs.getString("cGuid"));
+                stmt2.execute();
+                //Удадить засаду.
+                stmt2 = con.prepareStatement("delete from traps where guid=?");
+                stmt2.setString(1, rs.getString("aGuid"));
+                stmt2.execute();
+                stmt2 = con.prepareStatement("delete from aobject where guid=?");
+                stmt2.setString(1, rs.getString("aGuid"));
+                stmt2.execute();
+            }
+        }
+        stmt=con.prepareStatement("update caravan set stealed='Y' where stealed='R'");
+        stmt.execute();
+
+    }
+    public String GenMap() {
+        String result = "";
+        try {
+            Connection con;
+            con = DBUtils.ConnectDB();
+            PreparedStatement stmt;
+            ResultSet rs;
+            stmt = con.prepareStatement("SELECT a.Lat, a.Lng, CONCAT( c1.CITYNAME,  ' - ', c2.CITYNAME ) AS CITYNAME\n" +
+                    "FROM cities c1, cities c2, caravan a\n" +
+                    "WHERE a.startpoint = c1.guid\n" +
+                    "AND a.endpoint = c2.guid\n" +
+                    "LIMIT 0 , 30");
+            rs = stmt.executeQuery();
+            rs.beforeFirst();
+            while (rs.next()) {
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/caravan.png');\n";
+            }
+            stmt = con.prepareStatement("select Lat,Lng,CITYNAME from service.cities");
+            rs = stmt.executeQuery();
+            rs.beforeFirst();
+            while (rs.next()) {
+                result += "create_marker(" + rs.getInt("Lat") + "," + rs.getInt("Lng") + ",\"" + rs.getString("CITYNAME") + "\",map,'images/city.png');\n";
+            }
+
+            stmt.close();
             con.commit();
             con.close();
-        } catch (SQLException e) {
+        } catch (SQLException | NamingException e) {
             e.printStackTrace();
-            return e.toString();
-        } catch (NamingException e) {
-            e.printStackTrace();
-            return e.toString();
         }
-        return "Success";
-        //Generate positions
-        //write to db
-
+        return result;
     }
 }
