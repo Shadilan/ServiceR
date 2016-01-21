@@ -16,7 +16,14 @@ public class MyUtils {
 	 * @param lng2 Longtitude of end point
 	 * @return Distance in meters
 	 */
-	public static double distVincenty(double lat1, double lng1, double lat2, double lng2) {
+	public static double distVincenty(int lat1, int lng1, int lat2, int lng2) {
+		double result = Math.round(6378137 * Math.acos(Math.cos(lat1 / 1e6 * Math.PI / 180) *
+				Math.cos(lat2 / 1e6 * Math.PI / 180) * Math.cos(lng1 / 1e6 * Math.PI / 180 - lng2 / 1e6 * Math.PI / 180) +
+				Math.sin(lat1 / 1e6 * Math.PI / 180) * Math.sin(lat2 / 1e6 * Math.PI / 180)));
+		return result;
+	}
+
+	public static double RangeCheck(int lat1, int lng1, int lat2, int lng2) {
 		double result = Math.round(6378137 * Math.acos(Math.cos(lat1 / 1e6 * Math.PI / 180) *
 				Math.cos(lat2 / 1e6 * Math.PI / 180) * Math.cos(lng1 / 1e6 * Math.PI / 180 - lng2 / 1e6 * Math.PI / 180) +
 				Math.sin(lat1 / 1e6 * Math.PI / 180) * Math.sin(lat2 / 1e6 * Math.PI / 180)));
