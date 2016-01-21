@@ -19,8 +19,8 @@ public class Player {
     int Level = 0;
     int Exp = 0;
     int Gold = 0;
-    double Lat = 100;
-    double Lng = 200;
+    int Lat = 100;
+    int Lng = 200;
     int AmbLeft = 0;
     public Player() {
 
@@ -40,8 +40,8 @@ public class Player {
                 Level = rs.getInt(3);
                 Exp = rs.getInt(4);
                 Gold = rs.getInt(5);
-                Lat = rs.getDouble(6);
-                Lng = rs.getDouble(7);
+                Lat = rs.getInt(6);
+                Lng = rs.getInt(7);
             } else {
                 LastError = MyUtils.getJSONError("NOUSERFOUND", "(" + Token + ")");
             }
@@ -51,12 +51,14 @@ public class Player {
         }
     }
 
-    public static void BuyUpgrade(String PGUID, String CGUID, double PLAT, double PLNG, Connection con) {
+    public static String BuyUpgrade(String PGUID, String CGUID, int PLAT, int PLNG, Connection con) {
         //range check, coins check, db changes, return result
+        return "1";
     }
 
-    public static void GetPlayerInfo(String PGUID, Connection con) {
+    public static String GetPlayerInfo(String PGUID, Connection con) {
         //
+        return "1";
     }
 
     public static boolean CheckAmbushesQuantity(String PGUID, Connection con) {
@@ -84,35 +86,40 @@ public class Player {
         return ret;
     }
 
-    public static void ScanRange(String PGUID, double PLAT, double PLNG, Connection con) {
+    public static String ScanRange(String PGUID, int PLAT, int PLNG, Connection con) {
         PreparedStatement query;
         String GUID, Type, Lat, Lng, Result;
-        JSONObject json = new JSONObject();
+        JSONObject jresult = new JSONObject();
         JSONArray jarr = new JSONArray();
-
         try {
             query = con.prepareStatement("select GUID,Lat,Lng,Type from GameObjects where abs(Lat-?)<10000 and abs(Lng-?)<10000");
-            query.setString(1, Token);
+            query.setInt(1, PLAT);
+            query.setInt(1, PLNG);
             ResultSet rs = query.executeQuery();
 
             if (rs.isBeforeFirst()) {
+
                 while (rs.next()) {
+                    JSONObject jobj = new JSONObject();
                     GUID = rs.getString("GUID");
                     Type = rs.getString("Type");
                     Lat = rs.getString("Lat");
                     Lng = rs.getString("Lng");
-                    Result = Result.concat()
+                    jobj.put("GUID", GUID);
+                    jobj.put("Type", Type);
+                    jobj.put("Lat", Lat);
+                    jobj.put("Lng", Lng);
+                    jarr.add(jobj);
                 }
-                query.close();
-
+                jresult.put("Objects", jarr);
             } else {
-                query.close();
-                LastError = "Error: NOUSERFOUND (" + Token + ")";
-                return LastError;
+                jresult.put("Objects", jarr);
             }
+            query.close();
         } catch (SQLException e) {
-            LastError = MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+            jresult.put("Error", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
+        return jresult.toString();
     }
 
     public String GetGUIDByToken(Connection con, String Token) throws SQLException {

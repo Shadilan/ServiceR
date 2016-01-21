@@ -9,15 +9,18 @@ public class Caravan {
     public Caravan() {
     }
 
-    public static void StartRoute(String PGUID, String CGUID, double PLAT, double PLNG, Connection con) {
+    public static String StartRoute(String PGUID, String CGUID, int PLAT, int PLNG, Connection con) {
         //check range to city, start route
+        return "1";
     }
 
-    public static void FinishRoute(String PGUID, String CGUID, double PLAT, double PLNG, Connection con) {
+    public static String FinishRoute(String PGUID, String CGUID, int PLAT, int PLNG, Connection con) {
         //check range to city, finish route
+        return "1";
     }
 
-    public static void DropRoute(String PGUID, Connection con) {
+    public static String DropRoute(String PGUID, Connection con) {
         //
+        return "1";
     }
 }

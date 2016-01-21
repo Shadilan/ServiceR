@@ -1,5 +1,7 @@
 package main;
 
+import org.json.simple.JSONObject;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +17,10 @@ public class Ambush {
 
     }
 
-    public static void Set(String PGUID, double PLAT, double PLNG, double LAT, double LNG, Connection con) {
-        String AGUID, result;
+    public static String Set(String PGUID, int PLAT, int PLNG, int LAT, int LNG, Connection con) {
+        String AGUID;
         int Radius;
+        JSONObject jresult = new JSONObject();
         //do range check, count check for ambushes and insert into tables Ambush and GameObjects
         if (Server.RangeCheck(PLAT, PLNG, LAT, LNG) > 50) {
             if (Player.CheckAmbushesQuantity(PGUID, con)) {
@@ -39,21 +42,22 @@ public class Ambush {
                     query.setInt(3, Radius);
                     query.execute();
                     con.commit();
+                    jresult.put("Result", "OK");
                     //Server.SendData();
                 } catch (SQLException e) {
-                    result = MyUtils.getJSONError("DBError", e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    jresult.put("Error", "DBError. " + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
             } else {
-                //return FALSE, not enough ambushes
-                //Server.SendData();
+                jresult.put("Error", "Not enough ambushes.");
             }
         } else {
-            //return FALSE, too far
-            //Server.SendData();
+            jresult.put("Error", "You are too far");
         }
+        return jresult.toString();
     }
 
-    public static void Destroy(String PGUID, String AGUID, double PLAT, double PLNG, Connection con) {
+    public static String Destroy(String PGUID, String AGUID, int PLAT, int PLNG, Connection con) {
         //do range check,
+        return "1";
     }
 }

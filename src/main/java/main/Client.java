@@ -1,9 +1,14 @@
 package main;
 
+import org.json.simple.JSONObject;
+
 import javax.naming.NamingException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Created by Well on 17.01.2016.
@@ -27,81 +32,70 @@ public class Client {
         return con;
     }
 
-    public void sendData(String ReqName, String PGUID, String TGUID, double PLAT, double PLNG, double LAT, double LNG) {
+    public String sendData(String ReqName, String PGUID, String TGUID, int PLAT, int PLNG, int LAT, int LNG) {
+        String result;
         switch (ReqName) {
             case "ScanRange":
-                Player.ScanRange(PGUID, PLAT, PLNG, con);
+                result = Player.ScanRange(PGUID, PLAT, PLNG, con);
                 break;
             case "SetAmbush":
-                Ambush.Set(PGUID, PLAT, PLNG, LAT, LNG, con);
+                result = Ambush.Set(PGUID, PLAT, PLNG, LAT, LNG, con);
                 break;
             case "DestroyAmbush":
-                Ambush.Destroy(PGUID, TGUID, PLAT, PLNG, con);
+                result = Ambush.Destroy(PGUID, TGUID, PLAT, PLNG, con);
                 break;
             case "StartRoute":
-                Caravan.StartRoute(PGUID, TGUID, PLAT, PLNG, con);
+                result = Caravan.StartRoute(PGUID, TGUID, PLAT, PLNG, con);
                 break;
             case "FinishRoute":
-                Caravan.FinishRoute(PGUID, TGUID, PLAT, PLNG, con);
+                result = Caravan.FinishRoute(PGUID, TGUID, PLAT, PLNG, con);
                 break;
             case "BuyUpgrade":
-                Player.BuyUpgrade(PGUID, TGUID, PLAT, PLNG, con);
+                result = Player.BuyUpgrade(PGUID, TGUID, PLAT, PLNG, con);
                 break;
             case "DropRoute":
-                Caravan.DropRoute(PGUID, con);
+                result = Caravan.DropRoute(PGUID, con);
                 break;
             case "GetPlayerInfo":
-                Player.GetPlayerInfo(PGUID, con);
+                result = Player.GetPlayerInfo(PGUID, con);
                 break;
             default:
-                //result = MyUtils.getJSONError("ActionNotFound", "Действие не определено");
+                result = "{" + '"' + "Error" + '"' + ": " + '"' + "Unknown command." + '"' + "}";
         }
+        return result;
     }
 
-/*
-    public void sendData(String ACTION, String PGUID, double PLAT, double PLNG) {
-        //It's ScanRange
-        if (result.equals("")) Server.ScanRange(PGUID, PLAT, PLNG, con);
-        //else Server.SendData(..)
-    }
+    public String GetToken(String Login, String Password) {
+        PreparedStatement pstmt;
+        String Token = "T" + UUID.randomUUID().toString();
+        String PGUID;
+        JSONObject jresult = new JSONObject();
 
-    public void sendData(String ACTION, String PGUID, double PLAT, double PLNG, double LAT, double LNG) {
-        //It's SetAmbush
-        Ambush.Set(PGUID, PLAT, PLNG, LAT, LNG, con);
-    }
+        try {
+            con = DBUtils.ConnectDB();
+            pstmt = con.prepareStatement("SELECT GUID from Users WHERE Login=? and Password=?");
+            pstmt.setString(1, Login);
+            pstmt.setString(2, Password);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.isBeforeFirst()) {
+                PGUID = rs.getString(1);
+                pstmt = con.prepareStatement("INSERT into Connections (PGUID,Token) Values(?,?)");
+                pstmt.setString(1, PGUID);
+                pstmt.setString(2, Token);
+                pstmt.execute();
+                con.commit();
+                con.close();
+                jresult.put("Token", Token);
+            } else {
+                jresult.put("Error", "User not found.");
+            }
+        } catch (SQLException e) {
+            jresult.put("Error", "DBError. " + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
 
-    public void sendData(String ACTION, String PGUID, String TGUID, double PLAT, double PLNG) {
-        //It's DestroyAmbush or StartRoute or FinishRoute or BuyUpgrade
-        switch (ACTION) {
-            case "DestroyAmbush":
-                Ambush.Destroy(PGUID, TGUID, PLAT, PLNG);
-                break;
-            case "StartRoute":
-                Caravan.StartRoute(PGUID, TGUID, PLAT, PLNG);
-                break;
-            case "FinishRoute":
-                Caravan.FinishRoute(PGUID, TGUID, PLAT, PLNG);
-                break;
-            case "BuyUpgrade":
-                Player.BuyUpgrade(PGUID, TGUID, PLAT, PLNG);
-                break;
-            default:
-                //result = MyUtils.getJSONError("ActionNotFound", "Действие не определено");
+        } catch (NamingException e) {
+            jresult.put("Error", "ResourceError. " + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
+        return jresult.toString();
     }
 
-    public void sendData(String ACTION, String PGUID) {
-        //It's DropRoute or GetPLayerInfo
-        switch (ACTION) {
-            case "DropRoute":
-                Caravan.DropRoute(PGUID);
-                break;
-            case "GetPlayerInfo":
-                Player.GetPlayerInfo(PGUID);
-                break;
-            default:
-                //result = MyUtils.getJSONError("ActionNotFound", "Действие не определено");
-        }
-    }
-    */
 }
