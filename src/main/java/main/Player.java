@@ -122,6 +122,25 @@ public class Player {
         return jresult.toString();
     }
 
+    public static double getRadius(String PGUID, Connection con) {
+        int result;
+        PreparedStatement query;
+        try {
+            query = con.prepareStatement("select z3.Effect1 from Players z1, PUpgrades z2, Upgrades z3 where z1.GUID=? and z2.PGUID=z1.GUID and z2.UGUID=z3.GUID and z3.Type='paladin'");
+            query.setString(1, PGUID);
+            ResultSet rs = query.executeQuery();
+            if (rs.isBeforeFirst()) {
+                result = rs.getInt(1);
+            } else {
+                result = 0;
+            }
+            query.close();
+            return result;
+        } catch (SQLException e) {
+            return 0; //pizdec. esli polomaetsia zdes - hyi naidesh )
+        }
+    }
+
     public String GetGUIDByToken(Connection con, String Token) throws SQLException {
         PreparedStatement query;
         query = con.prepareStatement("select PGUID from Connection where Token=? limit 1");

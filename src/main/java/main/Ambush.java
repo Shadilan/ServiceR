@@ -22,7 +22,7 @@ public class Ambush {
         int Radius;
         JSONObject jresult = new JSONObject();
         //do range check, count check for ambushes and insert into tables Ambush and GameObjects
-        if (Server.RangeCheck(PLAT, PLNG, LAT, LNG) > 50) {
+        if (MyUtils.RangeCheck(PLAT, PLNG, LAT, LNG) <= Player.getRadius(PGUID, con)) {
             if (Player.CheckAmbushesQuantity(PGUID, con)) {
                 //insert new ambush into tables
                 //insert into Ambushes(GUID,PGUID,Radius) values (?,?,?)
@@ -41,6 +41,12 @@ public class Ambush {
                     query.setString(2, PGUID);
                     query.setInt(3, Radius);
                     query.execute();
+
+                    query = con.prepareStatement("insert into GameObjects(GUID,Lat,Lng,Type) values (?,?,?,'Ambush')");
+                    query.setString(1, AGUID);
+                    query.setInt(2, LAT);
+                    query.setInt(3, LNG);
+                    query.execute();
                     con.commit();
                     jresult.put("Result", "OK");
                     //Server.SendData();
@@ -57,7 +63,15 @@ public class Ambush {
     }
 
     public static String Destroy(String PGUID, String AGUID, int PLAT, int PLNG, Connection con) {
-        //do range check,
+        /*String AGUID;
+        int lat, lng;
+        JSONObject jresult = new JSONObject();
+
+        //do range check
+        if (MyUtils.RangeCheck(PLAT, PLNG, LAT, LNG) <= Player.getRadius(PGUID,con)) {
+
+        }
+        */
         return "1";
     }
 }
