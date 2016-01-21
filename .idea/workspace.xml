@@ -4,14 +4,6 @@
     <list id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Enlarge Radius" />
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
     <list default="true" id="9a9abe1b-deb1-4cdf-87fb-b399a239e272" name="noworkspace" comment="noworkspace">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_10.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_1.xml" />
-      <change type="DELETED" beforePath="C:\Users\Well\IdeaProjects\serviceR\.idea\libraries\Maven__junit_junit_3_8_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Well\IdeaProjects\serviceR\.idea\libraries\Maven__org_json_json_20090211.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/Player.java" afterPath="$PROJECT_DIR$/src/main/java/main/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/serviceR.iml" afterPath="$PROJECT_DIR$/.idea/serviceR.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="serviceR.iws" />
@@ -40,8 +32,8 @@
             <state vertical-scroll-proportion="0.129771">
               <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
               <folding>
-                <element signature="e#5766#5767#0" expanded="true" />
-                <element signature="e#5798#5799#0" expanded="true" />
+                <element signature="e#5767#5768#0" expanded="true" />
+                <element signature="e#5799#5800#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -551,12 +543,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00034" summary="City_map&#10;">
-      <created>1446479852971</created>
-      <option name="number" value="00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1446479852971</updated>
-    </task>
     <task id="LOCAL-00035" summary="City_map&#10;">
       <created>1446480411422</created>
       <option name="number" value="00035" />
@@ -845,7 +831,13 @@
       <option name="project" value="LOCAL" />
       <updated>1453407174859</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="noworkspace">
+      <created>1453408195299</created>
+      <option name="number" value="00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1453408195299</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1298,8 +1290,8 @@
         <state vertical-scroll-proportion="0.129771">
           <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
           <folding>
-            <element signature="e#5766#5767#0" expanded="true" />
-            <element signature="e#5798#5799#0" expanded="true" />
+            <element signature="e#5767#5768#0" expanded="true" />
+            <element signature="e#5799#5800#0" expanded="true" />
           </folding>
         </state>
       </provider>
