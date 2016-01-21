@@ -4,9 +4,6 @@
     <list id="eafe4e9b-6798-4801-82e4-50663e5fa5e5" name="Default" comment="Enlarge Radius" />
     <list id="312e254e-154e-4b68-87cb-93b3030a9935" name="Rejected commit: Default" comment="Token Constructor." />
     <list default="true" id="9a9abe1b-deb1-4cdf-87fb-b399a239e272" name="noworkspace" comment="noworkspace">
-      <change type="DELETED" beforePath="C:\Users\Well\IdeaProjects\serviceR\src\main\java\main\Server.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/Ambush.java" afterPath="$PROJECT_DIR$/src/main/java/main/Ambush.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/main/Player.java" afterPath="$PROJECT_DIR$/src/main/java/main/Player.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="serviceR.iws" />
@@ -32,8 +29,8 @@
       <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.62069">
-              <caret line="158" column="26" selection-start-line="158" selection-start-column="26" selection-end-line="158" selection-end-column="26" />
+            <state vertical-scroll-proportion="-13.344828">
+              <caret line="166" column="5" selection-start-line="166" selection-start-column="5" selection-end-line="166" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -517,12 +514,6 @@
       <option name="number" value="Default" />
       <updated>1445698454128</updated>
     </task>
-    <task id="LOCAL-00031" summary="City_map&#10;">
-      <created>1446479264242</created>
-      <option name="number" value="00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1446479264242</updated>
-    </task>
     <task id="LOCAL-00032" summary="City_map&#10;">
       <created>1446479441305</created>
       <option name="number" value="00032" />
@@ -811,7 +802,13 @@
       <option name="project" value="LOCAL" />
       <updated>1453401088408</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="noworkspace">
+      <created>1453406448430</created>
+      <option name="number" value="00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1453406448430</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1245,8 +1242,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.62069">
-          <caret line="158" column="26" selection-start-line="158" selection-start-column="26" selection-end-line="158" selection-end-column="26" />
+        <state vertical-scroll-proportion="-13.344828">
+          <caret line="166" column="5" selection-start-line="166" selection-start-column="5" selection-end-line="166" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
